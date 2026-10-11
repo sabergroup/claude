@@ -485,7 +485,7 @@ def head_top(plan, name, fi):
 def place_by_head(plan, name):
     """put each top element as high as needed so it never touches the head; fall back below the face"""
     for a in plan["anims"]:
-        if a["type"] not in ("chip", "steps", "cta", "list", "flow", "count", "pill", "tpill", "pair"): continue
+        if a["type"] not in ("chip", "steps", "cta", "list", "flow", "count", "pill", "tpill", "pair", "dock"): continue
         h = 112 if a["type"] == "list" else 100
         hs = [head_top(plan, name, fi) for fi in range(int(a["t0"] * FPS), int(a["t1"] * FPS))]
         hs = [x for x in hs if x is not None]
@@ -520,6 +520,29 @@ def audit_read_time(plan):
                 rd = end - ready
                 print(f"  read {rd:4.2f}s  {text}", flush=True)
                 if rd < MIN_READ: bad.append((text, round(rd, 2)))
+    for a in plan["anims"]:
+        if a["type"] != "dock": continue
+        sts = a["states"]
+        for i, s_ in enumerate(sts):
+            texts = []
+            if s_["kind"] == "pair":
+                texts = [(tx, ti) for _, tx, ti in s_["items"] if ti >= s_["t"] - 1e-6]
+            elif s_["kind"] == "steps":
+                texts = [(s_["l1"], s_["t"])]
+            elif s_["kind"] == "cta" and s_.get("later"):
+                texts = [(s_["later"][1], s_["later"][0])]
+            else:
+                texts = [(s_["text"], s_["t"])]
+            end = sts[i + 1]["t"] if i + 1 < len(sts) and not sts[i + 1].get("cont") else a["t1"] - 0.45
+            j = i + 1
+            while j < len(sts) and sts[j].get("cont"):     # continued states keep this text on screen
+                j += 1
+            end = sts[j]["t"] if j < len(sts) else a["t1"] - 0.45
+            for tx, ti in texts:
+                ready = ti + 0.10 + 0.10 + anim2.STAG * (len(tx.split()) - 1) + anim2.WIN
+                rd = end - ready
+                print(f"  read {rd:4.2f}s  {tx}", flush=True)
+                if rd < MIN_READ: bad.append((tx, round(rd, 2)))
     assert not bad, f"text not readable long enough: {bad}"
 
 

@@ -484,6 +484,11 @@ def draw_all(frame_rgba, anims, t):
         elif ty == "flow": flow_pill(layer, t, a, a.get("cy", CY))
         elif ty == "mirror": mirror_anim(layer, t, a)
         elif ty == "count": count_pill(layer, t, a, a.get("cy", CY))
+        elif ty == "dock":
+            import dock
+            if "_chain" not in a: a["_chain"] = dock.build(a)
+            a["_chain"]["cy"] = a.get("cy", CY)
+            dock.draw_dock(layer, t, a["_chain"])
         elif ty == "pill": text_pill(layer, t, a["t0"], a["t1"], a["steps"], cy=a.get("cy", CY))
         elif ty == "tpill": text_pill(layer, t, a["t0"], a["t1"], a["steps"], cy=a.get("cy", CY), extra=a)
         elif ty == "pair": pair(layer, t, a, a.get("cy", CY))
