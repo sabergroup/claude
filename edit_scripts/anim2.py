@@ -188,7 +188,7 @@ def reveal(im, f):
 
 
 # ------------------------------------------------------------------ kinetic words
-STAG, WIN = 0.18, 0.55          # stagger between words, duration of one word's entrance
+STAG, WIN = 0.12, 0.38          # stagger between words, duration of one word's entrance
 SPACE = 0.28
 
 
@@ -202,7 +202,7 @@ def kinetic(cv, s, size, col, right, cy, lin, lout=None, n_out_total=None):
     for i, im in enumerate(ims):
         p = (lin - i * STAG) / WIN
         if p <= 0: x -= im.width + sp; continue
-        a = eo(p * 1.4); sc = 1.0; dy = (1 - eo(p)) * 22 * SS
+        a = eo(p * 1.8); sc = 1 + 0.35 * (1 - eo(p)); dy = (1 - eo(p)) * 10 * SS
         if lout is not None:          # leave in reverse order, rising up
             q = cl((lout - (n - 1 - i) * 0.06) / 0.22)
             a *= 1 - eo(q); dy -= eo(q) * 30 * SS
@@ -472,17 +472,18 @@ def hook(layer, t, a):
 
 # ------------------------------------------------------------------ entry point
 def draw_all(frame_rgba, anims, t):
+    import typo
     act = [a for a in anims if a["t0"] <= t < a["t1"]]
     if not act: return None
     layer = Image.new("RGBA", (BW * SS, BH * SS), (0, 0, 0, 0))
     for a in act:
         ty = a["type"]
         if ty == "chip" and "pair" in a: pair(layer, t, a)
-        elif ty == "chip": bar_label(layer, t, a, a.get("cy", CY))
+        elif ty == "chip": typo.label(layer, t, a, a.get("cy", CY))
         elif ty == "steps": steps_pill(layer, t, a, a.get("cy", CY))
         elif ty == "list": list_pill(layer, t, a)
         elif ty == "cta": cta(layer, t, a, a.get("cy", CY))
-        elif ty == "hook": hook_bars(layer, t, a)
+        elif ty == "hook": typo.hook(layer, t, a)
     small = layer.resize((BW, BH), Image.LANCZOS)
     frame_rgba.alpha_composite(small, (0, 0))
     al = np.asarray(small.getchannel("A"))

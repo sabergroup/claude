@@ -240,9 +240,6 @@ def render(base_rgb, src_rgb, a, t):
     layer = Image.new("RGBA", (W * SS, H * SS), (0, 0, 0, 0))
     draw_dots(layer, t)
     SCENES[a["scene"]](layer, t, a)
-    pp = pip(src_rgb, lt - 0.25)
-    if pp is not None:
-        A.put(layer, pp, 885 * SS - pp.width / 2, 1700 * SS - pp.height / 2)
     small = layer.resize((W, H), Image.LANCZOS)
     bg = Image.fromarray(background()).convert("RGBA")
     bg.alpha_composite(small)
