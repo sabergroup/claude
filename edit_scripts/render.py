@@ -485,7 +485,7 @@ def head_top(plan, name, fi):
 def place_by_head(plan, name):
     """put each top element as high as needed so it never touches the head; fall back below the face"""
     for a in plan["anims"]:
-        if a["type"] not in ("chip", "steps", "cta", "list"): continue
+        if a["type"] not in ("chip", "steps", "cta", "list", "flow"): continue
         h = 112 if a["type"] == "list" else 100
         hs = [head_top(plan, name, fi) for fi in range(int(a["t0"] * FPS), int(a["t1"] * FPS))]
         hs = [x for x in hs if x is not None]

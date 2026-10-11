@@ -481,6 +481,7 @@ def draw_all(frame_rgba, anims, t):
         if ty == "chip" and "pair" in a: pair(layer, t, a)
         elif ty == "chip": bar_label(layer, t, a, a.get("cy", CY))
         elif ty == "steps": steps_pill(layer, t, a, a.get("cy", CY))
+        elif ty == "flow": flow_pill(layer, t, a, a.get("cy", CY))
         elif ty == "list": list_pill(layer, t, a, a.get("cy", CY))
         elif ty == "cta": cta(layer, t, a, a.get("cy", CY))
         elif ty == "hook": typo.hook(layer, t, a)
@@ -581,3 +582,86 @@ def hook_bars(layer, t, a):
                 x = 36 * SS + (text_w("100%", size) * SS - ti.width)
                 im.alpha_composite(ti, (int(x), int(H_ / 2 - ti.height / 2 + 2 * SS)))
         bar_line(layer, t, te, tx, ln["text"], 540, ln["cy"], size=size, h=h, pad=36, col=col, wf=wf, extra=extra)
+
+
+# ================================================================== flow infographic (same language as the steps pill)
+RED = (176, 72, 62)
+
+
+def flow_pill(layer, t, a, cy_=CY):
+    """items (RTL): {"icon": name | None, "label": str, "on": time, "x": time (optional)}.
+    Each node lights up at its time; the track between two nodes fills as he speaks, with a travelling spark."""
+    t0, t1 = a["t0"], a["t1"]
+    lt, ic, gr, tx = envelope(t, t0, t1)
+    if ic <= .01: return
+    items = a["items"]; LSZ = 40; dot = 36; icd = 56; gap = 14; track = 74; pad = 40
+    widths = []
+    for it in items:
+        nd = icd if it.get("icon") else dot
+        widths.append(nd + gap + text_w(it["label"], LSZ))
+    wf = pad * 2 + sum(widths) + track * (len(items) - 1) + 16 * (len(items) - 1)
+    w = PH + (wf - PH) * gr
+
+    def content(cv, W_, H_):
+        g = ImageDraw.Draw(cv); cy = H_ / 2
+        x = W_ / 2 + wf * SS / 2 - pad * SS
+        centers = []
+        for k, it in enumerate(items):
+            nd = icd if it.get("icon") else dot
+            c = x - nd * SS / 2
+            on = t >= it["on"]
+            # label: dim until its moment, then bright (gold if it is the "answer")
+            lab_col = (ACC + (255,)) if (on and it.get("gold")) else (255, 255, 255, 255)
+            la = tx * (1.0 if on else 0.32)
+            if on:
+                u = eo((t - it["on"]) / 0.3); la = tx * (0.32 + 0.68 * u)
+            im = txt(it["label"], LSZ, lab_col)
+            lx = x - nd * SS - gap * SS - im.width
+            put(cv, im, lx, cy - im.height / 2 + 2 * SS, la)
+            centers.append((c, x - nd * SS - gap * SS - im.width, nd, it))
+            x = lx - 16 * SS - track * SS
+        # tracks (from node k's left edge area to node k+1)
+        for k in range(len(items) - 1):
+            c, lx_end, nd, it = centers[k]
+            c2, _, nd2, it2 = centers[k + 1]
+            x0 = lx_end - 8 * SS; x1 = c2 + nd2 * SS / 2 + 8 * SS
+            g.line([(x0, cy), (x1, cy)], fill=(255, 255, 255, int(60 * tx)), width=4 * SS)
+            a0, a1 = it["on"], it2["on"]
+            if t >= a0 and a1 > a0:
+                f = cl((t - a0) / (a1 - a0)); xe = x0 + (x1 - x0) * eio(f)
+                g.line([(x0, cy), (xe, cy)], fill=ACC, width=4 * SS)
+                if f < 1:
+                    r = 7 * SS * (1 + .3 * math.sin(t * 20))
+                    g.ellipse((xe - r, cy - r, xe + r, cy + r), fill=(255, 236, 200))
+        # nodes
+        for c, _, nd, it in centers:
+            r = nd * SS / 2; on = t >= it["on"]
+            xed = "x" in it and t >= it["x"]
+            if it.get("icon"):
+                ilt = t - it["on"] if on else 0
+                bg = ACC if on else (90, 92, 94)
+                if xed: bg = RED
+                p = eb((t - it["on"]) / 0.35) if on else 1
+                d = nd * (0.8 + 0.2 * p) if on else nd * .8
+                im = icon("x" if xed else it["icon"], d, (t - it["x"]) if xed else ilt,
+                          fg=(255, 255, 255) if xed else DARK, bg=bg)
+                put(cv, im, c - im.width / 2, cy - im.height / 2, tx)
+            else:
+                pend = (not on) and any(t >= o["on"] for o in items if o is not it)
+                pulse = 1 + .08 * math.sin(t * 7) if pend else 1
+                g.ellipse((c - r * pulse, cy - r * pulse, c + r * pulse, cy + r * pulse),
+                          outline=ACC + (int(255 * tx * (1 if on else .5)),), width=3 * SS)
+                if on:
+                    p = eb((t - it["on"]) / 0.3); rr = r * p
+                    if rr > 1: g.ellipse((c - rr, cy - rr, c + rr, cy + rr), fill=RED if xed else ACC)
+                    if xed:
+                        mk = icon("x", nd, t - it["x"], fg=(255, 255, 255), bg=(0, 0, 0, 0))
+                    else:
+                        mk = icon("check", nd, t - it["on"] - .12, bg=(0, 0, 0, 0)) if it.get("check", True) else None
+                    if mk is not None: put(cv, mk, c - mk.width / 2, cy - mk.height / 2)
+            if on:   # ripple when a node lights up
+                u = (t - (it["x"] if xed else it["on"])) / 0.6
+                if 0 <= u < 1:
+                    R = r * (1 + 1.6 * eo(u))
+                    g.ellipse((c - R, cy - R, c + R, cy + R), outline=(RED if xed else ACC) + (int(200 * (1 - u)),), width=2 * SS)
+    draw_pill(layer, 540, cy_, w, PH, BODY + (225,), min(1, ic * 1.5), content)
