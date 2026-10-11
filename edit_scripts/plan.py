@@ -7,11 +7,11 @@ PLANS = {
     "consult": {
         "dur": 37.56,
         # user's own zoom spots (zoom in/out + whoosh/click) – nothing is added here
-        "protect": [(1.80, 6.30)],
+        "protect": [(2.12, 6.30)],
         # (start, end, scale_from, scale_to, entry_transition)
         "segs": [
             (0.00, 9.24, None, None, None),          # untouched (user zoom inside)
-            (9.24, 11.92, 1.22, 1.25, "slash"),
+            (9.24, 11.92, 1.22, 1.25, None),
             (11.92, 15.12, 1.00, 1.04, None),
             (15.12, 20.08, 1.24, 1.28, "glitch"),
             (20.08, 24.44, 1.00, 1.05, None),
@@ -61,7 +61,9 @@ PLANS = {
         ],
         # animations live exactly inside one shot (or a run of shots) [start,end]
         "anims": [
-            {"type": "chip", "t0": 11.92, "t1": 15.12, "steps": [(11.92, "eye", "مشكلة واحدة")]},
+            {"type": "hook", "t0": 0.0, "t1": 2.12, "lines": [("دخلتي بقرار؟",), ("ممكن تطلعي بغيره", "spark")]},
+            {"type": "insert", "scene": "mirror", "t0": 11.92, "t1": 15.12, "title": "اللي المريضة شايفاه",
+             "mark": 13.60, "label": "مشكلة واحدة"},
             {"type": "chip", "t0": 15.12, "t1": 20.08,
              "steps": [(15.12, "search", "الفحص"), (17.10, "spark", "سبب تاني خالص")]},
             {"type": "chip", "t0": 20.08, "t1": 24.44, "strike": 22.74,
@@ -69,15 +71,14 @@ PLANS = {
             {"type": "steps", "t0": 24.44, "t1": 28.92, "labels": ["مراجعة", "قرار"],
              "marks": [26.94, 28.52]},
             {"type": "chip", "t0": 28.92, "t1": 30.84, "steps": [(28.92, "target", "هدف الاستشارة")]},
-            {"type": "chip", "t0": 30.84, "t1": 34.28,
-             "steps": [(30.84, "list", "الاختيارات المتاحة")],
-             "pair": [(32.54, "check", "ممكن"), (33.74, "x", "مش واقعي")]},
+            {"type": "insert", "scene": "options", "t0": 30.84, "t1": 34.28, "title": "الاختيارات المتاحة",
+             "ok": 32.54, "no": 33.74, "ok_label": "ممكن", "no_label": "مش واقعي"},
             {"type": "cta", "t0": 34.28, "t1": 37.56, "text": "احجزي استشارتك", "tap": 34.56,
              "badge": (35.20, "clock", "دلوقتي")},
         ],
         # (sfx file, event time, align on 'onset'|'peak', max length or None)
         "sfx": [
-            ("blade slide", 9.28, "peak", None),
+            ("notification", 0.12, "onset", None),
             ("ui 2", 11.92, "onset", None),
             ("metal glitch", 15.12, "onset", 0.9),
             ("data 1", 17.10, "onset", None),
@@ -93,7 +94,7 @@ PLANS = {
     },
     "hashwa": {
         "dur": 25.36,
-        "protect": [(2.00, 6.20), (23.40, 25.36)],
+        "protect": [(2.32, 6.20), (23.40, 25.36)],
         "segs": [
             (0.00, 7.92, None, None, None),          # untouched (user zoom inside)
             (7.92, 8.52, 1.23, 1.23, None),
@@ -101,7 +102,7 @@ PLANS = {
             (9.04, 9.96, 1.23, 1.23, None),
             (9.96, 11.12, 1.00, 1.01, None),
             (11.12, 13.36, 1.10, 1.13, None),
-            (13.36, 15.24, 1.00, 1.03, "slash"),
+            (13.36, 15.24, 1.00, 1.03, None),
             (15.24, 18.24, 1.23, 1.27, None),
             (18.24, 20.52, 1.09, 1.11, "glitch"),
             (20.52, 23.40, 1.00, 1.05, None),
@@ -140,9 +141,10 @@ PLANS = {
             ("اللي فاتت", 24.68, 25.36),
         ],
         "anims": [
-            {"type": "list", "t0": 7.92, "t1": 13.36, "title": "بيانات الحشوة",
-             "items": [(7.92, "الموديل", 2), (8.52, "المقاس", 3), (9.04, "السيريال نمبر", 4),
-                       (9.96, "كارت الحشوة", 5), (11.12, "احتفظي بيها كلها", 5)]},
+            {"type": "hook", "t0": 0.0, "t1": 2.32, "lines": [("عملتي تكبير بحشوة؟",), ("معلومة مهمة جدًا", "alert")]},
+            {"type": "insert", "scene": "implant", "t0": 7.92, "t1": 11.12, "title": "بيانات الحشوة",
+             "rows": [(8.02, "الشركة"), (8.20, "الموديل"), (8.60, "المقاس"), (9.10, "السيريال نمبر"), (10.00, "كارت الحشوة")]},
+            {"type": "chip", "t0": 11.12, "t1": 13.36, "steps": [(11.12, "check", "احتفظي بيها كلها")]},
             {"type": "chip", "t0": 13.36, "t1": 15.24, "steps": [(13.36, "calendar", "المتابعة")]},
             {"type": "chip", "t0": 15.24, "t1": 18.24,
              "steps": [(15.24, "alert", "أي تغيرات"), (17.44, "clock", "في المستقبل")]},
@@ -150,12 +152,12 @@ PLANS = {
             {"type": "chip", "t0": 20.52, "t1": 23.40, "steps": [(20.52, "doc", "بتساعد دكتورك")]},
         ],
         "sfx": [
+            ("ui 2", 0.12, "onset", None),
             ("notification", 7.92, "onset", None),
-            ("iphone tap 1", 8.52, "onset", None),
-            ("ui 1", 9.04, "onset", None),
-            ("iphone tab 2", 9.96, "peak", None),
+            ("iphone tap 1", 8.60, "onset", None),
+            ("ui 1", 9.10, "onset", None),
+            ("iphone tab 2", 10.00, "peak", None),
             ("data 1", 11.12, "onset", None),
-            ("blade slide", 13.40, "peak", None),
             ("alert", 15.24, "onset", None),
             ("clock", 17.44, "onset", None),
             ("metal glitch", 18.24, "onset", 0.9),

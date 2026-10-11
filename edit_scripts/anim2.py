@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 SS = 2                         # supersampling for the overlay band
-BW, BH = 1080, 420             # band (top of frame) in output pixels
+BW, BH = 1080, 1700            # overlay band in output pixels
 CY = 212                       # pill centre line
 PH = 100                       # pill height
 ACC = (233, 184, 114)
@@ -34,7 +34,6 @@ def txt(s, size, col=(255, 255, 255, 255)):
     return im
 
 
-def text_w(s, size): return txt(s, size).width / SS
 
 
 # ------------------------------------------------------------------ icons (animated)
@@ -137,7 +136,7 @@ def pill_mask(w, h):
     return m.resize((w, h), Image.LANCZOS)
 
 
-def draw_pill(layer, cx, cy, w, h, fill, alpha, content=None, glow=0.0, shimmer=None, shadow=True):
+def draw_pill(layer, cx, cy, w, h, fill, alpha, content=None, glow=0.0, shimmer=None, shadow=False):
     """cx,cy,w,h in output px; content(canvas, w, h) draws in SS units; alpha 0..1"""
     if alpha <= 0.01 or w < 2: return
     W_, H_ = int(w * SS), int(h * SS)
@@ -188,24 +187,64 @@ def reveal(im, f):
     out = im.copy(); out.putalpha(Image.fromarray(a)); return out
 
 
+# ------------------------------------------------------------------ kinetic words
+STAG, WIN = 0.13, 0.42          # stagger between words, duration of one word's entrance
+SPACE = 0.28
+
+
+def kinetic(cv, s, size, col, right, cy, lin, lout=None, n_out_total=None):
+    """Draw text RTL word by word. lin = seconds since words started entering.
+    lout = seconds since words started leaving (None while on screen)."""
+    words = s.split(); ims = [txt(w, size, col) for w in words]
+    sp = size * SS * SPACE
+    x = right
+    n = len(words)
+    for i, im in enumerate(ims):
+        p = (lin - i * STAG) / WIN
+        if p <= 0: x -= im.width + sp; continue
+        a = eo(p * 1.6); sc = 0.55 + 0.45 * eb(p); dy = (1 - eo(p)) * 38 * SS
+        if lout is not None:          # leave in reverse order, rising up
+            q = cl((lout - (n - 1 - i) * 0.06) / 0.22)
+            a *= 1 - eo(q); dy -= eo(q) * 30 * SS
+        if a > 0.01:
+            w_, h_ = max(1, int(im.width * sc)), max(1, int(im.height * sc))
+            sim = im.resize((w_, h_), Image.BICUBIC) if abs(sc - 1) > .01 else im
+            cx_ = x - im.width / 2
+            put(cv, sim, cx_ - w_ / 2, cy - h_ / 2 + 2 * SS + dy, a)
+        x -= im.width + sp
+
+
+def words_time(s): return (len(s.split()) - 1) * STAG + WIN
+
+
+def text_w(s, size):
+    ws = s.split()
+    return (sum(txt(w, size).width for w in ws) + size * SS * SPACE * (len(ws) - 1)) / SS
+
+
 # ------------------------------------------------------------------ envelope shared by all elements
 def envelope(t, t0, t1):
     lt, rt = t - t0, t1 - t
     ic = eb(lt / 0.26)
     gr = eo((lt - 0.12) / 0.36)
     tx = eo((lt - 0.30) / 0.40)
-    if rt < 0.42:
-        tx *= 1 - eio((0.42 - rt) / 0.16)
-        gr *= 1 - eio((0.28 - rt) / 0.18)
+    if rt < 0.30:
+        gr *= 1 - eio((0.30 - rt) / 0.20)
         ic *= 1 - ei((0.12 - rt) / 0.12)
     return lt, ic, gr, tx
 
 
+OUT = 0.62     # words start leaving this long before the element ends
+def lout_of(t, t1): return (t - (t1 - OUT)) if t1 - t < OUT else None
+
+
 TS = 46                       # pill text size
 ICD = PH - 26                 # icon diameter
+TS_DEF, PH_DEF = TS, PH
 
 
-def text_pill(layer, t, t0, t1, steps, cx=540, cy=CY, extra=None, palette="dark"):
+def text_pill(layer, t, t0, t1, steps, cx=540, cy=CY, extra=None, palette="dark", ts_=None, ph=None):
+    TS = ts_ or TS_DEF; PH = ph or PH_DEF; ICD = PH - 26
     """steps: [(time, icon, text)] – icon flips & text rolls on each step"""
     lt, ic, gr, tx = envelope(t, t0, t1)
     if ic <= 0.01: return 0
@@ -243,18 +282,21 @@ def text_pill(layer, t, t0, t1, steps, cx=540, cy=CY, extra=None, palette="dark"
             put(cv, im, W_ - (13 + ICD/2) * SS - im.width/2, H_/2 - im.height/2)
         # text
         right = W_ - (13 + ICD + 22) * SS
-        def place(s, dy, al, f):
-            im = reveal(txt(s, TS, fg_txt), f)
-            put(cv, im, right - im.width, H_/2 - im.height/2 + 2*SS + dy, al)
-        if k > 0 and swap < 1:
-            place(steps[k-1][2], -H_ * .7 * swap, 1 - swap, tx)
-            place(label, H_ * .7 * (1 - swap), swap, tx)
-        else:
-            place(label, (1 - tx) * 14 * SS, tx, tx)
+        lo = lout_of(t, t1)
+        if k > 0 and t - ts < 0.34:      # previous text leaves word by word
+            kinetic(cv, steps[k-1][2], TS, fg_txt, right, H_/2, 9, t - ts)
+        lin = (t - t0 - 0.30) if k == 0 else (t - ts - 0.16)
+        kinetic(cv, label, TS, fg_txt, right, H_/2, lin, lo)
         if extra and "strike" in extra and t >= extra["strike"]:
             p = eo((t - extra["strike"]) / 0.3); tw = text_w(label, TS) * SS
             ImageDraw.Draw(cv).line([(right + 4*SS, H_/2 + 4*SS), (right - (tw + 8*SS) * p, H_/2 + 4*SS)],
                                     fill=ACC, width=5*SS)
+    imp = (extra or {}).get("impact")
+    if imp:   # slam-in: oversize -> settle, burst ring
+        u = (t - t0) / 0.35
+        if u < 1:
+            shake += 10 * math.sin(u * 40) * (1 - u)
+            glow_ring(layer, cx, cy + bob, w, PH, eo(u), 1.0)
     draw_pill(layer, cx + shake, cy + bob, w, PH, fill, min(1, ic * 1.5), content, shimmer=sh)
     return wf
 
@@ -273,11 +315,12 @@ def steps_pill(layer, t, a):
     def content(cv, W_, H_):
         g = ImageDraw.Draw(cv); cy = H_ / 2
         x = W_ / 2 + wf * SS / 2 - 40 * SS
-        im1 = reveal(txt(l1, 42), tx); put(cv, im1, x - im1.width, cy - im1.height/2 + 2*SS, tx); x -= im1.width + 18*SS
+        lo = lout_of(t, t1); lin = t - t0 - 0.30
+        kinetic(cv, l1, 42, (255, 255, 255, 255), x, cy, lin, lo); x -= text_w(l1, 42) * SS + 18*SS
         d1c = x - dot*SS/2; x -= dot*SS + 20*SS
         lx0 = x; x -= line*SS; lx1 = x; x -= 20*SS
         d2c = x - dot*SS/2; x -= dot*SS + 18*SS
-        im2 = reveal(txt(l2, 42), tx); put(cv, im2, x - im2.width, cy - im2.height/2 + 2*SS, tx)
+        kinetic(cv, l2, 42, (255, 255, 255, 255), x, cy, lin - 0.25, lo)
         # track
         g.line([(lx0, cy), (lx1, cy)], fill=(255, 255, 255, int(70 * tx)), width=4*SS)
         if fill_p > 0:
@@ -333,14 +376,11 @@ def list_pill(layer, t, a):
         tt = reveal(txt(a["title"], 26, (255, 255, 255, 150)), tx)
         put(cv, tt, right - tt.width, 10*SS, tx)
         col = ACC + (255,) if final else (255, 255, 255, 255)
-        def place(s, c, dy, al):
-            im = reveal(txt(s, 44, c), tx)
-            put(cv, im, right - im.width, H_ - im.height - 2*SS + dy, al)
-        if k > 0 and swap < 1:
-            place(items[k-1][1], (255, 255, 255, 255), 30*SS*swap, (1 - swap) ** 2)
-            place(label, col, 18*SS*(1 - swap), swap)
-        else:
-            place(label, col, (1 - tx)*12*SS, tx)
+        ty = H_ * 0.66; lo = lout_of(t, t1)
+        if k > 0 and t - ts < 0.3:
+            kinetic(cv, items[k-1][1], 44, (255, 255, 255, 255), right, ty, 9, t - ts)
+        lin = (t - t0 - 0.30) if k == 0 else (t - ts - 0.12)
+        kinetic(cv, label, 44, col, right, ty, lin, lo)
         # 5-segment progress bar, fills right-to-left with animation
         bx1 = 34*SS + barw*SS; seg = (barw*SS - 4*6*SS) / 5; y = H_/2
         f = prevfilled + (filled - prevfilled) * swap
@@ -417,6 +457,19 @@ def glow_ring(layer, cx, cy, w, h, u, a):
     layer.alpha_composite(im, (int((cx - w/2 - pad) * SS), int((cy - h/2 - pad) * SS)))
 
 
+def hook(layer, t, a):
+    global OUT
+    t0, t1 = a["t0"], a["t1"]
+    (s1,), (s2, ic2) = a["lines"]
+    keep = OUT; OUT = 0.34                     # short exit: the hook must read for as long as possible
+    text_pill(layer, t, t0, t1, [(t0, None, s1)], cy=1330, ts_=52, ph=98)
+    t2 = t0 + 0.38
+    if t >= t2:
+        text_pill(layer, t, t2, t1, [(t2, ic2, s2)], cy=1460, ts_=68, ph=132, palette="gold",
+                  extra={"impact": True})
+    OUT = keep
+
+
 # ------------------------------------------------------------------ entry point
 def draw_all(frame_rgba, anims, t):
     act = [a for a in anims if a["t0"] <= t < a["t1"]]
@@ -429,8 +482,8 @@ def draw_all(frame_rgba, anims, t):
         elif ty == "steps": steps_pill(layer, t, a)
         elif ty == "list": list_pill(layer, t, a)
         elif ty == "cta": cta(layer, t, a)
+        elif ty == "hook": hook(layer, t, a)
     small = layer.resize((BW, BH), Image.LANCZOS)
     frame_rgba.alpha_composite(small, (0, 0))
     al = np.asarray(small.getchannel("A"))
-    rows = np.where(al.max(1) > 24)[0]
-    return int(rows.max()) if len(rows) else None   # lowest painted row (for the head check)
+    return al.max(1) > 24          # painted rows (for the head check)

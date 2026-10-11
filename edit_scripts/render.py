@@ -3,7 +3,7 @@ import numpy as np, cv2
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 sys.path.insert(0, "/tmp/claude-0/scripts")
 from plan import PLANS, W, H, FPS
-import anim2
+import anim2, inserts
 
 WD = "/tmp/claude-0/w"
 FA = f"{WD}/fonts/tajawal-700.ttf"
@@ -490,18 +490,22 @@ def main(name, only=None):
         if len(buf) < W * H * 3: break
         t = fi / FPS
         fr = np.frombuffer(buf, np.uint8).reshape(H, W, 3)
+        src = fr
         if not in_protect(plan, t):
             fr = transform(fr, plan, t, fi)
+        ins = [a for a in plan["anims"] if a["type"] == "insert" and a["t0"] <= t < a["t1"]]
+        if ins:
+            fr = inserts.render(np.ascontiguousarray(fr), src, ins[0], t)
             for sg in plan["segs"]:
                 if sg[4] == "slash" and 0 < sg[0] - t <= 4 / FPS + 1e-6:
                     fr = slash_out(fr, t, sg[0])
         img = Image.fromarray(np.ascontiguousarray(fr)).convert("RGBA")
-        low = anim2.draw_all(img, plan["anims"], t)
-        if low is not None:
+        low = anim2.draw_all(img, [a for a in plan["anims"] if a["type"] != "insert"], t)
+        if low is not None and not ins:
             sg = seg_at(plan, t); sc = 1.0 if sg[2] is None else sg[2] + (sg[3] - sg[2]) * (t - sg[0]) / (sg[1] - sg[0])
-            head_top = ANCHOR[1] - (ANCHOR[1] - 330) * sc
-            if low > head_top - 6:
-                print(f"HEAD OVERLAP t={t:.2f} low={low} head={head_top:.0f}", flush=True)
+            head_top = int(ANCHOR[1] - (ANCHOR[1] - 330) * sc)
+            if low[max(0, head_top - 6):int(ANCHOR[1] + 140 * sc)].any():
+                print(f"HEAD OVERLAP t={t:.2f} head={head_top}", flush=True)
         enc.stdin.write(img.convert("RGB").tobytes())
     enc.stdin.close(); enc.wait(); dec.terminate()
     print("video done", name, flush=True)
