@@ -234,7 +234,7 @@ def envelope(t, t0, t1):
     return lt, ic, gr, tx
 
 
-OUT = 0.62     # words start leaving this long before the element ends
+OUT = 0.45     # words start leaving this long before the element ends
 def lout_of(t, t1): return (t - (t1 - OUT)) if t1 - t < OUT else None
 
 
@@ -257,8 +257,8 @@ def text_pill(layer, t, t0, t1, steps, cx=540, cy=CY, extra=None, palette="dark"
     w = PH + (wf - PH) * gr
     bob = 0
     shake = 0
-    if extra and "strike" in extra and t >= extra["strike"]:
-        u = t - extra["strike"]; shake = 9 * math.sin(u * 55) * math.exp(-u * 9)
+    if False:
+        pass
     sh = None
     if lt > 0.8:
         u = ((lt - 0.8) % 2.6) / 0.7
@@ -269,12 +269,12 @@ def text_pill(layer, t, t0, t1, steps, cx=540, cy=CY, extra=None, palette="dark"
         # icon at the right end, flipping on step change
         d = ICD * ic
         if d > 2:
-            if k > 0 and swap < 1:
+            if k > 0 and swap < 1 and steps[k-1][1] != ico:
                 fl = abs(math.cos(math.pi * swap)); nm = steps[k-1][1] if swap < .5 else ico
                 ilt = (t - steps[k-1][0]) if swap < .5 else (t - ts)
             else:
                 fl, nm, ilt = 1, ico, t - ts
-            if extra and "strike" in extra and t >= extra["strike"] + 0.25:
+            if extra and "strike" in extra and t >= extra["strike"] + 0.25 and k == extra.get("strike_step", 0):
                 nm, ilt = "x", t - extra["strike"] - 0.25
             bgc, fgc = (ACC, DARK) if palette == "dark" else (DARK, ACC)
             im = icon(nm, d, ilt, fg=fgc, bg=bgc)
@@ -287,7 +287,7 @@ def text_pill(layer, t, t0, t1, steps, cx=540, cy=CY, extra=None, palette="dark"
             kinetic(cv, steps[k-1][2], TS, fg_txt, right, H_/2, 9, t - ts)
         lin = (t - t0 - 0.30) if k == 0 else (t - ts - 0.16)
         kinetic(cv, label, TS, fg_txt, right, H_/2, lin, lo)
-        if extra and "strike" in extra and t >= extra["strike"]:
+        if extra and "strike" in extra and t >= extra["strike"] and k == extra.get("strike_step", 0):
             p = eo((t - extra["strike"]) / 0.3); tw = text_w(label, TS) * SS
             ImageDraw.Draw(cv).line([(right + 4*SS, H_/2 + 4*SS), (right - (tw + 8*SS) * p, H_/2 + 4*SS)],
                                     fill=ACC, width=5*SS)
@@ -397,13 +397,13 @@ def list_pill(layer, t, a, cy_=CY):
     draw_pill(layer, 540, cy_ + bob, w, h, BODY + (230,), min(1, ic*1.5), content)
 
 
-def pair(layer, t, a):
+def pair(layer, t, a, cy_=CY):
     """main chip; at pair time it turns into ✓ممكن and a second chip ✕ grows out to its left"""
     (tp1, ic1, s1), (tp2, ic2, s2) = a["pair"]
     steps = a["steps"] + [(tp1, ic1, s1)]
     gap = 22
     if t < tp2:
-        text_pill(layer, t, a["t0"], a["t1"], steps)
+        text_pill(layer, t, a["t0"], a["t1"], steps, cy=cy_)
         return
     w1 = 30 + text_w(s1, TS) + 22 + ICD + 13
     w2 = 30 + text_w(s2, TS) + 22 + ICD + 13
@@ -411,14 +411,14 @@ def pair(layer, t, a):
     c1 = 540 + (w2 + gap) / 2 * p
     c2 = 540 - (w1 + gap) / 2 * p
     # second chip has its own entry, shared exit
-    text_pill(layer, t, tp2, a["t1"], [(tp2, ic2, s2)], cx=c2)
-    text_pill(layer, t, a["t0"], a["t1"], steps, cx=c1)
+    text_pill(layer, t, tp2, a["t1"], [(tp2, ic2, s2)], cx=c2, cy=cy_)
+    text_pill(layer, t, a["t0"], a["t1"], steps, cx=c1, cy=cy_)
 
 
 def cta(layer, t, a, CY=CY):
     t0, t1 = a["t0"], a["t1"]
     lt = t - t0
-    rise = (1 - eb(lt / 0.5)) * 70
+    rise = (1 - eo(lt / 0.5)) * 40
     bt, bic, btx = a["badge"]
     tp = a["tap"]
     wb = 30 + text_w(btx, TS) + 22 + ICD + 13
@@ -483,6 +483,10 @@ def draw_all(frame_rgba, anims, t):
         elif ty == "steps": steps_pill(layer, t, a, a.get("cy", CY))
         elif ty == "flow": flow_pill(layer, t, a, a.get("cy", CY))
         elif ty == "mirror": mirror_anim(layer, t, a)
+        elif ty == "count": count_pill(layer, t, a, a.get("cy", CY))
+        elif ty == "pill": text_pill(layer, t, a["t0"], a["t1"], a["steps"], cy=a.get("cy", CY))
+        elif ty == "tpill": text_pill(layer, t, a["t0"], a["t1"], a["steps"], cy=a.get("cy", CY), extra=a)
+        elif ty == "pair": pair(layer, t, a, a.get("cy", CY))
         elif ty == "list": list_pill(layer, t, a, a.get("cy", CY))
         elif ty == "cta": cta(layer, t, a, a.get("cy", CY))
         elif ty == "hook": typo.hook(layer, t, a)
@@ -746,3 +750,49 @@ def mirror_anim(layer, t, a):
             if ul > 0:
                 xr = (x_tip - 10) * S; xl = xr - im.width * ul
                 g.line([(xr, py * S), (xl, py * S)], fill=ACC + (fa,), width=6 * S)
+
+
+# ================================================================== text pill + rolling number badge
+def count_pill(layer, t, a, cy_=CY):
+    t0, t1, tb = a["t0"], a["t1"], a["badge_t"]
+    n0, n1 = a.get("from", 0), a["to"]
+    ts_ = a.get("show_t", tb)
+    bd = 76; gap = 16
+    pb = eio((t - ts_) / 0.45) if t >= ts_ else 0
+    # main pill, shifted right to make room for the badge so the group stays centred;
+    # the badge follows the pill's current (animated) width
+    steps = a["steps"]
+    k = max(i for i, st in enumerate(steps) if t >= st[0])
+    wfull = lambda s_: 30 + text_w(s_, TS) + 22 + ICD + 13
+    sw = eo((t - steps[k][0]) / 0.34) if k > 0 else 1.0
+    wcur = wfull(steps[k][2]) if sw >= 1 else wfull(steps[k-1][2]) + (wfull(steps[k][2]) - wfull(steps[k-1][2])) * sw
+    _, _ic, _gr, _ = envelope(t, t0, t1)
+    wcur = PH + (wcur - PH) * _gr
+    cx = 540 + (bd + gap) / 2 * pb
+    text_pill(layer, t, t0, t1, a["steps"], cx=cx, cy=cy_)
+    if t < ts_: return
+    _, ic, gr, tx = envelope(t, t0, t1)
+    u = t - tb
+    sc = eo((t - ts_) / 0.4) * min(ic, gr if gr > 0 else ic)
+    if sc <= 0.02: return
+    bx = cx - wcur / 2 - gap - bd / 2
+    D = int(bd * SS)
+    b = Image.new("RGBA", (D, D), (0, 0, 0, 0)); g = ImageDraw.Draw(b)
+    g.ellipse((0, 0, D - 1, D - 1), fill=ACC)
+    # rolling digit: old number slides up and out, new number comes from below
+    roll = eio((u - 0.15) / 0.35) if u > 0 else 0.0
+    cv = Image.new("RGBA", (D, D), (0, 0, 0, 0))
+    for val, off in ((n0, -roll), (n1, 1 - roll)):
+        im = txt(str(val), 48, DARK + (255,))
+        put(cv, im, D / 2 - im.width / 2, D / 2 - im.height / 2 + 4 * SS + off * D * 0.8)
+    m = Image.new("L", (D, D), 0); ImageDraw.Draw(m).ellipse((0, 0, D - 1, D - 1), fill=255)
+    ca = np.minimum(np.asarray(cv.getchannel("A")), np.asarray(m)); cv.putalpha(Image.fromarray(ca))
+    b.alpha_composite(cv)
+    if abs(sc - 1) > .01:
+        b = b.resize((max(1, int(D * sc)), max(1, int(D * sc))), Image.BICUBIC)
+    put(layer, b, bx * SS - b.width / 2, cy_ * SS - b.height / 2)
+    if roll >= 1:   # soft pulse ring after the number changes
+        q = ((u - 0.5) % 1.3) / 1.3
+        R = (bd / 2 + 22 * eo(q)) * SS
+        ImageDraw.Draw(layer).ellipse((bx * SS - R, cy_ * SS - R, bx * SS + R, cy_ * SS + R),
+                                      outline=ACC + (int(180 * (1 - q) * sc),), width=3 * SS)
