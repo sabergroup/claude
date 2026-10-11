@@ -11,7 +11,7 @@ PLANS = {
         # (start, end, scale_from, scale_to, entry_transition)
         "segs": [
             (0.00, 9.24, None, None, None),          # untouched (user zoom inside)
-            (9.24, 11.92, 1.22, 1.25, "whip"),
+            (9.24, 11.92, 1.22, 1.25, "slash"),
             (11.92, 15.12, 1.00, 1.04, None),
             (15.12, 20.08, 1.24, 1.28, "glitch"),
             (20.08, 24.44, 1.00, 1.05, None),
@@ -77,7 +77,7 @@ PLANS = {
         ],
         # (sfx file, event time, align on 'onset'|'peak', max length or None)
         "sfx": [
-            ("blade slide", 9.24, "peak", None),
+            ("blade slide", 9.28, "peak", None),
             ("ui 2", 11.92, "onset", None),
             ("metal glitch", 15.12, "onset", 0.9),
             ("data 1", 17.10, "onset", None),
@@ -101,7 +101,7 @@ PLANS = {
             (9.04, 9.96, 1.23, 1.23, None),
             (9.96, 11.12, 1.00, 1.01, None),
             (11.12, 13.36, 1.10, 1.13, None),
-            (13.36, 15.24, 1.00, 1.03, "whip"),
+            (13.36, 15.24, 1.00, 1.03, "slash"),
             (15.24, 18.24, 1.23, 1.27, None),
             (18.24, 20.52, 1.09, 1.11, "glitch"),
             (20.52, 23.40, 1.00, 1.05, None),
@@ -155,7 +155,7 @@ PLANS = {
             ("ui 1", 9.04, "onset", None),
             ("iphone tab 2", 9.96, "peak", None),
             ("data 1", 11.12, "onset", None),
-            ("blade slide", 13.36, "peak", None),
+            ("blade slide", 13.40, "peak", None),
             ("alert", 15.24, "onset", None),
             ("clock", 17.44, "onset", None),
             ("metal glitch", 18.24, "onset", 0.9),

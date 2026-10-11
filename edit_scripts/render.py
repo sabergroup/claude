@@ -3,6 +3,7 @@ import numpy as np, cv2
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 sys.path.insert(0, "/tmp/claude-0/scripts")
 from plan import PLANS, W, H, FPS
+import anim2
 
 WD = "/tmp/claude-0/w"
 FA = f"{WD}/fonts/tajawal-700.ttf"
@@ -389,6 +390,8 @@ def transform(fr, plan, t, fi):
     if tr == "zoomblur" and k < 7:
         e = (1 - k/7) ** 2; extra = 0.12 * e; gauss = 9 * e
     s += extra
+    if tr == "slash" and k < 9:
+        return slash(fr, s, k)
     ax, ay = ANCHOR
     M = np.float32([[s, 0, ax - s*ax + dx], [0, s, ay - s*ay]])
     out = cv2.warpAffine(fr, M, (W, H), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REFLECT)
@@ -407,6 +410,57 @@ def transform(fr, plan, t, fi):
         al = 0.5 * (1 - k/6) ** 1.5
         out = (out.astype(np.float32) * (1 - al) + 255 * al).astype(np.uint8)
     return out
+
+
+def warp(fr, s, dx=0, dy=0):
+    ax, ay = ANCHOR
+    M = np.float32([[s, 0, ax - s*ax + dx], [0, s, ay - s*ay + dy]])
+    return cv2.warpAffine(fr, M, (W, H), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
+
+
+def dir_blur(img, length, ang):
+    length = int(length)
+    if length < 3: return img
+    k = np.zeros((length, length), np.float32)
+    c = length // 2
+    cv2.line(k, (int(c - c*math.cos(ang)), int(c - c*math.sin(ang))),
+             (int(c + c*math.cos(ang)), int(c + c*math.sin(ang))), 1, 1)
+    return cv2.filter2D(img, -1, k / k.sum())
+
+
+SL_ANG = math.radians(-24)          # blade direction (up-right)
+
+
+def slash(fr, s, k):
+    """strong blade cut: frame split on a diagonal, halves fly apart and snap back, white slash streak"""
+    e = (1 - k / 9) ** 2.2
+    ux, uy = math.cos(SL_ANG), math.sin(SL_ANG)
+    D = 230 * e
+    a = warp(fr, s + 0.16 * e, D * ux, D * uy)
+    b = warp(fr, s + 0.16 * e, -D * ux, -D * uy)
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    side = ((xx - W/2) * (-uy) + (yy - H*0.42) * ux) > 0
+    out = np.where(side[..., None], a, b)
+    out = dir_blur(out, 80 * e, SL_ANG)
+    if k < 6:   # white streak along the cut + flash
+        st = np.zeros((H, W), np.float32)
+        p0 = (int(W/2 - ux*1600), int(H*0.42 - uy*1600)); p1 = (int(W/2 + ux*1600), int(H*0.42 + uy*1600))
+        cv2.line(st, p0, p1, 1.0, int(10 * e) + 2, cv2.LINE_AA)
+        st = np.clip(cv2.GaussianBlur(st, (0, 0), 14) * 2.2 + st, 0, 1) * e
+        fl = 0.45 * (1 - k / 3) if k < 3 else 0
+        al = np.clip(st + fl, 0, 1)[..., None]
+        out = (out.astype(np.float32) * (1 - al) + 255 * al).astype(np.uint8)
+    return out
+
+
+def slash_out(fr, t, nxt):
+    """last 4 frames of the outgoing shot: accelerate along the blade direction"""
+    p = 1 - (nxt - t) * FPS / 4          # 0..1 over the last 4 frames
+    p = max(0.0, min(1.0, p))
+    e = p ** 2
+    ux, uy = math.cos(SL_ANG), math.sin(SL_ANG)
+    out = warp(fr, 1.0 + 0.10 * e, -90 * e * ux, -90 * e * uy) if p > 0 else fr
+    return dir_blur(out, 70 * e, SL_ANG)
 
 
 def in_protect(plan, t):
@@ -438,11 +492,16 @@ def main(name, only=None):
         fr = np.frombuffer(buf, np.uint8).reshape(H, W, 3)
         if not in_protect(plan, t):
             fr = transform(fr, plan, t, fi)
+            for sg in plan["segs"]:
+                if sg[4] == "slash" and 0 < sg[0] - t <= 4 / FPS + 1e-6:
+                    fr = slash_out(fr, t, sg[0])
         img = Image.fromarray(np.ascontiguousarray(fr)).convert("RGBA")
-        for an in plan["anims"]:
-            if an["t0"] <= t < an["t1"]:
-                draw_anim(img, an, t)
-        draw_caption(img, plan["caps"], t)
+        low = anim2.draw_all(img, plan["anims"], t)
+        if low is not None:
+            sg = seg_at(plan, t); sc = 1.0 if sg[2] is None else sg[2] + (sg[3] - sg[2]) * (t - sg[0]) / (sg[1] - sg[0])
+            head_top = ANCHOR[1] - (ANCHOR[1] - 330) * sc
+            if low > head_top - 6:
+                print(f"HEAD OVERLAP t={t:.2f} low={low} head={head_top:.0f}", flush=True)
         enc.stdin.write(img.convert("RGB").tobytes())
     enc.stdin.close(); enc.wait(); dec.terminate()
     print("video done", name, flush=True)
