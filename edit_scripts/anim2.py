@@ -69,7 +69,7 @@ def icon(name, d, lt, fg=DARK, bg=ACC, prog=1.0):
     elif name == "eye":
         ph = (lt % 1.7) / 1.7
         op = 1 - math.sin(math.pi * (ph - .82) / .18) if ph > .82 else 1
-        h = .22 * max(op, .08)
+        h = .22 * max(op, .55)
         g.chord((.18*D, (.5-h)*D, .82*D, (.5+h)*D), 0, 360, outline=fg, width=lw)
         px = .5 + .07 * math.sin(lt * 2.6)
         if op > .3:
@@ -188,7 +188,7 @@ def reveal(im, f):
 
 
 # ------------------------------------------------------------------ kinetic words
-STAG, WIN = 0.12, 0.38          # stagger between words, duration of one word's entrance
+STAG, WIN = 0.08, 0.30          # stagger between words, duration of one word's entrance
 SPACE = 0.28
 
 
@@ -202,7 +202,7 @@ def kinetic(cv, s, size, col, right, cy, lin, lout=None, n_out_total=None):
     for i, im in enumerate(ims):
         p = (lin - i * STAG) / WIN
         if p <= 0: x -= im.width + sp; continue
-        a = eo(p * 1.8); sc = 1 + 0.35 * (1 - eo(p)); dy = (1 - eo(p)) * 10 * SS
+        a = eo(p * 1.8); sc = 1 + 0.10 * (1 - eo(p)); dy = (1 - eo(p)) * 10 * SS
         if lout is not None:          # leave in reverse order, rising up
             q = cl((lout - (n - 1 - i) * 0.06) / 0.22)
             a *= 1 - eo(q); dy -= eo(q) * 30 * SS
@@ -400,7 +400,7 @@ def list_pill(layer, t, a, cy_=CY):
 def pair(layer, t, a, cy_=CY):
     """main chip; at pair time it turns into ✓ممكن and a second chip ✕ grows out to its left"""
     (tp1, ic1, s1), (tp2, ic2, s2) = a["pair"]
-    steps = a["steps"] + [(tp1, ic1, s1)]
+    steps = a["steps"] + [(tp1, ic1, s1)] if a["steps"] else [(tp1, ic1, s1)]
     gap = 22
     if t < tp2:
         text_pill(layer, t, a["t0"], a["t1"], steps, cy=cy_)

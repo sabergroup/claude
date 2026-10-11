@@ -495,6 +495,34 @@ def place_by_head(plan, name):
         print(f"{a['type']:5s} {a['t0']:6.2f}-{a['t1']:6.2f} head>={mh:.0f} -> cy {a['cy']:.0f}", flush=True)
 
 
+MIN_READ = 1.2
+
+
+def audit_read_time(plan):
+    """every piece of text must sit fully visible for MIN_READ seconds before it starts to leave"""
+    out = anim2.OUT; bad = []
+    for a in plan["anims"]:
+        ty = a["type"]
+        if ty in ("count", "pill", "tpill", "pair"):
+            steps = list(a["steps"])
+            if ty == "pair":
+                steps = steps + [a["pair"][0]]
+                seq = [(steps[i][0], steps[i][2], steps[i + 1][0] if i + 1 < len(steps) else a["t1"] - out)
+                       for i in range(len(steps))]
+                tp2, _, s2 = a["pair"][1]
+                seq.append((tp2, s2, a["t1"] - out))
+            else:
+                seq = [(steps[i][0], steps[i][2], steps[i + 1][0] if i + 1 < len(steps) else a["t1"] - out)
+                       for i in range(len(steps))]
+            for i, (ts, text, end) in enumerate(seq):
+                start = ts + (0.30 if i == 0 or ts == a["t0"] else 0.16)
+                ready = start + anim2.STAG * (len(text.split()) - 1) + anim2.WIN
+                rd = end - ready
+                print(f"  read {rd:4.2f}s  {text}", flush=True)
+                if rd < MIN_READ: bad.append((text, round(rd, 2)))
+    assert not bad, f"text not readable long enough: {bad}"
+
+
 def in_protect(plan, t):
     return any(a <= t < b for a, b in plan["protect"])
 
@@ -507,6 +535,7 @@ def main(name, only=None):
         for a, b in plan["protect"]:
             assert an["t1"] <= a or an["t0"] >= b, ("anim in protected", an["t0"])
     place_by_head(plan, name)
+    audit_read_time(plan)
     for s in plan["segs"]:
         if s[2] is not None:
             for a, b in plan["protect"]:
