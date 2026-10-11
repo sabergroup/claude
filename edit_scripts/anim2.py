@@ -482,6 +482,7 @@ def draw_all(frame_rgba, anims, t):
         elif ty == "chip": bar_label(layer, t, a, a.get("cy", CY))
         elif ty == "steps": steps_pill(layer, t, a, a.get("cy", CY))
         elif ty == "flow": flow_pill(layer, t, a, a.get("cy", CY))
+        elif ty == "mirror": mirror_anim(layer, t, a)
         elif ty == "list": list_pill(layer, t, a, a.get("cy", CY))
         elif ty == "cta": cta(layer, t, a, a.get("cy", CY))
         elif ty == "hook": typo.hook(layer, t, a)
@@ -665,3 +666,83 @@ def flow_pill(layer, t, a, cy_=CY):
                     R = r * (1 + 1.6 * eo(u))
                     g.ellipse((c - R, cy - R, c + R, cy + R), outline=(RED if xed else ACC) + (int(200 * (1 - u)),), width=2 * SS)
     draw_pill(layer, 540, cy_, w, PH, BODY + (225,), min(1, ic * 1.5), content)
+
+
+# ================================================================== mirror (one problem) – annotated illustration
+def _ellipse_pts(cx, cy, rx, ry, n=120, start=-90):
+    return [(cx + rx * math.cos(math.radians(start - 360 * i / n)), cy + ry * math.sin(math.radians(start - 360 * i / n)))
+            for i in range(n + 1)]
+
+
+def mirror_anim(layer, t, a):
+    t0, t1, mk = a["t0"], a["t1"], a["mark"]
+    lt, rt = t - t0, t1 - t
+    S = SS
+    out = 1 - eio((0.35 - rt) / 0.35) if rt < 0.35 else 1.0     # global exit
+    if out <= 0: return
+    mx, my = a.get("x", 735), a.get("cy", 190)                    # mirror centre (output px)
+    rx, ry = 62, 86
+    g = ImageDraw.Draw(layer)
+    # glass (fades in after the frame starts drawing)
+    ga = eo((lt - 0.25) / 0.4) * out
+    if ga > 0.01:
+        glass = Image.new("RGBA", (int(rx * 2 * S), int(ry * 2 * S)), (0, 0, 0, 0))
+        gy = np.linspace(0, 1, glass.height)[:, None]
+        col = (np.array([206, 218, 226]) * (1 - gy[..., None]) + np.array([240, 244, 247]) * gy[..., None]).repeat(glass.width, 1)
+        glass = Image.fromarray(col.astype(np.uint8)).convert("RGBA")
+        gd = ImageDraw.Draw(glass)
+        # patient silhouette
+        hx, hy = glass.width / 2, glass.height * 0.42
+        sil = (170, 182, 191)
+        gd.ellipse((hx - 22 * S, hy - 28 * S, hx + 22 * S, hy + 28 * S), fill=sil)
+        gd.rounded_rectangle((hx - 52 * S, hy + 34 * S, hx + 52 * S, glass.height + 40 * S), radius=44 * S, fill=sil)
+        # shine sweep (every 1.8 s)
+        u = ((lt - 0.6) % 1.8) / 0.7
+        if lt > 0.6 and u <= 1:
+            sx = -glass.width * 0.6 + u * glass.width * 2.2
+            sh = Image.new("L", glass.size, 0); sd = ImageDraw.Draw(sh)
+            for i in range(-18, 19):
+                sd.line([(sx + i * S + 60 * S, 0), (sx + i * S - 60 * S, glass.height)], fill=int(150 * (1 - abs(i) / 18)), width=S)
+            wh = Image.new("RGBA", glass.size, (255, 255, 255, 0)); wh.putalpha(sh); glass.alpha_composite(wh)
+        m = Image.new("L", glass.size, 0); ImageDraw.Draw(m).ellipse((0, 0, glass.width - 1, glass.height - 1), fill=int(255 * ga))
+        glass.putalpha(m)
+        layer.alpha_composite(glass, (int((mx - rx) * S), int((my - ry) * S)))
+    # frame draws itself around the glass
+    fp = eio(lt / 0.55)
+    pts = _ellipse_pts(mx * S, my * S, (rx + 6) * S, (ry + 6) * S)
+    n = max(2, int(len(pts) * fp))
+    fa = int(255 * out)
+    g.line(pts[:n], fill=DARK + (fa,), width=11 * S, joint="curve")
+    g.line(pts[:n], fill=ACC + (fa,), width=5 * S, joint="curve")
+    # little stand under the mirror
+    if fp >= 1:
+        sa = eo((lt - 0.55) / 0.25) * out
+        g.line([(mx * S, (my + ry + 10) * S), (mx * S, (my + ry + 10 + 14 * sa) * S)], fill=DARK + (int(255 * out),), width=6 * S)
+    # the one problem: marker on the face + leader line + annotation text
+    if t >= mk:
+        u = t - mk
+        px, py = mx + 10, my - 18                       # on the silhouette's face
+        p = eb(u / 0.35)
+        r = 13 * p
+        g.ellipse(((px - r) * S, (py - r) * S, (px + r) * S, (py + r) * S), outline=ACC + (fa,), width=4 * S)
+        rr = 5 * p
+        g.ellipse(((px - rr) * S, (py - rr) * S, (px + rr) * S, (py + rr) * S), fill=ACC + (fa,))
+        q = (u % 1.1) / 1.1                               # pulse
+        R = 13 + 26 * eo(q)
+        g.ellipse(((px - R) * S, (py - R) * S, (px + R) * S, (py + R) * S), outline=ACC + (int(200 * (1 - q) * out),), width=2 * S)
+        # leader: from the marker straight out to the left, then it becomes the gold underline of the text
+        lp = eio((u - 0.10) / 0.30)
+        x_tip = mx - rx - 40                                 # where the text's right edge sits
+        if lp > 0:
+            x_end = (px - 14) - ((px - 14) - x_tip) * lp
+            g.line([((px - 14) * S, py * S), (x_end * S, py * S)], fill=DARK + (fa,), width=4 * S)
+            g.ellipse(((x_end - 5) * S, (py - 5) * S, (x_end + 5) * S, (py + 5) * S), fill=DARK + (fa,))
+        ta = a.get("text_at", mk + 0.35)
+        tp = eo((t - ta) / 0.45)
+        if tp > 0:
+            im = reveal(txt(a["label"], 56, DARK + (255,)), tp)
+            put(layer, im, x_tip * S - 10 * S - im.width, py * S - im.height + 4 * S, out)
+            ul = eio((t - ta - 0.1) / 0.45)
+            if ul > 0:
+                xr = (x_tip - 10) * S; xl = xr - im.width * ul
+                g.line([(xr, py * S), (xl, py * S)], fill=ACC + (fa,), width=6 * S)

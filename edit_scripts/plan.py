@@ -61,7 +61,7 @@ PLANS = {
         ],
         # animations live exactly inside one shot (or a run of shots) [start,end]
         "anims": [
-            {"type": "flow", "t0": 11.92, "t1": 15.12, "items": [{"icon": "eye", "label": "شايفاها", "on": 12.0}, {"label": "مشكلة واحدة", "on": 13.60, "gold": True}, {"label": "", "on": 99, "check": False}]},
+            {"type": "mirror", "t0": 11.92, "t1": 15.12, "mark": 13.20, "text_at": 13.55, "label": "مشكلة واحدة"},
             {"type": "flow", "t0": 15.12, "t1": 20.08, "items": [{"icon": "search", "label": "الفحص", "on": 15.25}, {"label": "سبب تاني", "on": 17.10, "gold": True}]},
             {"type": "flow", "t0": 20.08, "t1": 24.44, "items": [{"label": "المتخيَّلة", "on": 20.25, "x": 22.74}, {"label": "الأنسب لحالتك", "on": 23.60, "gold": True}]},
             {"type": "steps", "t0": 24.44, "t1": 28.92, "labels": ["مراجعة", "قرار"],
@@ -74,6 +74,7 @@ PLANS = {
         # (sfx file, event time, align on 'onset'|'peak', max length or None)
         "sfx": [
             ("ui 2", 11.92, "onset", None),
+            ("notification", 13.20, "onset", None),
             ("metal glitch", 15.12, "onset", 0.9),
             ("data 1", 17.10, "onset", None),
             ("fail", 22.74, "onset", None),
