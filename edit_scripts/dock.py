@@ -12,7 +12,7 @@ MORPH = 0.38
 
 
 # ---------------------------------------------------------------- content builders (return width, draw)
-def icontext(ic, text, t_in, badge=None, strike=None, dark=False):
+def icontext(ic, text, t_in, badge=None, strike=None, dark=False, icon2=None):
     bd = 70
     w = 30 + text_w(text, TS) + 22 + ICD + 13 + ((bd + 22) if badge else 0)
     col = (DARK + (255,)) if dark else (255, 255, 255, 255)
@@ -20,12 +20,18 @@ def icontext(ic, text, t_in, badge=None, strike=None, dark=False):
     def draw(cv, W_, H_, t):
         cy = H_ / 2
         name, ilt = ic, t - t_in
+        flip = 1.0
+        if icon2 and t >= icon2[0]:
+            u = (t - icon2[0]) / 0.3
+            if u < 0.5: flip = abs(math.cos(math.pi * u))
+            else: name, ilt, flip = icon2[1], t - icon2[0], abs(math.cos(math.pi * min(u, 1)))
         if strike is not None and t >= strike + 0.25:
             name, ilt = "x", t - strike - 0.25
         d = ICD * (0.6 + 0.4 * eo((t - t_in) / 0.3))
         bg = RED if name == "x" else (DARK if dark else ACC)
         fg = (255, 255, 255) if name == "x" else (ACC if dark else DARK)
         im = icon(name, d, ilt, fg=fg, bg=bg)
+        if flip < .999: im = im.resize((max(1, int(im.width * flip)), im.height))
         put(cv, im, W_ - (13 + ICD / 2) * SS - im.width / 2, cy - im.height / 2)
         right = W_ - (13 + ICD + 22) * SS
         kinetic(cv, text, TS, col, right, cy, t - t_in - 0.10)
@@ -49,6 +55,34 @@ def icontext(ic, text, t_in, badge=None, strike=None, dark=False):
             sc = eo((t - t_in) / 0.3)
             if sc < .99: b = b.resize((max(1, int(D * sc)), max(1, int(D * sc))), Image.BICUBIC)
             put(cv, b, bx - b.width / 2, cy - b.height / 2)
+    return w, draw
+
+
+def progress(ic, title, t_in, marks):
+    """icon + title + a 5-slot bar that fills one slot per mark; glows when complete"""
+    n = len(marks); slot, sg = 34, 10
+    barw = n * slot + (n - 1) * sg
+    w = 34 + barw + 30 + text_w(title, TS) + 22 + ICD + 13
+
+    def draw(cv, W_, H_, t):
+        g = ImageDraw.Draw(cv); cy = H_ / 2
+        im = icon(ic, ICD * (0.6 + 0.4 * eo((t - t_in) / 0.3)), t - t_in)
+        put(cv, im, W_ - (13 + ICD / 2) * SS - im.width / 2, cy - im.height / 2)
+        kinetic(cv, title, TS, (255, 255, 255, 255), W_ - (13 + ICD + 22) * SS, cy, t - t_in - 0.10)
+        xr = (34 + barw) * SS
+        ba = eo((t - t_in - 0.42) / 0.2)       # bar only once the pill has opened
+        if ba <= 0.01: return
+        for i, mk in enumerate(marks):       # slots fill right-to-left
+            x1 = xr - i * (slot + sg) * SS; x0 = x1 - slot * SS
+            g.rounded_rectangle((x0, cy - 7 * SS, x1, cy + 7 * SS), radius=7 * SS, fill=(255, 255, 255, int(60 * ba)))
+            if t >= mk:
+                f = eo((t - mk) / 0.25)
+                g.rounded_rectangle((x1 - slot * SS * f, cy - 7 * SS, x1, cy + 7 * SS), radius=7 * SS, fill=ACC)
+        done = marks[-1] + 0.25
+        if t >= done:
+            u = ((t - done) % 1.3) / 1.3
+            g.rounded_rectangle((34 * SS - 6 * SS, cy - 13 * SS, xr + 6 * SS, cy + 13 * SS), radius=13 * SS,
+                                outline=ACC + (int(170 * (1 - u)),), width=2 * SS)
     return w, draw
 
 
@@ -164,7 +198,9 @@ def build(spec):
     for s in spec["states"]:
         kind = s["kind"]
         if kind == "icontext":
-            w, d = icontext(s["icon"], s["text"], s["t"], s.get("badge"), s.get("strike"))
+            w, d = icontext(s["icon"], s["text"], s["t"], s.get("badge"), s.get("strike"), icon2=s.get("icon2"))
+        elif kind == "progress":
+            w, d = progress(s["icon"], s["text"], s["t"], s["marks"])
         elif kind == "steps":
             w, d = steps(s["l1"], s["l2"], s["m1"], s["m2"], s["t"])
         elif kind == "pair":
