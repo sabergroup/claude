@@ -344,7 +344,7 @@ def steps_pill(layer, t, a, cy_=CY):
     draw_pill(layer, 540, cy_ + bob, w, PH, BODY + (225,), min(1, ic*1.5), content)
 
 
-def list_pill(layer, t, a):
+def list_pill(layer, t, a, cy_=CY):
     t0, t1 = a["t0"], a["t1"]
     lt, ic, gr, tx = envelope(t, t0, t1)
     if ic <= .01: return
@@ -394,7 +394,7 @@ def list_pill(layer, t, a):
             u = (t - ts) % 1.2 / 1.2
             g.rounded_rectangle((34*SS - 4*SS, y - 9*SS, bx1 + 4*SS, y + 9*SS), radius=9*SS,
                                 outline=ACC + (int(160*(1-u)),), width=2*SS)
-    draw_pill(layer, 540, CY + bob, w, h, BODY + (230,), min(1, ic*1.5), content)
+    draw_pill(layer, 540, cy_ + bob, w, h, BODY + (230,), min(1, ic*1.5), content)
 
 
 def pair(layer, t, a):
@@ -479,9 +479,9 @@ def draw_all(frame_rgba, anims, t):
     for a in act:
         ty = a["type"]
         if ty == "chip" and "pair" in a: pair(layer, t, a)
-        elif ty == "chip": typo.label(layer, t, a, a.get("cy", CY))
+        elif ty == "chip": bar_label(layer, t, a, a.get("cy", CY))
         elif ty == "steps": steps_pill(layer, t, a, a.get("cy", CY))
-        elif ty == "list": list_pill(layer, t, a)
+        elif ty == "list": list_pill(layer, t, a, a.get("cy", CY))
         elif ty == "cta": cta(layer, t, a, a.get("cy", CY))
         elif ty == "hook": typo.hook(layer, t, a)
     small = layer.resize((BW, BH), Image.LANCZOS)
