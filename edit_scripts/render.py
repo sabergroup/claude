@@ -463,6 +463,38 @@ def slash_out(fr, t, nxt):
     return dir_blur(out, 70 * e, SL_ANG)
 
 
+def scale_at(plan, t):
+    sg = seg_at(plan, t)
+    if sg[2] is None: return 1.0
+    return sg[2] + (sg[3] - sg[2]) * (t - sg[0]) / (sg[1] - sg[0])
+
+
+HEADS = {}
+
+
+def head_top(plan, name, fi):
+    """measured head top in output coordinates (after our zoom), None if unknown"""
+    if name not in HEADS:
+        import json; HEADS[name] = json.load(open(f"{WD}/{name}_head.json"))
+    hd = HEADS[name]
+    if fi >= len(hd) or hd[fi] <= 0 or hd[fi] >= 900: return None
+    t = fi / FPS
+    return ANCHOR[1] + (hd[fi] - ANCHOR[1]) * scale_at(plan, t)
+
+
+def place_by_head(plan, name):
+    """put each top element as high as needed so it never touches the head; fall back below the face"""
+    for a in plan["anims"]:
+        if a["type"] not in ("chip", "steps", "cta"): continue
+        h = 100
+        hs = [head_top(plan, name, fi) for fi in range(int(a["t0"] * FPS), int(a["t1"] * FPS))]
+        hs = [x for x in hs if x is not None]
+        mh = min(hs) if hs else 330
+        cy = min(222, mh - 40 - h / 2 - (6 if a["type"] == "cta" else 0))
+        a["cy"] = cy if cy - h / 2 >= 70 else 1480
+        print(f"{a['type']:5s} {a['t0']:6.2f}-{a['t1']:6.2f} head>={mh:.0f} -> cy {a['cy']:.0f}", flush=True)
+
+
 def in_protect(plan, t):
     return any(a <= t < b for a, b in plan["protect"])
 
@@ -471,8 +503,10 @@ def main(name, only=None):
     plan = PLANS[name]
     # sanity: nothing animated inside the protected zones
     for an in plan["anims"]:
+        if an["type"] == "hook": continue          # hook is a text overlay only, asked to run through the first 5 s
         for a, b in plan["protect"]:
             assert an["t1"] <= a or an["t0"] >= b, ("anim in protected", an["t0"])
+    place_by_head(plan, name)
     for s in plan["segs"]:
         if s[2] is not None:
             for a, b in plan["protect"]:
@@ -503,9 +537,9 @@ def main(name, only=None):
         low = anim2.draw_all(img, [a for a in plan["anims"] if a["type"] != "insert"], t)
         if low is not None and not ins:
             sg = seg_at(plan, t); sc = 1.0 if sg[2] is None else sg[2] + (sg[3] - sg[2]) * (t - sg[0]) / (sg[1] - sg[0])
-            head_top = int(ANCHOR[1] - (ANCHOR[1] - 330) * sc)
-            if low[max(0, head_top - 6):int(ANCHOR[1] + 140 * sc)].any():
-                print(f"HEAD OVERLAP t={t:.2f} head={head_top}", flush=True)
+            ht = head_top(plan, name, fi)
+            if ht is not None and low[max(0, int(ht) - 6):int(ANCHOR[1] + 140 * sc)].any():
+                print(f"HEAD OVERLAP t={t:.2f} head={ht:.0f}", flush=True)
         enc.stdin.write(img.convert("RGB").tobytes())
     enc.stdin.close(); enc.wait(); dec.terminate()
     print("video done", name, flush=True)

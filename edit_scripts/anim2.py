@@ -188,7 +188,7 @@ def reveal(im, f):
 
 
 # ------------------------------------------------------------------ kinetic words
-STAG, WIN = 0.13, 0.42          # stagger between words, duration of one word's entrance
+STAG, WIN = 0.18, 0.55          # stagger between words, duration of one word's entrance
 SPACE = 0.28
 
 
@@ -202,7 +202,7 @@ def kinetic(cv, s, size, col, right, cy, lin, lout=None, n_out_total=None):
     for i, im in enumerate(ims):
         p = (lin - i * STAG) / WIN
         if p <= 0: x -= im.width + sp; continue
-        a = eo(p * 1.6); sc = 0.55 + 0.45 * eb(p); dy = (1 - eo(p)) * 38 * SS
+        a = eo(p * 1.4); sc = 1.0; dy = (1 - eo(p)) * 22 * SS
         if lout is not None:          # leave in reverse order, rising up
             q = cl((lout - (n - 1 - i) * 0.06) / 0.22)
             a *= 1 - eo(q); dy -= eo(q) * 30 * SS
@@ -255,7 +255,7 @@ def text_pill(layer, t, t0, t1, steps, cx=540, cy=CY, extra=None, palette="dark"
     w_full = lambda s: 30 + text_w(s, TS) + 22 + ICD + 13
     wf = w_full(label) if swap >= 1 else w_full(steps[k-1][2]) + (w_full(label) - w_full(steps[k-1][2])) * swap
     w = PH + (wf - PH) * gr
-    bob = 5 * math.sin(2 * math.pi * lt / 2.4) * gr
+    bob = 0
     shake = 0
     if extra and "strike" in extra and t >= extra["strike"]:
         u = t - extra["strike"]; shake = 9 * math.sin(u * 55) * math.exp(-u * 9)
@@ -291,7 +291,7 @@ def text_pill(layer, t, t0, t1, steps, cx=540, cy=CY, extra=None, palette="dark"
             p = eo((t - extra["strike"]) / 0.3); tw = text_w(label, TS) * SS
             ImageDraw.Draw(cv).line([(right + 4*SS, H_/2 + 4*SS), (right - (tw + 8*SS) * p, H_/2 + 4*SS)],
                                     fill=ACC, width=5*SS)
-    imp = (extra or {}).get("impact")
+    imp = None
     if imp:   # slam-in: oversize -> settle, burst ring
         u = (t - t0) / 0.35
         if u < 1:
@@ -302,14 +302,14 @@ def text_pill(layer, t, t0, t1, steps, cx=540, cy=CY, extra=None, palette="dark"
 
 
 # ------------------------------------------------------------------ composite elements
-def steps_pill(layer, t, a):
+def steps_pill(layer, t, a, cy_=CY):
     t0, t1 = a["t0"], a["t1"]; m1, m2 = a["marks"]
     lt, ic, gr, tx = envelope(t, t0, t1)
     if ic <= .01: return
     l1, l2 = a["labels"]; dot = 34; line = 120
     wf = 40 + text_w(l1, 42) + 18 + dot + 20 + line + 20 + dot + 18 + text_w(l2, 42) + 40
     w = PH + (wf - PH) * gr
-    bob = 5 * math.sin(2 * math.pi * lt / 2.4) * gr
+    bob = 0
     fill_p = cl((t - m1) / (m2 - m1)) if t >= m1 else 0
 
     def content(cv, W_, H_):
@@ -341,7 +341,7 @@ def steps_pill(layer, t, a):
                 if u < 1:
                     R = r * (1 + 1.6 * eo(u))
                     g.ellipse((dc - R, cy - R, dc + R, cy + R), outline=ACC + (int(200*(1-u)),), width=2*SS)
-    draw_pill(layer, 540, CY + bob, w, PH, BODY + (225,), min(1, ic*1.5), content)
+    draw_pill(layer, 540, cy_ + bob, w, PH, BODY + (225,), min(1, ic*1.5), content)
 
 
 def list_pill(layer, t, a):
@@ -358,7 +358,7 @@ def list_pill(layer, t, a):
     barw = 150
     wf = 34 + barw + 30 + max(maxw, text_w(a["title"], 26)) + 20 + icd + 15
     w = h + (wf - h) * gr
-    bob = 5 * math.sin(2 * math.pi * lt / 2.4) * gr
+    bob = 0
     prevfilled = items[k-1][2] if k > 0 else filled - 1
 
     def content(cv, W_, H_):
@@ -415,7 +415,7 @@ def pair(layer, t, a):
     text_pill(layer, t, a["t0"], a["t1"], steps, cx=c1)
 
 
-def cta(layer, t, a):
+def cta(layer, t, a, CY=CY):
     t0, t1 = a["t0"], a["t1"]
     lt = t - t0
     rise = (1 - eb(lt / 0.5)) * 70
@@ -429,10 +429,10 @@ def cta(layer, t, a):
     cx_b = 540 - (wc + gap) / 2 * pb
     press = math.sin(math.pi * cl((t - tp) / 0.28)) if t >= tp else 0
     if t >= bt:
-        text_pill(layer, t, bt, t1, [(bt, bic, btx)], cx=cx_b)
+        text_pill(layer, t, bt, t1, [(bt, bic, btx)], cx=cx_b, cy=CY)
     # breathing glow ring
     _, ic, gr, _ = envelope(t, t0, t1)
-    if lt > 0.9 and gr > .5:
+    if False:
         u = ((lt - 0.9) % 1.3) / 1.3
         glow_ring(layer, cx_c, CY + rise, wc, PH, u, gr)
     text_pill(layer, t, t0, t1, [(t0, "calendar", a["text"])], cx=cx_c, cy=CY + rise + press * 4,
@@ -478,12 +478,105 @@ def draw_all(frame_rgba, anims, t):
     for a in act:
         ty = a["type"]
         if ty == "chip" and "pair" in a: pair(layer, t, a)
-        elif ty == "chip": text_pill(layer, t, a["t0"], a["t1"], a["steps"], extra=a)
-        elif ty == "steps": steps_pill(layer, t, a)
+        elif ty == "chip": bar_label(layer, t, a, a.get("cy", CY))
+        elif ty == "steps": steps_pill(layer, t, a, a.get("cy", CY))
         elif ty == "list": list_pill(layer, t, a)
-        elif ty == "cta": cta(layer, t, a)
-        elif ty == "hook": hook(layer, t, a)
+        elif ty == "cta": cta(layer, t, a, a.get("cy", CY))
+        elif ty == "hook": hook_bars(layer, t, a)
     small = layer.resize((BW, BH), Image.LANCZOS)
     frame_rgba.alpha_composite(small, (0, 0))
     al = np.asarray(small.getchannel("A"))
     return al.max(1) > 24          # painted rows (for the head check)
+
+
+# ================================================================== premium bar-wipe typography
+BAR_R = 12
+
+
+def _bar_img(text, size, h, pad, col=(255, 255, 255, 255), fill=BODY + (238,), wf=None, extra=None):
+    tw = text_w(text, size)
+    wf = wf or tw + 2 * pad
+    W_, H_ = int(wf * SS), int(h * SS)
+    im = Image.new("RGBA", (W_, H_), (0, 0, 0, 0))
+    ImageDraw.Draw(im).rounded_rectangle((0, 0, W_ - 1, H_ - 1), radius=BAR_R * SS, fill=fill)
+    t = txt(text, size, col)
+    im.alpha_composite(t, (int(W_ - pad * SS - t.width), int(H_ / 2 - t.height / 2 + 2 * SS)))
+    if extra: extra(im, W_, H_)
+    return im
+
+
+def bar_line(layer, t, te, tx, text, cx, cy, size=56, h=100, pad=36, col=(255, 255, 255, 255),
+             fill=BODY + (238,), wf=None, extra=None):
+    """gold bar sweeps in from the right, retracts and leaves the dark bar + text; reverse on exit.
+    te = entry start, tx = exit start (None = no exit yet)."""
+    if t < te: return
+    tw = text_w(text, size); wf = wf or tw + 2 * pad
+    right = cx + wf / 2; left = cx - wf / 2
+    pa = eio((t - te) / 0.30); pb = eio((t - te - 0.26) / 0.36)
+    gl, gr = right - wf * pa, right - wf * pb               # entry gold span
+    he = left; ge = left
+    if tx is not None and t >= tx:
+        qa = eio((t - tx) / 0.20); qb = eio((t - tx - 0.14) / 0.20)
+        ge, he = left + wf * qa, left + wf * qb              # exit gold span [he, ge]
+    lo = max(gr, he)
+    if lo < right - 0.5:
+        slide = (1 - pb) * 26 * SS            # parallax: text settles while being revealed
+        x0 = int((lo - left) * SS)
+        bg = Image.new("RGBA", (int(wf * SS), int(h * SS)), (0, 0, 0, 0))
+        ImageDraw.Draw(bg).rounded_rectangle((0, 0, bg.width - 1, bg.height - 1), radius=BAR_R * SS, fill=fill)
+        bg.alpha_composite(_bar_txt_only(text, size, h, pad, col, wf, extra, slide))
+        crop = bg.crop((x0, 0, bg.width, bg.height))
+        layer.alpha_composite(crop, (int(lo * SS), int((cy - h / 2) * SS)))
+    g = ImageDraw.Draw(layer)
+    y0, y1 = (cy - h / 2) * SS, (cy + h / 2) * SS
+    if pb < 1 and gl < gr - .5:
+        g.rounded_rectangle((gl * SS, y0, gr * SS, y1), radius=BAR_R * SS, fill=ACC)
+    if ge > he + .5:
+        g.rounded_rectangle((he * SS, y0, ge * SS, y1), radius=BAR_R * SS, fill=ACC)
+
+
+def _bar_txt_only(text, size, h, pad, col, wf, extra, slide):
+    W_, H_ = int(wf * SS), int(h * SS)
+    im = Image.new("RGBA", (W_, H_), (0, 0, 0, 0))
+    t = txt(text, size, col)
+    im.alpha_composite(t, (int(W_ - pad * SS - t.width - slide), int(H_ / 2 - t.height / 2 + 2 * SS)))
+    if extra: extra(im, W_, H_)
+    return im
+
+
+def bar_label(layer, t, a, cy):
+    """chip replacement: sequence of labels, each swap = wipe out + wipe in; strike option"""
+    steps = a["steps"]; t0, t1 = a["t0"], a["t1"]
+    for i, (ts, _ic, label) in enumerate(steps):
+        te = t0 + 0.05 if i == 0 else ts + 0.28
+        nxt = steps[i + 1][0] if i + 1 < len(steps) else None
+        tx = nxt if nxt is not None else t1 - 0.40
+        if t >= (nxt + 0.40 if nxt else t1): continue
+        extra = None
+        if "strike" in a and i == len(steps) - 1 and t >= a["strike"]:
+            p = eio((t - a["strike"]) / 0.45)
+            def extra(im, W_, H_, p=p, label=label):
+                tw = text_w(label, 56) * SS
+                x1 = W_ - 36 * SS; x0 = x1 - tw * p
+                ImageDraw.Draw(im).line([(x1, H_ / 2 + 3 * SS), (x0, H_ / 2 + 3 * SS)], fill=ACC, width=6 * SS)
+        bar_line(layer, t, te, tx, label, 540, cy, extra=extra)
+
+
+def hook_bars(layer, t, a):
+    t1 = a["t1"]; tx_all = t1 - 0.42
+    for ln in a["bars"]:
+        te = ln["t"]; tx = ln.get("out", tx_all)
+        size = ln.get("size", 64); h = ln.get("h", 112)
+        col = ACC + (255,) if ln.get("gold") else (255, 255, 255, 255)
+        extra = None; wf = None
+        if "count" in ln:          # number counting up next to the words
+            c0, c1 = ln["count"]
+            n = int(round(100 * eio((t - c0) / (c1 - c0)))) if t >= c0 else None
+            num_w = text_w("100%", size)
+            wf = text_w(ln["text"], size) + 22 + num_w + 2 * 36
+            def extra(im, W_, H_, n=n, size=size):
+                if n is None: return
+                s = f"{n}%"; ti = txt(s, size, ACC + (255,))
+                x = 36 * SS + (text_w("100%", size) * SS - ti.width)
+                im.alpha_composite(ti, (int(x), int(H_ / 2 - ti.height / 2 + 2 * SS)))
+        bar_line(layer, t, te, tx, ln["text"], 540, ln["cy"], size=size, h=h, pad=36, col=col, wf=wf, extra=extra)
