@@ -68,7 +68,7 @@ def sprite(w,g,size=58):
     rgb=(col[None,None,:]*ma[...,None]+np.array(SH,np.float32)[None,None,:]*(sh*(1-ma))[...,None])/np.maximum(a,1e-6)[...,None]
     im=Image.fromarray(np.dstack([rgb,a*255]).clip(0,255).astype(np.uint8),"RGBA")
     return im,tw,th,bb
-CAP_CY=1290
+CAP_CY=getattr(CFG,'CAP_CY',1290)   # caption centre (name sits 125 px below)
 for c in chunks:
     sp=font(FM,58).getlength(" ")
     for w in c["words"]:
@@ -267,7 +267,7 @@ def name_layer(size=36,track=0.22,line_len=60,y=1415):
     sh=np.clip(s1*0.95+s2*0.75,0,255)
     out=Image.fromarray(np.dstack([np.full(sh.shape+(3,),SH,np.uint8),sh.astype(np.uint8)]),"RGBA"); out.alpha_composite(L)
     return out
-NAME_L=name_layer(); NAME_Y=1415; NAME_IN=0.3; NAME_OUT=getattr(CFG,'NAME_OUT',6.2)
+NAME_L=name_layer(); NAME_Y=getattr(CFG,'NAME_Y',CAP_CY+125); NAME_IN=0.3; NAME_OUT=getattr(CFG,'NAME_OUT',6.2)
 def draw_name(img,t):
     if not (NAME_IN<=t<NAME_OUT): return
     p=t-NAME_IN; fo=1-eio((t-(NAME_OUT-0.5))/0.5)
