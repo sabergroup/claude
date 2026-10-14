@@ -54,6 +54,15 @@ for k,c in enumerate(chunks):
     nxt=chunks[k+1]["s"] if k+1<len(chunks) else DUR
     c["end"]=min(nxt, c["le"]+0.45) if k+1<len(chunks) else DUR-0.02
 chunks[0]["s"]=0; chunks[0]["words"][0]["s"]=0.0
+HOLD=0.62
+for c in chunks:
+    ws_=c["words"]
+    for w in ws_: w["s"]=max(c["s"],w["s"]-0.08)          # appear slightly ahead of the voice
+    lim=c["end"]-HOLD
+    last=ws_[-1]["s"]
+    if last>lim and last>c["s"]:
+        f=max(0.0,(lim-c["s"]))/(last-c["s"])
+        for w in ws_: w["s"]=c["s"]+(w["s"]-c["s"])*f
 # ---------------- word sprites with soft drop shadow (no box, no stroke)
 PAD=30
 def sprite(w,g,size=58):
@@ -259,13 +268,11 @@ def name_layer(size=36,track=0.22,line_len=60,y=1415):
     gap=18*SS; ih=size*SS; iw=ih*0.55
     L=Image.new("RGBA",(WD*SS,160*SS),(0,0,0,0)); d=ImageDraw.Draw(L)
     bb=f.getbbox("M"); cy=80*SS
-    total=nw+2*(line_len*SS+gap)+gap+iw; tx=WD*SS/2-total/2
+    total=nw+2*(line_len*SS+gap); tx=WD*SS/2-total/2
     d.line((tx,cy,tx+line_len*SS,cy),fill=GOLD+(255,),width=int(1.5*SS)); tx+=line_len*SS+gap
     ty=cy-(bb[1]+bb[3])/2
     for c,a_ in zip(name,adv): d.text((tx,ty),c,font=f,fill=BEIGE+(255,)); tx+=a_+tr
     tx+=gap-tr
-    d.rounded_rectangle((tx,cy-ih/2,tx+iw,cy+ih/2),radius=ih*0.14,outline=GOLD+(255,),width=int(1.6*SS))
-    d.line((tx+iw*0.34,cy+ih*0.33,tx+iw*0.66,cy+ih*0.33),fill=GOLD+(255,),width=int(1.6*SS)); tx+=iw+gap
     d.line((tx,cy,tx+line_len*SS,cy),fill=GOLD+(255,),width=int(1.5*SS))
     L=L.resize((WD,160),Image.LANCZOS)
     a=L.split()[3]
@@ -327,9 +334,9 @@ for fk in frames:
     # captions (word-by-word)
     for c in chunks:
         if not (c["s"]<=t<c["end"]): continue
-        out=clamp((t-(c["end"]-0.14))/0.14)
+        out=clamp((t-(c["end"]-0.1))/0.1)
         for w in c["words"]:
-            p=(t-w["s"])/0.24
+            p=(t-w["s"])/0.18
             if p<=0: continue
             if w["g"]: sc=1.18-0.18*eo(p); dy=0
             else: sc=0.85+0.15*eback(p,1.3); dy=22*(1-eo(p))
@@ -342,12 +349,12 @@ for fk in frames:
                 d.line((xs,y,x1,y),fill=GOLD+(a,),width=3)
     draw_name(img,t)
     o=img.convert("RGB")
-    if PREVIEW: o.save(f"{S}/prev6/p_{t:06.2f}.png")
+    if PREVIEW: o.save(f"{S}/prev7/p_{t:06.2f}.png")
     else: enc.stdin.write(o.tobytes())
 if not PREVIEW: enc.stdin.close(); enc.wait()
 def T(x):
     ms=int(round(x*1000)); return f"{ms//3600000:02d}:{ms//60000%60:02d}:{ms//1000%60:02d},{ms%1000:03d}"
 with open(f"{S}/captions3.srt","w",encoding="utf-8") as f:
     for k,c in enumerate(chunks): f.write(f"{k+1}\n{T(c['s'])} --> {T(c['end'])}\n{' '.join(w['w'] for w in c['words'])}\n\n")
-for c in chunks: print(f"{c['s']:6.2f}-{c['end']:6.2f}", ' '.join(w['w'] for w in c['words']))
+for c in chunks: print(f"{c['s']:6.2f}-{c['end']:6.2f} last word fully on {c['end']-0.1-(c["words"][-1]["s"]+0.18):.2f}s", c['words'][-1]['w'])
 print("icons",[(i['n'],round(i['s'],2),round(i['e'],2)) for i in icons])
