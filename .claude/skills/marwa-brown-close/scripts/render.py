@@ -209,7 +209,7 @@ def seg_bounds(t):
         if c>t: b=c; break
     return a,b
 def zoom(t):
-    z=1.0+0.035*(0.5-0.5*math.cos(2*math.pi*t/9.0))   # slow breathing push (kept)
+    z=getattr(CFG,'BASE_ZOOM',1.0)*1.0+0.035*(0.5-0.5*math.cos(2*math.pi*t/9.0))   # slow breathing push (kept)
     for s_,e_ in EMPH:
         z+=0.075*eio((t-s_)/0.4)*(1-eio((t-(e_-0.05))/0.4))
     for c,k in TR.items():   # gentle zoom-through: rises into the cut and settles after, no jumps
@@ -228,7 +228,7 @@ def flash_at(t):
     for c,k in TR.items():
         if k=="flash" and abs(t-c)<0.16: return 0.2*eio(1-abs(t-c)/0.16)
     return 0
-AX,AY=540,560
+AX,AY=getattr(CFG,'ANCHOR',(540,560))   # punch-in / base-zoom anchor (face)
 def frame_zoom(fr,z,bl):
     im=Image.fromarray(fr)
     def crop(zz):
@@ -267,7 +267,7 @@ def name_layer(size=36,track=0.22,line_len=60,y=1415):
     sh=np.clip(s1*0.95+s2*0.75,0,255)
     out=Image.fromarray(np.dstack([np.full(sh.shape+(3,),SH,np.uint8),sh.astype(np.uint8)]),"RGBA"); out.alpha_composite(L)
     return out
-NAME_L=name_layer(); NAME_Y=1415; NAME_IN=0.3; NAME_OUT=6.2
+NAME_L=name_layer(); NAME_Y=1415; NAME_IN=0.3; NAME_OUT=getattr(CFG,'NAME_OUT',6.2)
 def draw_name(img,t):
     if not (NAME_IN<=t<NAME_OUT): return
     p=t-NAME_IN; fo=1-eio((t-(NAME_OUT-0.5))/0.5)
