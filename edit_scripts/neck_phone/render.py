@@ -109,7 +109,7 @@ for c in chunks:
         l0=[w for w in gws if w["cy"]==gws[0]["cy"]]
         c["ul"]=(min(w["cx"]-w["tw"]/2 for w in l0),max(w["cx"]+w["tw"]/2 for w in l0),l0[0]["cy"]+34,min(w["s"] for w in l0))
 import json as _j
-_j.dump([dict(t=round(w["s"],3),w=w["w"]) for c in chunks for w in c["words"]],open(f"{S}/word_times.json","w"),ensure_ascii=False)
+_j.dump([dict(t=round(w["s"],3),w=w["w"],line_start=(k==0 or c["words"][k-1]["cy"]!=w["cy"])) for c in chunks for k,w in enumerate(c["words"])],open(f"{S}/word_times.json","w"),ensure_ascii=False)
 # ---------------- line icons (0..100 box) drawn on
 def circle(cx,cy,r,a0=0,a1=360,n=64):
     return [(cx+r*math.cos(math.radians(a)),cy+r*math.sin(math.radians(a))) for a in np.linspace(a0,a1,n)]

@@ -53,7 +53,7 @@ for t,f,ev,al,tgt,why in PLAN:
 TAPS=[("iphone mix tabs.MP3",i) for i in range(12)]+[("iphone tab 2.MP3",0),("iphone tap 1.MP3",0),("iphone tab 2.MP3",1),("iphone tap 1.MP3",1)]
 TAP_REL=float(sys.argv[2]) if len(sys.argv)>2 else -3
 cache={}
-words=json.load(open(f"{S}/word_times.json"))
+words=[w for w in json.load(open(f"{S}/word_times.json")) if w["line_start"]]   # tap only on the first word of each caption line
 for k,wd in enumerate(words):
     f,i=TAPS[k%len(TAPS)]
     if f not in cache: cache[f]=load(f)
@@ -63,7 +63,7 @@ for k,wd in enumerate(words):
     pk=20*np.log10(np.abs(seg).max()+1e-9)
     g=10**((VOICE_RMS+TAP_REL+12-pk)/20)   # taps are clicks: level them by peak (peak ≈ speech RMS + 12 + TAP_REL)
     st=int(round(wd["t"]*SR)); en=min(len(mix),st+len(seg)); mix[st:en]+=seg[:en-st]*g
-log.append(dict(t="كل كلمة",file="iphone mix tabs / iphone tab 2 / iphone tap 1",events="16 تاب بالتناوب",gain_db=None,why=f"تاب آيفون مع ظهور كل كلمة ({len(words)} كلمة)"))
+log.append(dict(t="أول كل سطر",file="iphone mix tabs / iphone tab 2 / iphone tap 1",events="16 تاب بالتناوب",gain_db=None,why=f"تاب آيفون مع أول كلمة في كل سطر ({len(words)} سطر)"))
 print("taps:",len(words))
 print("mix peak dBFS",round(20*np.log10(np.abs(mix).max()),2),"voice peak",round(20*np.log10(np.abs(voice).max()),2))
 assert np.abs(mix).max()<0.99
