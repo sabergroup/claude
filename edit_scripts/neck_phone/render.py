@@ -19,13 +19,13 @@ def wt(i):
     for o,s_,e_ in tl:
         if s_<=mid*SR<e_ and not (s_<=ws*SR<e_): st=o/SR
     return st, max(st+0.08, src2out(we-0.001))
-CH="""19:والاستمرار 20:في 21:*عادة 22:*زي 23:*دي
-24:بتخلي 25:*خطوط 26:*وتجاعيد
-27:تبتدي 28:تظهر 29:في 30:*الرقبة
-0:دايمًا 1:*أمهاتنا 2:كانوا 3:يقولولنا
+CH="""0:دايمًا 1:*أمهاتنا 2:كانوا 3:يقولولنا
 4:*ماتوطيش 5:*رقبتك 6:قدّام 7:لفترة 8:طويلة
 9:ودلوقتي 10:كلنا 11:ماسكين 12:*الموبايل
 13:وموطيين 14:رقبتنا 15:بشكل 16:تلقائي 17:*طول 18:*الوقت
+19:والاستمرار 20:في 21:*عادة 22:*زي 23:*دي
+24:بتخلي 25:*خطوط 26:*وتجاعيد
+27:تبتدي 28:تظهر 29:في 30:*الرقبة
 31:ومع 32:*إهمال 33:العناية 34:بيها
 35:الخطوط 36:دي 37:ممكن 38:*تبان 39:*أكتر
 40:وعلشان 41:كده 42:زي 43:ما 44:*بنهتم
@@ -72,7 +72,7 @@ def sprite(w,g,size=58):
     rgb=(col[None,None,:]*ma[...,None]+np.array(SH,np.float32)[None,None,:]*(sh*(1-ma))[...,None])/np.maximum(a,1e-6)[...,None]
     im=Image.fromarray(np.dstack([rgb,a*255]).clip(0,255).astype(np.uint8),"RGBA")
     return im,tw,th,bb
-CAP_CY=1330
+CAP_CY=1290
 for c in chunks:
     sp=font(FM,58).getlength(" ")
     for w in c["words"]:
@@ -149,6 +149,7 @@ for a,b,n in ICON_EV:
     s=wt(a)[0]-0.08; ca=chunk_of(a); cb=chunk_of(b)
     e=cb["end"]
     icons.append(dict(n=n,s=s,e=e,top=min(ca["top"],cb["top"])))
+icons.sort(key=lambda d:d['s'])
 for k in range(len(icons)-1):  # never overlap
     icons[k]["e"]=min(icons[k]["e"],icons[k+1]["s"])
 ISZ=118; SS=3
@@ -193,7 +194,9 @@ def sparkle_img(r,a):
     ImageDraw.Draw(im).polygon(star(c,c,r,0.2),fill=GOLD+(int(255*a),)); return im
 # ---------------- camera: slow push + smooth emphasis + eased cut transitions
 CUTS=[o/SR for o,_,_ in tl[1:]]
-BIG={round(c,2) for c in CUTS if abs(c-4.235)<0.01 or abs(c-13.119)<0.01}
+KINDS=["flash","zoom","blur","flash","zoom","dissolve","blur","zoom","flash"]
+TR={c:KINDS[i%len(KINDS)] for i,c in enumerate(CUTS)}
+BIG=set()
 EMPH=[]
 for c in chunks:
     if any(w["g"] for w in c["words"]) and c is not chunks[0]:
@@ -210,12 +213,25 @@ def seg_bounds(t):
         if c>t: b=c; break
     return a,b
 def zoom(t):
-    z=1.0+0.035*(0.5-0.5*math.cos(2*math.pi*t/9.0))   # slow breathing push, continuous across cuts
+    z=1.0+0.035*(0.5-0.5*math.cos(2*math.pi*t/9.0))   # slow breathing push (kept)
     for s_,e_ in EMPH:
         z+=0.075*eio((t-s_)/0.4)*(1-eio((t-(e_-0.05))/0.4))
+    for c,k in TR.items():   # gentle zoom-through: rises into the cut and settles after, no jumps
+        if k=="zoom":
+            if c-0.3<=t<c: z+=0.045*eio((t-(c-0.3))/0.3)
+            elif c<=t<c+0.4: z+=0.045*(1-eio((t-c)/0.4))
     return z
-XF={}   # cut time -> dissolve half-length
-for c in CUTS: XF[c]=0.16 if round(c,2) in BIG else 0.07
+HALF={"flash":0.09,"zoom":0.1,"blur":0.14,"dissolve":0.1}
+XF={c:HALF[k] for c,k in TR.items()}
+def blur_at(t):
+    for c,k in TR.items():
+        h=XF[c]
+        if k in("blur","zoom") and abs(t-c)<h: return (0.45 if k=="blur" else 0.2)*eio(1-abs(t-c)/h)
+    return 0
+def flash_at(t):
+    for c,k in TR.items():
+        if k=="flash" and abs(t-c)<0.16: return 0.2*eio(1-abs(t-c)/0.16)
+    return 0
 AX,AY=540,560
 def frame_zoom(fr,z,bl):
     im=Image.fromarray(fr)
@@ -237,31 +253,35 @@ class Reader:
         return s.fr
 R=Reader(); R2=Reader()
 # ---------------- end name
-def name_parts(size=36,track=0.42):
-    f=font(FM,size); name="DR. MARWA MAGDY"; out=[]
-    adv=[f.getlength(c) for c in name]; tr=size*track; nw=sum(adv)+tr*(len(name)-1); x=-nw/2
-    for c,a in zip(name,adv):
-        if c!=" ":
-            m=Image.new("RGBA",(int(a)+20,size*2),(0,0,0,0)); d=ImageDraw.Draw(m)
-            d.text((10,size*0.35),c,font=f,fill=BEIGE+(255,))
-            out.append((m,x+a/2))
-        x+=a+tr
-    return out,nw
-NAME,NW=name_parts()
-NAME_Y=1185
-NAME_Y=232
-NAME_OUT=6.0
+def name_layer(size=36,track=0.22,line_len=60,y=1415):
+    SS=3; f=ImageFont.truetype(FM,size*SS); name="DR. MARWA MAGDY"
+    adv=[f.getlength(c) for c in name]; tr=size*SS*track; nw=sum(adv)+tr*(len(name)-1)
+    gap=18*SS; ih=size*SS; iw=ih*0.55
+    L=Image.new("RGBA",(WD*SS,160*SS),(0,0,0,0)); d=ImageDraw.Draw(L)
+    bb=f.getbbox("M"); cy=80*SS
+    total=nw+2*(line_len*SS+gap)+gap+iw; tx=WD*SS/2-total/2
+    d.line((tx,cy,tx+line_len*SS,cy),fill=GOLD+(255,),width=int(1.5*SS)); tx+=line_len*SS+gap
+    ty=cy-(bb[1]+bb[3])/2
+    for c,a_ in zip(name,adv): d.text((tx,ty),c,font=f,fill=BEIGE+(255,)); tx+=a_+tr
+    tx+=gap-tr
+    d.rounded_rectangle((tx,cy-ih/2,tx+iw,cy+ih/2),radius=ih*0.14,outline=GOLD+(255,),width=int(1.6*SS))
+    d.line((tx+iw*0.34,cy+ih*0.33,tx+iw*0.66,cy+ih*0.33),fill=GOLD+(255,),width=int(1.6*SS)); tx+=iw+gap
+    d.line((tx,cy,tx+line_len*SS,cy),fill=GOLD+(255,),width=int(1.5*SS))
+    L=L.resize((WD,160),Image.LANCZOS)
+    a=L.split()[3]
+    s1=np.roll(np.array(a.filter(ImageFilter.GaussianBlur(3)),np.float32),2,0); s2=np.array(a.filter(ImageFilter.GaussianBlur(14)),np.float32)
+    sh=np.clip(s1*0.95+s2*0.75,0,255)
+    out=Image.fromarray(np.dstack([np.full(sh.shape+(3,),SH,np.uint8),sh.astype(np.uint8)]),"RGBA"); out.alpha_composite(L)
+    return out
+NAME_L=name_layer(); NAME_Y=1415; NAME_IN=0.3; NAME_OUT=6.2
 def draw_name(img,t):
-    p=t-0.15
-    if p<0 or t>=NAME_OUT: return
-    fo=1-eio((t-(NAME_OUT-0.45))/0.45)
-    d=ImageDraw.Draw(img); L=120*eo(p/0.5); gap=NW/2+34
-    for sgn in (-1,1):
-        x0=WD/2+sgn*gap; x1=x0+sgn*L
-        d.line((x0,NAME_Y,x1,NAME_Y),fill=GOLD+(int(255*fo),),width=2)
-    for k,(m,dx) in enumerate(NAME):
-        q=eo((p-0.15-k*0.035)/0.35)
-        put(img,m,WD/2+dx,NAME_Y+8*(1-q)+4-6*(1-fo),alpha=q*fo)
+    if not (NAME_IN<=t<NAME_OUT): return
+    p=t-NAME_IN; fo=1-eio((t-(NAME_OUT-0.5))/0.5)
+    q=eo(p/0.7)                                   # reveal from the centre outward
+    arr=np.array(NAME_L); half=int(WD/2*q)
+    arr[:,:max(0,WD//2-half),3]=0; arr[:,WD//2+half:,3]=0
+    arr[...,3]=(arr[...,3]*clamp(p/0.35)*fo).astype(np.uint8)
+    img.alpha_composite(Image.fromarray(arr),(0,int(NAME_Y-80+6*(1-eo(p/0.5))-4*(1-fo))))
 # ---------------- render
 NF=int(round(DUR*FPS))
 if not PREVIEW:
@@ -283,10 +303,13 @@ for fk in frames:
             w=eio(w); wi=w if t>=c else w; 
             wa=(1-w) if t>=c else w  # weight of the 'other' frame
             fr=(fr.astype(np.float32)*(1-wa)+fr2.astype(np.float32)*wa).astype(np.uint8)
-            if round(c,2) in BIG:   # soft blur through the content jump hides ghosting
-                b=eio(1-abs(t-c)/h)
-                sm=Image.fromarray(fr).resize((WD//10,HT//10),Image.BILINEAR).filter(ImageFilter.GaussianBlur(2.2)).resize((WD,HT),Image.BICUBIC)
-                fr=(fr.astype(np.float32)*(1-b)+np.asarray(sm,np.float32)*b).astype(np.uint8)
+    bl=blur_at(t)
+    if bl>0.01:
+        sm=Image.fromarray(fr).resize((WD//10,HT//10),Image.BILINEAR).filter(ImageFilter.GaussianBlur(2.2)).resize((WD,HT),Image.BICUBIC)
+        fr=(fr.astype(np.float32)*(1-bl)+np.asarray(sm,np.float32)*bl).astype(np.uint8)
+    fl=flash_at(t)
+    if fl>0.005:
+        fr=(fr.astype(np.float32)*(1-fl)+np.array(CREAM,np.float32)*fl).astype(np.uint8)
     img=frame_zoom(fr,z,0).convert("RGBA")
     # icons
     for ic in icons:
@@ -319,12 +342,12 @@ for fk in frames:
                 d.line((xs,y,x1,y),fill=GOLD+(a,),width=3)
     draw_name(img,t)
     o=img.convert("RGB")
-    if PREVIEW: o.save(f"{S}/prev4/p_{t:06.2f}.png")
+    if PREVIEW: o.save(f"{S}/prev6/p_{t:06.2f}.png")
     else: enc.stdin.write(o.tobytes())
 if not PREVIEW: enc.stdin.close(); enc.wait()
 def T(x):
     ms=int(round(x*1000)); return f"{ms//3600000:02d}:{ms//60000%60:02d}:{ms//1000%60:02d},{ms%1000:03d}"
-with open(f"{S}/captions2.srt","w",encoding="utf-8") as f:
+with open(f"{S}/captions3.srt","w",encoding="utf-8") as f:
     for k,c in enumerate(chunks): f.write(f"{k+1}\n{T(c['s'])} --> {T(c['end'])}\n{' '.join(w['w'] for w in c['words'])}\n\n")
 for c in chunks: print(f"{c['s']:6.2f}-{c['end']:6.2f}", ' '.join(w['w'] for w in c['words']))
 print("icons",[(i['n'],round(i['s'],2),round(i['e'],2)) for i in icons])

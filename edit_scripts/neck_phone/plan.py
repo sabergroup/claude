@@ -11,7 +11,7 @@ def zc(t, side=0.004):
     cand=np.where(np.sign(seg[:-1])!=np.sign(seg[1:]))[0]
     if len(cand)==0: return i
     return i-w+cand[np.argmin(np.abs(cand-w))]+1
-PIECES=[(9.335,13.57),(0.12,9.335),(13.57,41.36)]
+PIECES=[(0.12,41.36)]
 KEEP=0.065; MINRUN=0.20
 def trim(a,b,last):
     out=[]; cur=a; i0,i1=int(a*100),int(b*100)
