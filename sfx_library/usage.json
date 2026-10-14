@@ -8,16 +8,6 @@
    "why": "ظهور اسم الدكتورة: ووش داخل على ضربة ناعمة (إمباكت)"
   },
   {
-   "t": 3.93,
-   "file": "iphone mix tabs.MP3",
-   "events": [
-    5,
-    5
-   ],
-   "gain_db": -21.0,
-   "why": "الموبايل: تاتش آيفون (تاتش رقم 6 من 12)"
-  },
-  {
    "t": 4.64,
    "file": "Zoom 2.wav",
    "events": null,
@@ -116,21 +106,18 @@
    "why": "ماتنتظريش: الوقت بيبطأ (تيب ستوب)"
   },
   {
-   "t": 36.84,
-   "file": "iphone tab 2.MP3",
-   "events": [
-    0,
-    0
-   ],
-   "gain_db": -21.0,
-   "why": "احجزي: تاتش"
-  },
-  {
    "t": 37.45,
    "file": "Chat Notification.wav",
    "events": null,
    "gain_db": -20.7,
    "why": "استشارتك معانا: دينج تأكيد"
+  },
+  {
+   "t": "كل كلمة",
+   "file": "iphone mix tabs / iphone tab 2 / iphone tap 1",
+   "events": "16 تاب بالتناوب",
+   "gain_db": null,
+   "why": "تاب آيفون مع ظهور كل كلمة (100 كلمة)"
   }
  ]
 }

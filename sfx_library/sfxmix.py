@@ -8,7 +8,6 @@ def load(f):
 # (time in video, file, event indices (first,last) or None=whole, align 'onset'|'peak', target peak dBFS, reason)
 PLAN=[
  (0.95,"Impact 1.wav",None,"peak",-29,"ظهور اسم الدكتورة: ووش داخل على ضربة ناعمة (إمباكت)"),
- (3.93,"iphone mix tabs.MP3",(5,5),"onset",-27,"الموبايل: تاتش آيفون (تاتش رقم 6 من 12)"),
  (4.645,"Zoom 2.wav",None,"peak",-30,"ترانزيشن زوم هادي"),
  (6.08,"soundjay_scroll_main__soundjay_scroll_main-04.wav",(0,3),"onset",-27,"طول الوقت: تكتكة ساعة"),
  (10.29,"MMDesignElement_BW.23589.wav",None,"onset",-29,"خطوط وتجاعيد: نبضات نغمية متموجة"),
@@ -21,7 +20,6 @@ PLAN=[
  (29.82,"Riser Stop.wav",("sec",2.35,3.32),"end",-30,"شد الجلد: آخر الرايزر (طالع لفوق ويقف)"),
  (33.56,"Click 3.wav",(0,0),"onset",-23,"نصيحتي: كليك زي مفتاح النور"),
  (34.24,"Stop Time 1.wav",("sec",0.0,1.3),"onset",-30,"ماتنتظريش: الوقت بيبطأ (تيب ستوب)"),
- (36.84,"iphone tab 2.MP3",(0,0),"onset",-26,"احجزي: تاتش"),
  (37.45,"Chat Notification.wav",None,"onset",-27,"استشارتك معانا: دينج تأكيد"),
 ]
 voice=np.concatenate([A[s:e] for s,e in segs]).astype(np.float32)
@@ -51,6 +49,22 @@ for t,f,ev,al,tgt,why in PLAN:
     mix[st:en]+=seg[:en-st]
     log.append(dict(t=round(t,2),file=f,events=list(ev) if ev else None,gain_db=round(float(20*np.log10(g)),1),why=why))
     print(f"{t:6.2f} {f[:40]:40s} ev={ev} gain {20*np.log10(g):+.1f} dB")
+# iPhone tap on every word as it appears (rotating through all 16 taps in the library)
+TAPS=[("iphone mix tabs.MP3",i) for i in range(12)]+[("iphone tab 2.MP3",0),("iphone tap 1.MP3",0),("iphone tab 2.MP3",1),("iphone tap 1.MP3",1)]
+TAP_REL=float(sys.argv[2]) if len(sys.argv)>2 else -3
+cache={}
+words=json.load(open(f"{S}/word_times.json"))
+for k,wd in enumerate(words):
+    f,i=TAPS[k%len(TAPS)]
+    if f not in cache: cache[f]=load(f)
+    E=EV[f]["events"][i]; a=cache[f]
+    seg=a[int((E["start"]-0.005)*SR):int((E["end"]+0.12)*SR)].copy()
+    fo=int(0.03*SR); seg[-fo:]*=np.linspace(1,0,fo)[:,None]
+    pk=20*np.log10(np.abs(seg).max()+1e-9)
+    g=10**((VOICE_RMS+TAP_REL+12-pk)/20)   # taps are clicks: level them by peak (peak ≈ speech RMS + 12 + TAP_REL)
+    st=int(round(wd["t"]*SR)); en=min(len(mix),st+len(seg)); mix[st:en]+=seg[:en-st]*g
+log.append(dict(t="كل كلمة",file="iphone mix tabs / iphone tab 2 / iphone tap 1",events="16 تاب بالتناوب",gain_db=None,why=f"تاب آيفون مع ظهور كل كلمة ({len(words)} كلمة)"))
+print("taps:",len(words))
 print("mix peak dBFS",round(20*np.log10(np.abs(mix).max()),2),"voice peak",round(20*np.log10(np.abs(voice).max()),2))
 assert np.abs(mix).max()<0.99
 mix.tofile(f"{S}/mix_sfx.f32"); json.dump(log,open(f"{S}/sfx_used.json","w"),ensure_ascii=False,indent=1)

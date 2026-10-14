@@ -65,12 +65,15 @@ for c in chunks:
         for w in ws_: w["s"]=c["s"]+(w["s"]-c["s"])*f
 # ---------------- word sprites with soft drop shadow (no box, no stroke)
 PAD=30
+_mt=[font(p,z).getmetrics() for p,z in ((FM,58),(FB,60))]
+ASC=max(a for a,_ in _mt); DESC=max(d for _,d in _mt)
 def sprite(w,g,size=58):
+    # every word shares one baseline: fixed box height, text drawn on the baseline
     f=font(FB if g else FM,size+(2 if g else 0))
-    bb=f.getbbox(w,direction="rtl",language="ar")
-    tw,th=bb[2]-bb[0],bb[3]-bb[1]
+    bb=f.getbbox(w,direction="rtl",language="ar",anchor="ls")
+    tw,th=bb[2]-bb[0],ASC+DESC
     Wd,Hd=tw+2*PAD,th+2*PAD
-    m=Image.new("L",(Wd,Hd),0); ImageDraw.Draw(m).text((PAD-bb[0],PAD-bb[1]),w,font=f,fill=255,direction="rtl",language="ar")
+    m=Image.new("L",(Wd,Hd),0); ImageDraw.Draw(m).text((PAD-bb[0],PAD+ASC),w,font=f,fill=255,direction="rtl",language="ar",anchor="ls")
     ma=np.array(m,np.float32)/255
     s1=np.array(m.filter(ImageFilter.GaussianBlur(4)),np.float32)/255
     s2=np.array(m.filter(ImageFilter.GaussianBlur(13)),np.float32)/255
@@ -105,6 +108,8 @@ for c in chunks:
     if gws:  # underline under the gold phrase, same line only
         l0=[w for w in gws if w["cy"]==gws[0]["cy"]]
         c["ul"]=(min(w["cx"]-w["tw"]/2 for w in l0),max(w["cx"]+w["tw"]/2 for w in l0),l0[0]["cy"]+34,min(w["s"] for w in l0))
+import json as _j
+_j.dump([dict(t=round(w["s"],3),w=w["w"]) for c in chunks for w in c["words"]],open(f"{S}/word_times.json","w"),ensure_ascii=False)
 # ---------------- line icons (0..100 box) drawn on
 def circle(cx,cy,r,a0=0,a1=360,n=64):
     return [(cx+r*math.cos(math.radians(a)),cy+r*math.sin(math.radians(a))) for a in np.linspace(a0,a1,n)]
@@ -349,7 +354,7 @@ for fk in frames:
                 d.line((xs,y,x1,y),fill=GOLD+(a,),width=3)
     draw_name(img,t)
     o=img.convert("RGB")
-    if PREVIEW: o.save(f"{S}/prev7/p_{t:06.2f}.png")
+    if PREVIEW: o.save(f"{S}/prev8/p_{t:06.2f}.png")
     else: enc.stdin.write(o.tobytes())
 if not PREVIEW: enc.stdin.close(); enc.wait()
 def T(x):
