@@ -147,7 +147,7 @@ def chunk_of(i):
 icons=[]
 for a,b,n in ICON_EV:
     s=wt(a)[0]-0.08; ca=chunk_of(a); cb=chunk_of(b)
-    e=min(cb["end"], DUR-2.05)
+    e=cb["end"]
     icons.append(dict(n=n,s=s,e=e,top=min(ca["top"],cb["top"])))
 for k in range(len(icons)-1):  # never overlap
     icons[k]["e"]=min(icons[k]["e"],icons[k+1]["s"])
@@ -193,7 +193,7 @@ def sparkle_img(r,a):
     ImageDraw.Draw(im).polygon(star(c,c,r,0.2),fill=GOLD+(int(255*a),)); return im
 # ---------------- camera: slow push + smooth emphasis + eased cut transitions
 CUTS=[o/SR for o,_,_ in tl[1:]]
-BIG={round(4.235,2),round(13.119,2)}   # content jumps (hook -> start, intro -> body)
+BIG={round(c,2) for c in CUTS if abs(c-4.235)<0.01 or abs(c-13.119)<0.01}
 EMPH=[]
 for c in chunks:
     if any(w["g"] for w in c["words"]) and c is not chunks[0]:
@@ -210,22 +210,12 @@ def seg_bounds(t):
         if c>t: b=c; break
     return a,b
 def zoom(t):
-    a,b=seg_bounds(t)
-    z=1.0+0.03*eio((t-a)/max(b-a,0.1))          # gentle push inside each shot
-    for s,e in EMPH:
-        z+=0.075*eio((t-s)/0.4)*(1-eio((t-(e-0.05))/0.4))
-    for c in CUTS:  # each new shot settles in from slightly closer
-        if c<=t<c+0.5: z+=(0.12 if round(c,2) in BIG else 0.06)*(1-eo((t-c)/0.5))
-        if round(c,2) in BIG and c-0.18<=t<c: z+=0.12*eio((t-(c-0.18))/0.18)  # push into the cut
+    z=1.0+0.035*(0.5-0.5*math.cos(2*math.pi*t/9.0))   # slow breathing push, continuous across cuts
+    for s_,e_ in EMPH:
+        z+=0.075*eio((t-s_)/0.4)*(1-eio((t-(e_-0.05))/0.4))
     return z
-def blur_amt(t):
-    for c in CUTS:
-        if round(c,2) in BIG:
-            if c-0.12<=t<c: return (t-(c-0.12))/0.12
-            if c<=t<c+0.2: return 1-(t-c)/0.2
-        else:
-            if c<=t<c+0.1: return 0.45*(1-(t-c)/0.1)
-    return 0
+XF={}   # cut time -> dissolve half-length
+for c in CUTS: XF[c]=0.16 if round(c,2) in BIG else 0.07
 AX,AY=540,560
 def frame_zoom(fr,z,bl):
     im=Image.fromarray(fr)
@@ -245,9 +235,9 @@ class Reader:
         while s.idx<fi:
             s.fr=np.frombuffer(s.p.stdout.read(WD*HT*3),np.uint8).reshape(HT,WD,3); s.idx+=1
         return s.fr
-R=Reader()
+R=Reader(); R2=Reader()
 # ---------------- end name
-def name_parts(size=30,track=0.42):
+def name_parts(size=36,track=0.42):
     f=font(FM,size); name="DR. MARWA MAGDY"; out=[]
     adv=[f.getlength(c) for c in name]; tr=size*track; nw=sum(adv)+tr*(len(name)-1); x=-nw/2
     for c,a in zip(name,adv):
@@ -259,16 +249,19 @@ def name_parts(size=30,track=0.42):
     return out,nw
 NAME,NW=name_parts()
 NAME_Y=1185
+NAME_Y=232
+NAME_OUT=6.0
 def draw_name(img,t):
-    p=t-(DUR-2.0)
-    if p<0: return
-    d=ImageDraw.Draw(img); L=110*eo(p/0.5); gap=NW/2+34
+    p=t-0.15
+    if p<0 or t>=NAME_OUT: return
+    fo=1-eio((t-(NAME_OUT-0.45))/0.45)
+    d=ImageDraw.Draw(img); L=120*eo(p/0.5); gap=NW/2+34
     for sgn in (-1,1):
         x0=WD/2+sgn*gap; x1=x0+sgn*L
-        d.line((x0,NAME_Y,x1,NAME_Y),fill=GOLD+(255,),width=2)
+        d.line((x0,NAME_Y,x1,NAME_Y),fill=GOLD+(int(255*fo),),width=2)
     for k,(m,dx) in enumerate(NAME):
         q=eo((p-0.15-k*0.035)/0.35)
-        put(img,m,WD/2+dx,NAME_Y+8*(1-q)+4,alpha=q)
+        put(img,m,WD/2+dx,NAME_Y+8*(1-q)+4-6*(1-fo),alpha=q*fo)
 # ---------------- render
 NF=int(round(DUR*FPS))
 if not PREVIEW:
@@ -279,7 +272,22 @@ if not PREVIEW:
 frames=range(NF) if not PREVIEW else [int(float(x)*FPS) for x in PREVIEW.split(",")]
 for fk in frames:
     t=fk/FPS; ts=out2src(t+0.5/FPS); fi=min(int(ts*25),1033)
-    img=frame_zoom(R.get(fi),zoom(t),blur_amt(t)).convert("RGBA")
+    z=zoom(t); fr=R.get(fi)
+    for c,h in XF.items():
+        if c-h<=t<c+h:
+            k=[i for i,(o,_,_) in enumerate(tl) if abs(o/SR-c)<1e-6][0]
+            if t<c: other=tl[k][1]/SR+(t-c)          # incoming shot, slightly before its start
+            else:   other=tl[k-1][2]/SR+(t-c)        # outgoing shot, slightly past its end
+            fr2=R2.get(min(max(int(other*25),0),1033))
+            w=0.5+0.5*((t-c)/h)  # weight of incoming
+            w=eio(w); wi=w if t>=c else w; 
+            wa=(1-w) if t>=c else w  # weight of the 'other' frame
+            fr=(fr.astype(np.float32)*(1-wa)+fr2.astype(np.float32)*wa).astype(np.uint8)
+            if round(c,2) in BIG:   # soft blur through the content jump hides ghosting
+                b=eio(1-abs(t-c)/h)
+                sm=Image.fromarray(fr).resize((WD//10,HT//10),Image.BILINEAR).filter(ImageFilter.GaussianBlur(2.2)).resize((WD,HT),Image.BICUBIC)
+                fr=(fr.astype(np.float32)*(1-b)+np.asarray(sm,np.float32)*b).astype(np.uint8)
+    img=frame_zoom(fr,z,0).convert("RGBA")
     # icons
     for ic in icons:
         if ic["s"]<=t<ic["e"]:
@@ -311,7 +319,7 @@ for fk in frames:
                 d.line((xs,y,x1,y),fill=GOLD+(a,),width=3)
     draw_name(img,t)
     o=img.convert("RGB")
-    if PREVIEW: o.save(f"{S}/prev3/p_{t:06.2f}.png")
+    if PREVIEW: o.save(f"{S}/prev4/p_{t:06.2f}.png")
     else: enc.stdin.write(o.tobytes())
 if not PREVIEW: enc.stdin.close(); enc.wait()
 def T(x):
