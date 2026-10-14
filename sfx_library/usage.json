@@ -1,27 +1,27 @@
 {
  "الرقبة والموبايل (د. مروة مجدي)": [
   {
-   "t": 0.3,
-   "file": "Swoosh Accent 2.wav",
+   "t": 0.95,
+   "file": "Impact 1.wav",
    "events": null,
-   "gain_db": -19.3,
-   "why": "ظهور اسم الدكتورة"
+   "gain_db": -19.7,
+   "why": "ظهور اسم الدكتورة: ووش داخل على ضربة ناعمة (إمباكت)"
   },
   {
    "t": 3.93,
-   "file": "iphone tap 1.MP3",
+   "file": "iphone mix tabs.MP3",
    "events": [
-    0,
-    0
+    5,
+    5
    ],
-   "gain_db": -18.0,
-   "why": "أيقونة الموبايل: كلنا ماسكين الموبايل"
+   "gain_db": -21.0,
+   "why": "الموبايل: تاتش آيفون (تاتش رقم 6 من 12)"
   },
   {
    "t": 4.64,
-   "file": "Zoom 5.wav",
+   "file": "Zoom 2.wav",
    "events": null,
-   "gain_db": -5.1,
+   "gain_db": -17.0,
    "why": "ترانزيشن زوم هادي"
   },
   {
@@ -32,70 +32,67 @@
     3
    ],
    "gain_db": -15.9,
-   "why": "أيقونة الساعة: طول الوقت (تكتكة)"
+   "why": "طول الوقت: تكتكة ساعة"
   },
   {
    "t": 10.29,
-   "file": "Swoosh Accent 4.wav",
+   "file": "MMDesignElement_BW.23589.wav",
    "events": null,
-   "gain_db": -20.2,
-   "why": "أيقونة الخطوط والتجاعيد"
+   "gain_db": -19.9,
+   "why": "خطوط وتجاعيد: نبضات نغمية متموجة"
   },
   {
    "t": 13.27,
-   "file": "pop-up__pop-up.wav",
+   "file": "Impact 04.wav",
    "events": null,
-   "gain_db": -21.4,
-   "why": "أيقونة التحذير: إهمال"
+   "gain_db": -23.4,
+   "why": "إهمال: ضربة باص تقيلة واطية"
   },
   {
    "t": 14.57,
-   "file": "ui 1.MP3",
+   "file": "Camera MIX64_37_5.wav",
    "events": null,
-   "gain_db": -4.8,
-   "why": "أيقونة العين: تبان أكتر"
+   "gain_db": -13.7,
+   "why": "تبان أكتر: شتر كاميرا"
   },
   {
    "t": 18.15,
    "file": "New Text Message Ding.wav",
    "events": null,
    "gain_db": -12.2,
-   "why": "أيقونة القلب: نهتم"
+   "why": "نهتم: جرس ناعم"
   },
   {
    "t": 21.45,
    "file": "notification.MP3",
    "events": null,
    "gain_db": -16.3,
-   "why": "أيقونة الدرع: ماتقلقيش"
+   "why": "ماتقلقيش: نغمة مطمئنة"
   },
   {
    "t": 24.17,
    "file": "Magic Collect Shimmer Reveal Glitter Particles Tonal Multi Swell High Bright 02.wav",
    "events": null,
-   "gain_db": -8.6,
-   "why": "أيقونة اللمعة: إجراءات تجميلية"
-  },
-  {
-   "t": 24.45,
-   "file": "Zoom Transition.wav",
-   "events": null,
-   "gain_db": -16.4,
-   "why": "ترانزيشن زوم هادي"
+   "gain_db": -9.6,
+   "why": "إجراءات تجميلية: بريق"
   },
   {
    "t": 27.9,
-   "file": "chat-message__chat-message.wav",
+   "file": "Pop.wav",
    "events": null,
-   "gain_db": -16.4,
-   "why": "أيقونة النقطة: الكولاجين"
+   "gain_db": -24.1,
+   "why": "الكولاجين: بوب نقطة"
   },
   {
    "t": 29.82,
-   "file": "Zoom 4.wav",
-   "events": null,
-   "gain_db": -10.6,
-   "why": "أيقونة الأسهم: شد الجلد"
+   "file": "Riser Stop.wav",
+   "events": [
+    "sec",
+    2.35,
+    3.32
+   ],
+   "gain_db": -19.1,
+   "why": "شد الجلد: آخر الرايزر (طالع لفوق ويقف)"
   },
   {
    "t": 33.56,
@@ -105,24 +102,35 @@
     0
    ],
    "gain_db": -11.9,
-   "why": "أيقونة اللمبة: نصيحتي (كليك لمبة)"
+   "why": "نصيحتي: كليك زي مفتاح النور"
   },
   {
    "t": 34.24,
-   "file": "soundjay_scroll_main__soundjay_scroll_main-03.wav",
+   "file": "Stop Time 1.wav",
    "events": [
-    0,
-    2
+    "sec",
+    0.0,
+    1.3
    ],
-   "gain_db": -17.1,
-   "why": "أيقونة الساعة الرملية: ماتنتظريش"
+   "gain_db": -19.8,
+   "why": "ماتنتظريش: الوقت بيبطأ (تيب ستوب)"
   },
   {
    "t": 36.84,
+   "file": "iphone tab 2.MP3",
+   "events": [
+    0,
+    0
+   ],
+   "gain_db": -21.0,
+   "why": "احجزي: تاتش"
+  },
+  {
+   "t": 37.45,
    "file": "Chat Notification.wav",
    "events": null,
-   "gain_db": -19.8,
-   "why": "أيقونة النتيجة: احجزي استشارتك"
+   "gain_db": -20.7,
+   "why": "استشارتك معانا: دينج تأكيد"
   }
  ]
 }

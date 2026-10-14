@@ -7,22 +7,22 @@ def load(f):
     return a.reshape(-1,2).copy()
 # (time in video, file, event indices (first,last) or None=whole, align 'onset'|'peak', target peak dBFS, reason)
 PLAN=[
- (0.30,"Swoosh Accent 2.wav",None,"peak",-27,"ظهور اسم الدكتورة"),
- (3.93,"iphone tap 1.MP3",(0,0),"onset",-24,"أيقونة الموبايل: كلنا ماسكين الموبايل"),
- (4.645,"Zoom 5.wav",None,"peak",-27,"ترانزيشن زوم هادي"),
- (6.08,"soundjay_scroll_main__soundjay_scroll_main-04.wav",(0,3),"onset",-27,"أيقونة الساعة: طول الوقت (تكتكة)"),
- (10.29,"Swoosh Accent 4.wav",None,"peak",-28,"أيقونة الخطوط والتجاعيد"),
- (13.27,"pop-up__pop-up.wav",None,"onset",-25,"أيقونة التحذير: إهمال"),
- (14.57,"ui 1.MP3",None,"onset",-27,"أيقونة العين: تبان أكتر"),
- (18.15,"New Text Message Ding.wav",None,"onset",-28,"أيقونة القلب: نهتم"),
- (21.45,"notification.MP3",None,"onset",-28,"أيقونة الدرع: ماتقلقيش"),
- (24.17,"Magic Collect Shimmer Reveal Glitter Particles Tonal Multi Swell High Bright 02.wav",None,"onset",-25,"أيقونة اللمعة: إجراءات تجميلية"),
- (24.445,"Zoom Transition.wav",None,"peak",-29,"ترانزيشن زوم هادي"),
- (27.90,"chat-message__chat-message.wav",None,"onset",-27,"أيقونة النقطة: الكولاجين"),
- (29.82,"Zoom 4.wav",None,"peak",-29,"أيقونة الأسهم: شد الجلد"),
- (33.56,"Click 3.wav",(0,0),"onset",-23,"أيقونة اللمبة: نصيحتي (كليك لمبة)"),
- (34.24,"soundjay_scroll_main__soundjay_scroll_main-03.wav",(0,2),"onset",-28,"أيقونة الساعة الرملية: ماتنتظريش"),
- (36.84,"Chat Notification.wav",None,"onset",-26,"أيقونة النتيجة: احجزي استشارتك"),
+ (0.95,"Impact 1.wav",None,"peak",-29,"ظهور اسم الدكتورة: ووش داخل على ضربة ناعمة (إمباكت)"),
+ (3.93,"iphone mix tabs.MP3",(5,5),"onset",-27,"الموبايل: تاتش آيفون (تاتش رقم 6 من 12)"),
+ (4.645,"Zoom 2.wav",None,"peak",-30,"ترانزيشن زوم هادي"),
+ (6.08,"soundjay_scroll_main__soundjay_scroll_main-04.wav",(0,3),"onset",-27,"طول الوقت: تكتكة ساعة"),
+ (10.29,"MMDesignElement_BW.23589.wav",None,"onset",-29,"خطوط وتجاعيد: نبضات نغمية متموجة"),
+ (13.27,"Impact 04.wav",None,"peak",-30,"إهمال: ضربة باص تقيلة واطية"),
+ (14.57,"Camera MIX64_37_5.wav",None,"onset",-27,"تبان أكتر: شتر كاميرا"),
+ (18.15,"New Text Message Ding.wav",None,"onset",-28,"نهتم: جرس ناعم"),
+ (21.45,"notification.MP3",None,"onset",-28,"ماتقلقيش: نغمة مطمئنة"),
+ (24.17,"Magic Collect Shimmer Reveal Glitter Particles Tonal Multi Swell High Bright 02.wav",None,"onset",-26,"إجراءات تجميلية: بريق"),
+ (27.90,"Pop.wav",None,"onset",-29,"الكولاجين: بوب نقطة"),
+ (29.82,"Riser Stop.wav",("sec",2.35,3.32),"end",-30,"شد الجلد: آخر الرايزر (طالع لفوق ويقف)"),
+ (33.56,"Click 3.wav",(0,0),"onset",-23,"نصيحتي: كليك زي مفتاح النور"),
+ (34.24,"Stop Time 1.wav",("sec",0.0,1.3),"onset",-30,"ماتنتظريش: الوقت بيبطأ (تيب ستوب)"),
+ (36.84,"iphone tab 2.MP3",(0,0),"onset",-26,"احجزي: تاتش"),
+ (37.45,"Chat Notification.wav",None,"onset",-27,"استشارتك معانا: دينج تأكيد"),
 ]
 voice=np.concatenate([A[s:e] for s,e in segs]).astype(np.float32)
 vm=voice.mean(1); fr=vm[:len(vm)//480*480].reshape(-1,480); r=np.sqrt((fr**2).mean(1))
@@ -32,20 +32,24 @@ print("voice speaking RMS dBFS",round(VOICE_RMS,1))
 mix=voice.copy(); log=[]
 for t,f,ev,al,tgt,why in PLAN:
     a=load(f); E=EV[f]["events"]
-    if ev:
+    if ev and ev[0]=="sec": s0,e0=ev[1],ev[2]
+    elif ev:
         s0=E[ev[0]]["start"]; e0=E[ev[1]]["end"]+0.06
     else: s0=E[0]["start"]; e0=E[-1]["end"]+0.25
     seg=a[max(0,int((s0-0.01)*SR)):int(e0*SR)].copy()
     fo=min(len(seg),int(0.04*SR)); seg[-fo:]*=np.linspace(1,0,fo)[:,None]
+    fi=min(len(seg),int(0.008*SR)); seg[:fi]*=np.linspace(0,1,fi)[:,None]
     env=np.abs(seg).max(1)
-    off=0.01 if al=="onset" else np.argmax(np.convolve(env,np.ones(480)/480,"same"))/SR
+    off=0.01 if al=="onset" else (len(seg)/SR-0.02) if al=="end" else np.argmax(np.convolve(env,np.ones(480)/480,"same"))/SR
     e1=np.abs(seg).max(1); act=seg[e1>e1.max()*0.1]
     srms=20*np.log10(np.sqrt((act**2).mean())+1e-9); spk=20*np.log10(np.abs(seg).max()+1e-9)
     gdb=min(VOICE_RMS+REL+(tgt+27)-srms, -4-spk)   # tgt now = small per-effect trim around -27
     g=10**(gdb/20); seg*=g
-    st=int(round((t-off)*SR)); en=min(len(mix),st+len(seg))
+    st=int(round((t-off)*SR))
+    if st<0: seg=seg[-st:]; st=0
+    en=min(len(mix),st+len(seg))
     mix[st:en]+=seg[:en-st]
-    log.append(dict(t=round(t,2),file=f,events=ev,gain_db=round(float(20*np.log10(g)),1),why=why))
+    log.append(dict(t=round(t,2),file=f,events=list(ev) if ev else None,gain_db=round(float(20*np.log10(g)),1),why=why))
     print(f"{t:6.2f} {f[:40]:40s} ev={ev} gain {20*np.log10(g):+.1f} dB")
 print("mix peak dBFS",round(20*np.log10(np.abs(mix).max()),2),"voice peak",round(20*np.log10(np.abs(voice).max()),2))
 assert np.abs(mix).max()<0.99
