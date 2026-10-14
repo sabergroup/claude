@@ -111,5 +111,130 @@
    "gain_db": null,
    "why": "تاب آيفون مع أول كلمة في كل سطر (28 سطر)"
   }
+ ],
+ "التصبغات (د. مروة مجدي)": [
+  {
+   "t": 0.3,
+   "file": "chat-message__chat-message.wav",
+   "events": null,
+   "gain_db": -17.5,
+   "why": "ظهور الاسم: بليب نغمي ناعم"
+  },
+  {
+   "t": 5.52,
+   "file": "ComputerDesktop 6103_69_4.wav",
+   "events": [
+    72,
+    72
+   ],
+   "gain_db": -3.6,
+   "why": "سببها الشمس: بليب نغمي"
+  },
+  {
+   "t": 13.12,
+   "file": "Click 1.wav",
+   "events": [
+    0,
+    0
+   ],
+   "gain_db": -3.0,
+   "why": "منتجات مش مناسبة: كليك"
+  },
+  {
+   "t": 18.72,
+   "file": "soundjay_scroll_main__soundjay_scroll_main-01.wav",
+   "events": null,
+   "gain_db": -14.8,
+   "why": "التشخيص: تكات زي الفحص"
+  },
+  {
+   "t": 21.46,
+   "file": "ComputerDesktop 6103_69_4.wav",
+   "events": [
+    37,
+    37
+   ],
+   "gain_db": -5.0,
+   "why": "نحدد نوعها: بليب"
+  },
+  {
+   "t": 24.97,
+   "file": "ComputerDesktop 6103_69_4.wav",
+   "events": [
+    9,
+    9
+   ],
+   "gain_db": -3.4,
+   "why": "العلاج المناسب: بليب تأكيد"
+  },
+  {
+   "t": 26.85,
+   "file": "Zoom Popped.wav",
+   "events": null,
+   "gain_db": -17.4,
+   "why": "كريمات التفتيح: بوب"
+  },
+  {
+   "t": 32.63,
+   "file": "Magic Collect Shimmer Reveal Glitter Particles Tonal Multi Swell High Bright 02.wav",
+   "events": null,
+   "gain_db": -10.7,
+   "why": "الليزر: بريق (متكرر من فيديو الرقبة)"
+  },
+  {
+   "t": 34.85,
+   "file": "ComputerDesktop 6103_69_4.wav",
+   "events": [
+    12,
+    12
+   ],
+   "gain_db": 2.1,
+   "why": "واقي الشمس: بليب"
+  },
+  {
+   "t": 39.87,
+   "file": "soundjay_scroll_main__soundjay_scroll_main-02.wav",
+   "events": [
+    "sec",
+    0.1,
+    0.9
+   ],
+   "gain_db": -14.9,
+   "why": "رجوع التصبغات مرة تانية: تكات"
+  },
+  {
+   "t": 42.39,
+   "file": "soundjay_scroll_main__soundjay_scroll_main-03.wav",
+   "events": [
+    3,
+    5
+   ],
+   "gain_db": -17.4,
+   "why": "ماتستعجليش: تكات"
+  },
+  {
+   "t": 46.03,
+   "file": "Click 2.wav",
+   "events": null,
+   "gain_db": -15.7,
+   "why": "بتشخيص صح: كليك فكرة"
+  },
+  {
+   "t": 48.89,
+   "file": "ComputerDesktop 6103_69_4.wav",
+   "events": [
+    21,
+    21
+   ],
+   "gain_db": 6.4,
+   "why": "المناسب لبشرتك: بليب"
+  },
+  {
+   "t": "أول كل سطر",
+   "file": "iphone mix tabs / iphone tab 2 / iphone tap 1",
+   "events": "16 تاب بالتناوب",
+   "gain_db": null,
+   "why": "تاب آيفون مع أول كلمة في كل سطر (51 سطر)"
+  }
  ]
 }

@@ -75,7 +75,7 @@ for c in chunks:
         w["im"],w["tw"],w["th"],w["bb"]=sprite(w["w"],w["g"])
     tot=sum(w["tw"] for w in c["words"])+sp*(len(c["words"])-1)
     lines=[c["words"]]
-    if len(c["words"])>=6 or tot>840:
+    if getattr(CFG,"MAX_LINES",2)>1 and (len(c["words"])>=6 or tot>840):
         best=None
         for k in range(1,len(c["words"])):
             a=sum(w["tw"] for w in c["words"][:k]); b=sum(w["tw"] for w in c["words"][k:])
@@ -132,6 +132,9 @@ ICONS={
  "hourglass":[[(20,6),(80,6)],[(20,94),(80,94)],[(28,6),(28,22),(50,50),(28,78),(28,94)],[(72,6),(72,22),(50,50),(72,78),(72,94)]],
  "calendar":[rrect(8,16,92,92,8),[(8,36),(92,36)],[(30,6),(30,24)],[(70,6),(70,24)],[(34,62),(46,74),(68,52)]],
  "lift":[[(22,58),(50,30),(78,58)],[(22,84),(50,56),(78,84)],[(50,30),(50,6)]],
+ "sun":[circle(50,50,20,-90,270)]+[[(50+29*math.cos(a),50+29*math.sin(a)),(50+43*math.cos(a),50+43*math.sin(a))] for a in [k*math.pi/4 for k in range(8)]],
+ "search":[circle(42,42,28,-90,270),[(62,62),(90,90)]],
+ "check":[circle(50,50,42,-90,270),[(30,52),(44,66),(70,38)]],
 }
 # fix drop: simple teardrop
 ICONS["drop"]=[bez((50,4),(30,34),(23,56))+circle(50,62,27.5,190,350+0,40)[::-1]+bez((77,56),(70,34),(50,4)),bez((37,62),(37,76),(50,79))]
