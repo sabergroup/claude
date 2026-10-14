@@ -7,19 +7,19 @@ def load(f):
     return a.reshape(-1,2).copy()
 # (time in video, file, event indices (first,last) or None=whole, align 'onset'|'peak', target peak dBFS, reason)
 PLAN=[
- (0.95,"Impact 1.wav",None,"peak",-29,"ظهور اسم الدكتورة: ووش داخل على ضربة ناعمة (إمباكت)"),
+ (0.40,"data 1.MP3",None,"onset",-30,"ظهور اسم الدكتورة: رنات صغيرة متتابعة مع ظهور الحروف"),
  (4.645,"Zoom 2.wav",None,"peak",-30,"ترانزيشن زوم هادي"),
  (6.08,"soundjay_scroll_main__soundjay_scroll_main-04.wav",(0,3),"onset",-27,"طول الوقت: تكتكة ساعة"),
  (10.29,"MMDesignElement_BW.23589.wav",None,"onset",-29,"خطوط وتجاعيد: نبضات نغمية متموجة"),
- (13.27,"Impact 04.wav",None,"peak",-30,"إهمال: ضربة باص تقيلة واطية"),
+ (13.27,"pop-up__pop-up.wav",None,"onset",-27,"إهمال: بوب ناعم"),
  (14.57,"Camera MIX64_37_5.wav",None,"onset",-27,"تبان أكتر: شتر كاميرا"),
  (18.15,"New Text Message Ding.wav",None,"onset",-28,"نهتم: جرس ناعم"),
  (21.45,"notification.MP3",None,"onset",-28,"ماتقلقيش: نغمة مطمئنة"),
  (24.17,"Magic Collect Shimmer Reveal Glitter Particles Tonal Multi Swell High Bright 02.wav",None,"onset",-26,"إجراءات تجميلية: بريق"),
  (27.90,"Pop.wav",None,"onset",-29,"الكولاجين: بوب نقطة"),
- (29.82,"Riser Stop.wav",("sec",2.35,3.32),"end",-30,"شد الجلد: آخر الرايزر (طالع لفوق ويقف)"),
+ (29.82,"ui 1.MP3",None,"onset",-28,"شد الجلد: شايم ناعم"),
  (33.56,"Click 3.wav",(0,0),"onset",-23,"نصيحتي: كليك زي مفتاح النور"),
- (34.24,"Stop Time 1.wav",("sec",0.0,1.3),"onset",-30,"ماتنتظريش: الوقت بيبطأ (تيب ستوب)"),
+ (34.24,"notification 2.MP3",None,"onset",-29,"ماتنتظريش: نغمة ناعمة ممتدة"),
  (37.45,"Chat Notification.wav",None,"onset",-27,"استشارتك معانا: دينج تأكيد"),
 ]
 voice=np.concatenate([A[s:e] for s,e in segs]).astype(np.float32)
