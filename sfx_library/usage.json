@@ -1,0 +1,128 @@
+{
+ "الرقبة والموبايل (د. مروة مجدي)": [
+  {
+   "t": 0.3,
+   "file": "Shine Beam__Shine Beam.wav",
+   "events": null,
+   "gain_db": -23.8,
+   "why": "ظهور اسم الدكتورة"
+  },
+  {
+   "t": 3.93,
+   "file": "iphone tap 1.MP3",
+   "events": [
+    0,
+    0
+   ],
+   "gain_db": -23.8,
+   "why": "أيقونة الموبايل: كلنا ماسكين الموبايل"
+  },
+  {
+   "t": 4.64,
+   "file": "Zoom 5.wav",
+   "events": null,
+   "gain_db": -14.3,
+   "why": "ترانزيشن زوم هادي"
+  },
+  {
+   "t": 6.08,
+   "file": "soundjay_scroll_main__soundjay_scroll_main-04.wav",
+   "events": [
+    0,
+    3
+   ],
+   "gain_db": -24.5,
+   "why": "أيقونة الساعة: طول الوقت (تكتكة)"
+  },
+  {
+   "t": 10.29,
+   "file": "Swoosh Accent 4.wav",
+   "events": null,
+   "gain_db": -28.0,
+   "why": "أيقونة الخطوط والتجاعيد"
+  },
+  {
+   "t": 13.27,
+   "file": "pop-up__pop-up.wav",
+   "events": null,
+   "gain_db": -24.0,
+   "why": "أيقونة التحذير: إهمال"
+  },
+  {
+   "t": 14.57,
+   "file": "ui 1.MP3",
+   "events": null,
+   "gain_db": -14.2,
+   "why": "أيقونة العين: تبان أكتر"
+  },
+  {
+   "t": 18.15,
+   "file": "New Text Message Ding.wav",
+   "events": null,
+   "gain_db": -23.8,
+   "why": "أيقونة القلب: نهتم"
+  },
+  {
+   "t": 21.45,
+   "file": "notification.MP3",
+   "events": null,
+   "gain_db": -24.8,
+   "why": "أيقونة الدرع: ماتقلقيش"
+  },
+  {
+   "t": 24.17,
+   "file": "Magic Collect Shimmer Reveal Glitter Particles Tonal Multi Swell High Bright 02.wav",
+   "events": null,
+   "gain_db": -21.4,
+   "why": "أيقونة اللمعة: إجراءات تجميلية"
+  },
+  {
+   "t": 24.45,
+   "file": "Zoom Transition.wav",
+   "events": null,
+   "gain_db": -26.5,
+   "why": "ترانزيشن زوم هادي"
+  },
+  {
+   "t": 27.9,
+   "file": "chat-message__chat-message.wav",
+   "events": null,
+   "gain_db": -26.3,
+   "why": "أيقونة النقطة: الكولاجين"
+  },
+  {
+   "t": 29.82,
+   "file": "Zoom 4.wav",
+   "events": null,
+   "gain_db": -19.8,
+   "why": "أيقونة الأسهم: شد الجلد"
+  },
+  {
+   "t": 33.56,
+   "file": "Click 3.wav",
+   "events": [
+    0,
+    0
+   ],
+   "gain_db": -19.5,
+   "why": "أيقونة اللمبة: نصيحتي (كليك لمبة)"
+  },
+  {
+   "t": 34.24,
+   "file": "soundjay_scroll_main__soundjay_scroll_main-03.wav",
+   "events": [
+    0,
+    2
+   ],
+   "gain_db": -25.4,
+   "why": "أيقونة الساعة الرملية: ماتنتظريش"
+  },
+  {
+   "t": 36.84,
+   "file": "Chat Notification.wav",
+   "events": null,
+   "gain_db": -26.0,
+   "why": "أيقونة النتيجة: احجزي استشارتك"
+  }
+ ]
+}

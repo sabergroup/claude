@@ -1,0 +1,2923 @@
+{
+ "drive_folder": "https://drive.google.com/drive/folders/1onAE-tqpdVRvD2PCxiQqrM90ct0n-PJU",
+ "sounds": [
+  {
+   "file": "Beam Me Up.wav",
+   "drive_ids": {
+    ".wav": "145yPBbSsM0w7GAmuRV5eCqX9_cKk5Tjz"
+   },
+   "length": 8.88,
+   "events": [
+    {
+     "start": 0.1,
+     "end": 7.78,
+     "dur": 7.67,
+     "peak_at": 1.91,
+     "peak_db": -8.2,
+     "centroid": 3929,
+     "low": 0.04
+    }
+   ],
+   "desc": "شعاع/رايزر خيال علمي طويل (8 ث) بيعلى وينور",
+   "tags": "رايزر، خيال علمي",
+   "use_for": "نادرًا، مقدمات قوية"
+  },
+  {
+   "file": "Beam.wav",
+   "drive_ids": {
+    ".wav": "1pWngZoTkwgQn-4OFqzu1DqFXXmTUjP8s"
+   },
+   "length": 2.5,
+   "events": [
+    {
+     "start": 0.01,
+     "end": 2.13,
+     "dur": 2.12,
+     "peak_at": 0.75,
+     "peak_db": -8.2,
+     "centroid": 7890,
+     "low": 0.31
+    }
+   ],
+   "desc": "شعاع كهربا متقطع (زن) 2 ث",
+   "tags": "خيال علمي، تقني",
+   "use_for": "تجنبه في المحتوى الطبي الهادي"
+  },
+  {
+   "file": "Camera MIX64_37_5.wav",
+   "drive_ids": {
+    ".wav": "1P4i1IPNr_mECOkshtdO82MbDml22EDCm"
+   },
+   "length": 0.36,
+   "events": [
+    {
+     "start": 0.02,
+     "end": 0.33,
+     "dur": 0.3,
+     "peak_at": 0.1,
+     "peak_db": -13.2,
+     "centroid": 6928,
+     "low": 0.0
+    }
+   ],
+   "desc": "صوت شتر كاميرا قصير 0.3 ث",
+   "tags": "كاميرا، تصوير",
+   "use_for": "قبل/بعد، صورة، لقطة"
+  },
+  {
+   "file": "Chat Notification.wav",
+   "drive_ids": {
+    ".mp3": "1Tx0uX6r7jyPWPPyli3kJu4rRuwJkx-cO",
+    ".wav": "1ArWQclrtffBHtvKAwezJBrn84j6MkMEp"
+   },
+   "length": 0.48,
+   "events": [
+    {
+     "start": 0.0,
+     "end": 0.04,
+     "dur": 0.04,
+     "peak_at": 0.01,
+     "peak_db": -4.2,
+     "centroid": 783,
+     "low": 0.02
+    },
+    {
+     "start": 0.12,
+     "end": 0.16,
+     "dur": 0.04,
+     "peak_at": 0.13,
+     "peak_db": -2.6,
+     "centroid": 790,
+     "low": 0.03
+    }
+   ],
+   "desc": "دينج مزدوج قصير (صوتين ورا بعض)",
+   "tags": "إشعار، تأكيد",
+   "use_for": "حجز، تأكيد، رسالة"
+  },
+  {
+   "file": "Cinematic Impact 1.wav",
+   "drive_ids": {
+    ".mp3": "1Nl4DXEMI3gWFcMVav4SmcUJQauxZ5dFB",
+    ".wav": "1fC_dTlFqtr7M68l_tKFr25VfifURYYlR"
+   },
+   "length": 5.56,
+   "events": [
+    {
+     "start": 0.09,
+     "end": 3.67,
+     "dur": 3.58,
+     "peak_at": 0.3,
+     "peak_db": -2.7,
+     "centroid": 1573,
+     "low": 0.52
+    }
+   ],
+   "desc": "ضربة سينمائية تقيلة بذيل طويل 3.5 ث",
+   "tags": "إمباكت، دراما",
+   "use_for": "لحظة صادمة/مهمة جدًا، بحذر"
+  },
+  {
+   "file": "Cinematic Impact 2.wav",
+   "drive_ids": {
+    ".mp3": "18BjwthoSVXGBhPVlIXJItucyH0ixqnGD",
+    ".wav": "1Bi9SGXVswR-_FEVa388fF_57592NCd0m"
+   },
+   "length": 5.07,
+   "events": [
+    {
+     "start": 0.08,
+     "end": 3.19,
+     "dur": 3.11,
+     "peak_at": 0.37,
+     "peak_db": -2.5,
+     "centroid": 1349,
+     "low": 0.51
+    }
+   ],
+   "desc": "ضربة سينمائية تقيلة بذيل طويل 3 ث",
+   "tags": "إمباكت، دراما",
+   "use_for": "لحظة صادمة/مهمة جدًا، بحذر"
+  },
+  {
+   "file": "Click 1.wav",
+   "drive_ids": {
+    ".mp3": "1RB7yg7GsjVeIsmoBpZ8xGZjfybMXwgc2",
+    ".wav": "1Q8e0b-SKuRAA5CSJRowdgsDGPMlkl5-_"
+   },
+   "length": 0.53,
+   "events": [
+    {
+     "start": 0.0,
+     "end": 0.04,
+     "dur": 0.04,
+     "peak_at": 0.0,
+     "peak_db": -13.9,
+     "centroid": 6918,
+     "low": 0.11
+    },
+    {
+     "start": 0.11,
+     "end": 0.14,
+     "dur": 0.04,
+     "peak_at": 0.12,
+     "peak_db": -14.5,
+     "centroid": 10663,
+     "low": 0.02
+    }
+   ],
+   "desc": "كليك ماوس (ضغطة + رفعة = صوتين)",
+   "tags": "كليك، UI",
+   "use_for": "ظهور عنصر، اختيار"
+  },
+  {
+   "file": "Click 2.wav",
+   "drive_ids": {
+    ".mp3": "18q_MLH_hRzDpSY59pDUbQLNZd_bQU0uu",
+    ".wav": "1H2-X6VteiCMaY97XtNMPJEuJmlBwIJXu"
+   },
+   "length": 0.52,
+   "events": [
+    {
+     "start": 0.01,
+     "end": 0.18,
+     "dur": 0.18,
+     "peak_at": 0.03,
+     "peak_db": -12.0,
+     "centroid": 9342,
+     "low": 0.06
+    }
+   ],
+   "desc": "كليك ماوس بصدى خفيف (صوت واحد)",
+   "tags": "كليك، UI",
+   "use_for": "ظهور عنصر"
+  },
+  {
+   "file": "Click 3.wav",
+   "drive_ids": {
+    ".mp3": "1DgXD_CyPuAwxA0ETzP2F7L9YQacC3sDA",
+    ".wav": "1lA7AZGnO1JpVcyDdqrOi-sK2Rn1LfIuQ"
+   },
+   "length": 0.33,
+   "events": [
+    {
+     "start": 0.0,
+     "end": 0.12,
+     "dur": 0.12,
+     "peak_at": 0.09,
+     "peak_db": -14.0,
+     "centroid": 9621,
+     "low": 0.01
+    }
+   ],
+   "desc": "كليك حاد زي مفتاح نور (صوت واحد)",
+   "tags": "كليك، مفتاح",
+   "use_for": "لمبة/فكرة/نصيحة"
+  },
+  {
+   "file": "Click 4.wav",
+   "drive_ids": {
+    ".mp3": "1nnJy0NzcjNqU8Hv679x1ottvshIr4VuN",
+    ".wav": "1D4uZ1kdLUGOKd4c3uORRivj-8XFTMmMi"
+   },
+   "length": 0.49,
+   "events": [
+    {
+     "start": 0.01,
+     "end": 0.07,
+     "dur": 0.07,
+     "peak_at": 0.01,
+     "peak_db": -14.8,
+     "centroid": 7253,
+     "low": 0.11
+    },
+    {
+     "start": 0.16,
+     "end": 0.29,
+     "dur": 0.13,
+     "peak_at": 0.17,
+     "peak_db": -13.4,
+     "centroid": 8757,
+     "low": 0.08
+    }
+   ],
+   "desc": "كليك ماوس (صوتين)",
+   "tags": "كليك، UI",
+   "use_for": "ظهور عنصر"
+  },
+  {
+   "file": "Click 5.wav",
+   "drive_ids": {
+    ".mp3": "1q03tYfKBa6-9xLZy4Lt_qQDr5ihdxWpq",
+    ".wav": "1mRwYgH9o7R5b7Thn_PVhoBAIel9JZbEE"
+   },
+   "length": 0.31,
+   "events": [
+    {
+     "start": 0.02,
+     "end": 0.07,
+     "dur": 0.04,
+     "peak_at": 0.03,
+     "peak_db": -16.9,
+     "centroid": 8595,
+     "low": 0.04
+    },
+    {
+     "start": 0.13,
+     "end": 0.17,
+     "dur": 0.04,
+     "peak_at": 0.14,
+     "peak_db": -13.3,
+     "centroid": 10432,
+     "low": 0.02
+    }
+   ],
+   "desc": "كليك ماوس (صوتين)",
+   "tags": "كليك، UI",
+   "use_for": "ظهور عنصر"
+  },
+  {
+   "file": "Click 6.wav",
+   "drive_ids": {
+    ".mp3": "1CGKeuYx1GfXO3YLvcvwySrSN8ffJP9oa",
+    ".wav": "1l9rMR2915foxHEU1QNr3ZiHuBAasJDTR"
+   },
+   "length": 0.32,
+   "events": [
+    {
+     "start": 0.0,
+     "end": 0.04,
+     "dur": 0.04,
+     "peak_at": 0.0,
+     "peak_db": -15.2,
+     "centroid": 7275,
+     "low": 0.15
+    },
+    {
+     "start": 0.08,
+     "end": 0.11,
+     "dur": 0.03,
+     "peak_at": 0.08,
+     "peak_db": -18.1,
+     "centroid": 10940,
+     "low": 0.03
+    }
+   ],
+   "desc": "كليك ماوس سريع (صوتين)",
+   "tags": "كليك، UI",
+   "use_for": "ظهور عنصر"
+  },
+  {
+   "file": "Click 7.wav",
+   "drive_ids": {
+    ".mp3": "1VJr2ust1gJD8Hn3J-VBxAVLa0FiOesVp",
+    ".wav": "1G_BrtMHAR63VG2xSrfdLQ1YIpmsA8Kht"
+   },
+   "length": 0.53,
+   "events": [
+    {
+     "start": 0.01,
+     "end": 0.09,
+     "dur": 0.07,
+     "peak_at": 0.01,
+     "peak_db": -12.9,
+     "centroid": 6597,
+     "low": 0.08
+    },
+    {
+     "start": 0.15,
+     "end": 0.2,
+     "dur": 0.05,
+     "peak_at": 0.15,
+     "peak_db": -12.1,
+     "centroid": 6828,
+     "low": 0.14
+    }
+   ],
+   "desc": "كليك ماوس أتقل شوية (صوتين)",
+   "tags": "كليك، UI",
+   "use_for": "ظهور عنصر"
+  },
+  {
+   "file": "Click 8.wav",
+   "drive_ids": {
+    ".mp3": "1dy-zgxln4tUz7eywLpwfPDodFz3dhhIW",
+    ".wav": "1C8ahJy1Qw_AAQArweVQ99Gl7pmDrEQer"
+   },
+   "length": 0.34,
+   "events": [
+    {
+     "start": 0.0,
+     "end": 0.14,
+     "dur": 0.14,
+     "peak_at": 0.01,
+     "peak_db": -13.5,
+     "centroid": 10627,
+     "low": 0.03
+    }
+   ],
+   "desc": "كليك ماوس (صوت واحد)",
+   "tags": "كليك، UI",
+   "use_for": "ظهور عنصر"
+  },
+  {
+   "file": "ComputerDesktop 6103_69_4.wav",
+   "drive_ids": {
+    ".wav": "1sxDQYelrDsFyz8qSdY7ns6mjEWr7XCJG"
+   },
+   "length": 25.09,
+   "events": [
+    {
+     "start": 0.01,
+     "end": 0.59,
+     "dur": 0.58,
+     "peak_at": 0.01,
+     "peak_db": -14.6,
+     "centroid": 4575,
+     "low": 0.02
+    },
+    {
+     "start": 0.64,
+     "end": 0.78,
+     "dur": 0.14,
+     "peak_at": 0.69,
+     "peak_db": -18.2,
+     "centroid": 4483,
+     "low": 0.01
+    },
+    {
+     "start": 0.83,
+     "end": 1.06,
+     "dur": 0.23,
+     "peak_at": 0.84,
+     "peak_db": -23.2,
+     "centroid": 3418,
+     "low": 0.01
+    },
+    {
+     "start": 1.12,
+     "end": 1.31,
+     "dur": 0.19,
+     "peak_at": 1.19,
+     "peak_db": -17.5,
+     "centroid": 4634,
+     "low": 0.02
+    },
+    {
+     "start": 1.35,
+     "end": 1.55,
+     "dur": 0.2,
+     "peak_at": 1.35,
+     "peak_db": -18.7,
+     "centroid": 5171,
+     "low": 0.01
+    },
+    {
+     "start": 1.61,
+     "end": 1.65,
+     "dur": 0.03,
+     "peak_at": 1.62,
+     "peak_db": -26.3,
+     "centroid": 3386,
+     "low": 0.01
+    },
+    {
+     "start": 1.75,
+     "end": 1.92,
+     "dur": 0.16,
+     "peak_at": 1.89,
+     "peak_db": -22.0,
+     "centroid": 3905,
+     "low": 0.04
+    },
+    {
+     "start": 2.13,
+     "end": 2.54,
+     "dur": 0.41,
+     "peak_at": 2.42,
+     "peak_db": -18.5,
+     "centroid": 4939,
+     "low": 0.01
+    },
+    {
+     "start": 2.63,
+     "end": 2.77,
+     "dur": 0.14,
+     "peak_at": 2.75,
+     "peak_db": -22.3,
+     "centroid": 3417,
+     "low": 0.06
+    },
+    {
+     "start": 2.81,
+     "end": 2.87,
+     "dur": 0.06,
+     "peak_at": 2.83,
+     "peak_db": -22.5,
+     "centroid": 3180,
+     "low": 0.05
+    },
+    {
+     "start": 2.9,
+     "end": 3.06,
+     "dur": 0.15,
+     "peak_at": 2.94,
+     "peak_db": -18.3,
+     "centroid": 5156,
+     "low": 0.01
+    },
+    {
+     "start": 3.1,
+     "end": 3.31,
+     "dur": 0.21,
+     "peak_at": 3.19,
+     "peak_db": -17.0,
+     "centroid": 3799,
+     "low": 0.01
+    },
+    {
+     "start": 3.35,
+     "end": 3.38,
+     "dur": 0.04,
+     "peak_at": 3.37,
+     "peak_db": -27.2,
+     "centroid": 3373,
+     "low": 0.01
+    },
+    {
+     "start": 3.42,
+     "end": 3.54,
+     "dur": 0.12,
+     "peak_at": 3.52,
+     "peak_db": -20.3,
+     "centroid": 4259,
+     "low": 0.04
+    },
+    {
+     "start": 3.96,
+     "end": 4.34,
+     "dur": 0.38,
+     "peak_at": 4.3,
+     "peak_db": -22.9,
+     "centroid": 4556,
+     "low": 0.01
+    },
+    {
+     "start": 4.47,
+     "end": 4.75,
+     "dur": 0.28,
+     "peak_at": 4.48,
+     "peak_db": -17.2,
+     "centroid": 4519,
+     "low": 0.01
+    },
+    {
+     "start": 4.88,
+     "end": 4.94,
+     "dur": 0.07,
+     "peak_at": 4.88,
+     "peak_db": -29.4,
+     "centroid": 3603,
+     "low": 0.07
+    },
+    {
+     "start": 4.97,
+     "end": 5.01,
+     "dur": 0.04,
+     "peak_at": 4.99,
+     "peak_db": -37.7,
+     "centroid": 3237,
+     "low": 0.02
+    },
+    {
+     "start": 5.24,
+     "end": 5.37,
+     "dur": 0.13,
+     "peak_at": 5.32,
+     "peak_db": -17.1,
+     "centroid": 4927,
+     "low": 0.02
+    },
+    {
+     "start": 5.41,
+     "end": 5.55,
+     "dur": 0.14,
+     "peak_at": 5.5,
+     "peak_db": -17.5,
+     "centroid": 5134,
+     "low": 0.01
+    },
+    {
+     "start": 5.91,
+     "end": 6.95,
+     "dur": 1.04,
+     "peak_at": 6.69,
+     "peak_db": -17.4,
+     "centroid": 4513,
+     "low": 0.01
+    },
+    {
+     "start": 7.0,
+     "end": 7.04,
+     "dur": 0.04,
+     "peak_at": 7.01,
+     "peak_db": -32.1,
+     "centroid": 4188,
+     "low": 0.01
+    },
+    {
+     "start": 7.1,
+     "end": 7.25,
+     "dur": 0.14,
+     "peak_at": 7.11,
+     "peak_db": -19.3,
+     "centroid": 4255,
+     "low": 0.06
+    },
+    {
+     "start": 7.34,
+     "end": 7.41,
+     "dur": 0.06,
+     "peak_at": 7.35,
+     "peak_db": -23.6,
+     "centroid": 3720,
+     "low": 0.03
+    },
+    {
+     "start": 7.46,
+     "end": 7.49,
+     "dur": 0.03,
+     "peak_at": 7.47,
+     "peak_db": -32.7,
+     "centroid": 3876,
+     "low": 0.01
+    },
+    {
+     "start": 7.66,
+     "end": 7.84,
+     "dur": 0.18,
+     "peak_at": 7.66,
+     "peak_db": -19.6,
+     "centroid": 5006,
+     "low": 0.01
+    },
+    {
+     "start": 7.88,
+     "end": 8.04,
+     "dur": 0.16,
+     "peak_at": 7.92,
+     "peak_db": -20.1,
+     "centroid": 4414,
+     "low": 0.03
+    },
+    {
+     "start": 8.13,
+     "end": 8.25,
+     "dur": 0.12,
+     "peak_at": 8.22,
+     "peak_db": -20.6,
+     "centroid": 3816,
+     "low": 0.03
+    },
+    {
+     "start": 8.3,
+     "end": 8.46,
+     "dur": 0.15,
+     "peak_at": 8.31,
+     "peak_db": -24.8,
+     "centroid": 2838,
+     "low": 0.02
+    },
+    {
+     "start": 8.54,
+     "end": 8.91,
+     "dur": 0.37,
+     "peak_at": 8.63,
+     "peak_db": -17.9,
+     "centroid": 3736,
+     "low": 0.02
+    },
+    {
+     "start": 8.95,
+     "end": 8.97,
+     "dur": 0.03,
+     "peak_at": 8.96,
+     "peak_db": -27.4,
+     "centroid": 4314,
+     "low": 0.01
+    },
+    {
+     "start": 9.02,
+     "end": 9.17,
+     "dur": 0.15,
+     "peak_at": 9.02,
+     "peak_db": -24.0,
+     "centroid": 4115,
+     "low": 0.09
+    },
+    {
+     "start": 9.24,
+     "end": 9.29,
+     "dur": 0.05,
+     "peak_at": 9.25,
+     "peak_db": -28.3,
+     "centroid": 4034,
+     "low": 0.06
+    },
+    {
+     "start": 9.37,
+     "end": 9.4,
+     "dur": 0.04,
+     "peak_at": 9.38,
+     "peak_db": -23.8,
+     "centroid": 4718,
+     "low": 0.01
+    },
+    {
+     "start": 9.52,
+     "end": 9.68,
+     "dur": 0.16,
+     "peak_at": 9.63,
+     "peak_db": -17.6,
+     "centroid": 4578,
+     "low": 0.01
+    },
+    {
+     "start": 9.71,
+     "end": 9.77,
+     "dur": 0.05,
+     "peak_at": 9.74,
+     "peak_db": -26.1,
+     "centroid": 5762,
+     "low": 0.01
+    },
+    {
+     "start": 9.8,
+     "end": 9.84,
+     "dur": 0.04,
+     "peak_at": 9.81,
+     "peak_db": -18.0,
+     "centroid": 3533,
+     "low": 0.0
+    },
+    {
+     "start": 9.96,
+     "end": 10.03,
+     "dur": 0.07,
+     "peak_at": 9.96,
+     "peak_db": -20.6,
+     "centroid": 3874,
+     "low": 0.06
+    },
+    {
+     "start": 10.06,
+     "end": 10.09,
+     "dur": 0.03,
+     "peak_at": 10.06,
+     "peak_db": -22.8,
+     "centroid": 3234,
+     "low": 0.01
+    },
+    {
+     "start": 10.12,
+     "end": 10.32,
+     "dur": 0.2,
+     "peak_at": 10.23,
+     "peak_db": -18.4,
+     "centroid": 3944,
+     "low": 0.01
+    },
+    {
+     "start": 10.37,
+     "end": 10.61,
+     "dur": 0.23,
+     "peak_at": 10.55,
+     "peak_db": -15.2,
+     "centroid": 5934,
+     "low": 0.01
+    },
+    {
+     "start": 10.78,
+     "end": 10.95,
+     "dur": 0.17,
+     "peak_at": 10.79,
+     "peak_db": -24.0,
+     "centroid": 3681,
+     "low": 0.02
+    },
+    {
+     "start": 11.09,
+     "end": 11.22,
+     "dur": 0.14,
+     "peak_at": 11.12,
+     "peak_db": -19.2,
+     "centroid": 3895,
+     "low": 0.01
+    },
+    {
+     "start": 11.29,
+     "end": 11.36,
+     "dur": 0.07,
+     "peak_at": 11.29,
+     "peak_db": -27.2,
+     "centroid": 3735,
+     "low": 0.07
+    },
+    {
+     "start": 11.4,
+     "end": 11.48,
+     "dur": 0.08,
+     "peak_at": 11.44,
+     "peak_db": -20.0,
+     "centroid": 5417,
+     "low": 0.01
+    },
+    {
+     "start": 11.52,
+     "end": 11.95,
+     "dur": 0.43,
+     "peak_at": 11.66,
+     "peak_db": -16.9,
+     "centroid": 4014,
+     "low": 0.01
+    },
+    {
+     "start": 12.01,
+     "end": 12.05,
+     "dur": 0.04,
+     "peak_at": 12.03,
+     "peak_db": -23.3,
+     "centroid": 4809,
+     "low": 0.01
+    },
+    {
+     "start": 12.2,
+     "end": 12.32,
+     "dur": 0.12,
+     "peak_at": 12.3,
+     "peak_db": -21.1,
+     "centroid": 3663,
+     "low": 0.08
+    },
+    {
+     "start": 12.49,
+     "end": 12.55,
+     "dur": 0.07,
+     "peak_at": 12.49,
+     "peak_db": -34.7,
+     "centroid": 3635,
+     "low": 0.07
+    },
+    {
+     "start": 12.61,
+     "end": 12.64,
+     "dur": 0.03,
+     "peak_at": 12.62,
+     "peak_db": -26.8,
+     "centroid": 4309,
+     "low": 0.0
+    },
+    {
+     "start": 12.69,
+     "end": 12.79,
+     "dur": 0.1,
+     "peak_at": 12.7,
+     "peak_db": -28.8,
+     "centroid": 4582,
+     "low": 0.1
+    },
+    {
+     "start": 12.85,
+     "end": 13.24,
+     "dur": 0.4,
+     "peak_at": 13.05,
+     "peak_db": -16.7,
+     "centroid": 4937,
+     "low": 0.01
+    },
+    {
+     "start": 13.3,
+     "end": 13.44,
+     "dur": 0.14,
+     "peak_at": 13.31,
+     "peak_db": -20.7,
+     "centroid": 3968,
+     "low": 0.03
+    },
+    {
+     "start": 13.47,
+     "end": 13.54,
+     "dur": 0.07,
+     "peak_at": 13.48,
+     "peak_db": -26.5,
+     "centroid": 3848,
+     "low": 0.06
+    },
+    {
+     "start": 13.62,
+     "end": 13.65,
+     "dur": 0.03,
+     "peak_at": 13.63,
+     "peak_db": -23.4,
+     "centroid": 3868,
+     "low": 0.0
+    },
+    {
+     "start": 13.72,
+     "end": 13.79,
+     "dur": 0.07,
+     "peak_at": 13.73,
+     "peak_db": -23.8,
+     "centroid": 3815,
+     "low": 0.04
+    },
+    {
+     "start": 13.85,
+     "end": 13.88,
+     "dur": 0.04,
+     "peak_at": 13.86,
+     "peak_db": -21.6,
+     "centroid": 3453,
+     "low": 0.01
+    },
+    {
+     "start": 13.99,
+     "end": 14.27,
+     "dur": 0.28,
+     "peak_at": 14.21,
+     "peak_db": -14.9,
+     "centroid": 4628,
+     "low": 0.01
+    },
+    {
+     "start": 14.36,
+     "end": 14.44,
+     "dur": 0.09,
+     "peak_at": 14.37,
+     "peak_db": -17.0,
+     "centroid": 4759,
+     "low": 0.02
+    },
+    {
+     "start": 14.48,
+     "end": 14.6,
+     "dur": 0.11,
+     "peak_at": 14.49,
+     "peak_db": -21.0,
+     "centroid": 4366,
+     "low": 0.02
+    },
+    {
+     "start": 14.63,
+     "end": 14.74,
+     "dur": 0.1,
+     "peak_at": 14.69,
+     "peak_db": -23.8,
+     "centroid": 3810,
+     "low": 0.01
+    },
+    {
+     "start": 14.82,
+     "end": 14.88,
+     "dur": 0.05,
+     "peak_at": 14.83,
+     "peak_db": -33.8,
+     "centroid": 3126,
+     "low": 0.07
+    },
+    {
+     "start": 14.97,
+     "end": 15.07,
+     "dur": 0.1,
+     "peak_at": 15.04,
+     "peak_db": -19.0,
+     "centroid": 4060,
+     "low": 0.01
+    },
+    {
+     "start": 15.16,
+     "end": 15.18,
+     "dur": 0.01,
+     "peak_at": 15.16,
+     "peak_db": -38.8,
+     "centroid": 3073,
+     "low": 0.04
+    },
+    {
+     "start": 15.26,
+     "end": 15.3,
+     "dur": 0.05,
+     "peak_at": 15.26,
+     "peak_db": -39.0,
+     "centroid": 3146,
+     "low": 0.16
+    },
+    {
+     "start": 15.4,
+     "end": 15.49,
+     "dur": 0.09,
+     "peak_at": 15.44,
+     "peak_db": -20.0,
+     "centroid": 4279,
+     "low": 0.02
+    },
+    {
+     "start": 15.55,
+     "end": 15.58,
+     "dur": 0.03,
+     "peak_at": 15.55,
+     "peak_db": -22.8,
+     "centroid": 3586,
+     "low": 0.01
+    },
+    {
+     "start": 15.62,
+     "end": 15.87,
+     "dur": 0.26,
+     "peak_at": 15.85,
+     "peak_db": -16.0,
+     "centroid": 5291,
+     "low": 0.01
+    },
+    {
+     "start": 15.96,
+     "end": 15.98,
+     "dur": 0.03,
+     "peak_at": 15.96,
+     "peak_db": -22.2,
+     "centroid": 4499,
+     "low": 0.01
+    },
+    {
+     "start": 16.14,
+     "end": 16.5,
+     "dur": 0.35,
+     "peak_at": 16.14,
+     "peak_db": -21.4,
+     "centroid": 3711,
+     "low": 0.03
+    },
+    {
+     "start": 16.57,
+     "end": 16.61,
+     "dur": 0.04,
+     "peak_at": 16.57,
+     "peak_db": -14.3,
+     "centroid": 4291,
+     "low": 0.02
+    },
+    {
+     "start": 16.68,
+     "end": 16.73,
+     "dur": 0.04,
+     "peak_at": 16.7,
+     "peak_db": -20.5,
+     "centroid": 3519,
+     "low": 0.0
+    },
+    {
+     "start": 16.8,
+     "end": 16.86,
+     "dur": 0.06,
+     "peak_at": 16.8,
+     "peak_db": -21.6,
+     "centroid": 3479,
+     "low": 0.06
+    },
+    {
+     "start": 16.89,
+     "end": 16.94,
+     "dur": 0.04,
+     "peak_at": 16.91,
+     "peak_db": -27.1,
+     "centroid": 3862,
+     "low": 0.01
+    },
+    {
+     "start": 17.03,
+     "end": 17.14,
+     "dur": 0.1,
+     "peak_at": 17.11,
+     "peak_db": -18.3,
+     "centroid": 3623,
+     "low": 0.04
+    },
+    {
+     "start": 17.2,
+     "end": 17.5,
+     "dur": 0.3,
+     "peak_at": 17.3,
+     "peak_db": -19.7,
+     "centroid": 4963,
+     "low": 0.01
+    },
+    {
+     "start": 17.71,
+     "end": 17.84,
+     "dur": 0.12,
+     "peak_at": 17.82,
+     "peak_db": -18.4,
+     "centroid": 3698,
+     "low": 0.05
+    },
+    {
+     "start": 18.02,
+     "end": 18.07,
+     "dur": 0.06,
+     "peak_at": 18.02,
+     "peak_db": -27.3,
+     "centroid": 3558,
+     "low": 0.07
+    },
+    {
+     "start": 18.11,
+     "end": 18.2,
+     "dur": 0.09,
+     "peak_at": 18.13,
+     "peak_db": -21.4,
+     "centroid": 4837,
+     "low": 0.02
+    },
+    {
+     "start": 18.23,
+     "end": 18.41,
+     "dur": 0.17,
+     "peak_at": 18.3,
+     "peak_db": -10.7,
+     "centroid": 4539,
+     "low": 0.01
+    },
+    {
+     "start": 18.45,
+     "end": 18.51,
+     "dur": 0.06,
+     "peak_at": 18.49,
+     "peak_db": -28.1,
+     "centroid": 4148,
+     "low": 0.01
+    },
+    {
+     "start": 18.59,
+     "end": 18.66,
+     "dur": 0.06,
+     "peak_at": 18.6,
+     "peak_db": -23.0,
+     "centroid": 3275,
+     "low": 0.06
+    },
+    {
+     "start": 18.7,
+     "end": 18.8,
+     "dur": 0.1,
+     "peak_at": 18.75,
+     "peak_db": -21.8,
+     "centroid": 4756,
+     "low": 0.01
+    },
+    {
+     "start": 18.84,
+     "end": 18.88,
+     "dur": 0.04,
+     "peak_at": 18.86,
+     "peak_db": -22.2,
+     "centroid": 4516,
+     "low": 0.01
+    },
+    {
+     "start": 19.23,
+     "end": 19.38,
+     "dur": 0.14,
+     "peak_at": 19.23,
+     "peak_db": -20.9,
+     "centroid": 4231,
+     "low": 0.02
+    },
+    {
+     "start": 19.55,
+     "end": 19.8,
+     "dur": 0.25,
+     "peak_at": 19.55,
+     "peak_db": -18.0,
+     "centroid": 4984,
+     "low": 0.02
+    },
+    {
+     "start": 19.84,
+     "end": 20.23,
+     "dur": 0.38,
+     "peak_at": 19.95,
+     "peak_db": -17.6,
+     "centroid": 4234,
+     "low": 0.02
+    },
+    {
+     "start": 20.27,
+     "end": 20.3,
+     "dur": 0.04,
+     "peak_at": 20.27,
+     "peak_db": -22.0,
+     "centroid": 3983,
+     "low": 0.01
+    },
+    {
+     "start": 20.43,
+     "end": 20.55,
+     "dur": 0.12,
+     "peak_at": 20.43,
+     "peak_db": -13.6,
+     "centroid": 4302,
+     "low": 0.03
+    },
+    {
+     "start": 20.77,
+     "end": 20.89,
+     "dur": 0.12,
+     "peak_at": 20.77,
+     "peak_db": -16.7,
+     "centroid": 3632,
+     "low": 0.06
+    },
+    {
+     "start": 20.93,
+     "end": 20.98,
+     "dur": 0.05,
+     "peak_at": 20.94,
+     "peak_db": -17.7,
+     "centroid": 3825,
+     "low": 0.03
+    },
+    {
+     "start": 21.02,
+     "end": 21.35,
+     "dur": 0.33,
+     "peak_at": 21.08,
+     "peak_db": -17.6,
+     "centroid": 4238,
+     "low": 0.01
+    },
+    {
+     "start": 21.64,
+     "end": 21.68,
+     "dur": 0.04,
+     "peak_at": 21.66,
+     "peak_db": -31.1,
+     "centroid": 3761,
+     "low": 0.03
+    },
+    {
+     "start": 21.71,
+     "end": 21.77,
+     "dur": 0.06,
+     "peak_at": 21.74,
+     "peak_db": -30.4,
+     "centroid": 4231,
+     "low": 0.01
+    },
+    {
+     "start": 22.02,
+     "end": 22.14,
+     "dur": 0.12,
+     "peak_at": 22.03,
+     "peak_db": -15.0,
+     "centroid": 3361,
+     "low": 0.03
+    },
+    {
+     "start": 22.28,
+     "end": 22.33,
+     "dur": 0.05,
+     "peak_at": 22.29,
+     "peak_db": -25.7,
+     "centroid": 3625,
+     "low": 0.04
+    },
+    {
+     "start": 22.38,
+     "end": 22.43,
+     "dur": 0.06,
+     "peak_at": 22.39,
+     "peak_db": -29.2,
+     "centroid": 3900,
+     "low": 0.01
+    },
+    {
+     "start": 22.57,
+     "end": 22.71,
+     "dur": 0.15,
+     "peak_at": 22.57,
+     "peak_db": -21.6,
+     "centroid": 3439,
+     "low": 0.02
+    },
+    {
+     "start": 22.82,
+     "end": 22.91,
+     "dur": 0.09,
+     "peak_at": 22.86,
+     "peak_db": -19.9,
+     "centroid": 4009,
+     "low": 0.02
+    },
+    {
+     "start": 22.95,
+     "end": 22.98,
+     "dur": 0.03,
+     "peak_at": 22.95,
+     "peak_db": -21.6,
+     "centroid": 4172,
+     "low": 0.01
+    },
+    {
+     "start": 23.08,
+     "end": 23.22,
+     "dur": 0.14,
+     "peak_at": 23.19,
+     "peak_db": -22.6,
+     "centroid": 3564,
+     "low": 0.05
+    },
+    {
+     "start": 23.3,
+     "end": 23.36,
+     "dur": 0.06,
+     "peak_at": 23.31,
+     "peak_db": -22.3,
+     "centroid": 3293,
+     "low": 0.07
+    },
+    {
+     "start": 23.43,
+     "end": 23.57,
+     "dur": 0.14,
+     "peak_at": 23.55,
+     "peak_db": -14.2,
+     "centroid": 4704,
+     "low": 0.01
+    },
+    {
+     "start": 23.64,
+     "end": 23.7,
+     "dur": 0.06,
+     "peak_at": 23.64,
+     "peak_db": -30.7,
+     "centroid": 3276,
+     "low": 0.08
+    },
+    {
+     "start": 23.73,
+     "end": 23.91,
+     "dur": 0.18,
+     "peak_at": 23.73,
+     "peak_db": -22.6,
+     "centroid": 5600,
+     "low": 0.02
+    },
+    {
+     "start": 24.0,
+     "end": 24.11,
+     "dur": 0.11,
+     "peak_at": 24.09,
+     "peak_db": -21.9,
+     "centroid": 4073,
+     "low": 0.06
+    },
+    {
+     "start": 24.16,
+     "end": 24.29,
+     "dur": 0.12,
+     "peak_at": 24.17,
+     "peak_db": -21.3,
+     "centroid": 4265,
+     "low": 0.06
+    },
+    {
+     "start": 24.34,
+     "end": 24.39,
+     "dur": 0.06,
+     "peak_at": 24.34,
+     "peak_db": -24.3,
+     "centroid": 3708,
+     "low": 0.09
+    },
+    {
+     "start": 24.43,
+     "end": 24.47,
+     "dur": 0.04,
+     "peak_at": 24.45,
+     "peak_db": -37.0,
+     "centroid": 3663,
+     "low": 0.02
+    },
+    {
+     "start": 24.57,
+     "end": 24.71,
+     "dur": 0.14,
+     "peak_at": 24.58,
+     "peak_db": -16.3,
+     "centroid": 4653,
+     "low": 0.02
+    },
+    {
+     "start": 24.79,
+     "end": 24.84,
+     "dur": 0.06,
+     "peak_at": 24.8,
+     "peak_db": -21.7,
+     "centroid": 3845,
+     "low": 0.05
+    },
+    {
+     "start": 24.91,
+     "end": 24.95,
+     "dur": 0.04,
+     "peak_at": 24.93,
+     "peak_db": -23.5,
+     "centroid": 3922,
+     "low": 0.01
+    }
+   ],
+   "desc": "25 ث فيها 112 صوت كمبيوتر/UI صغير (بلِبس وتكات)",
+   "tags": "UI، مكتبة",
+   "use_for": "تقطيع أصوات صغيرة منها لكل حاجة"
+  },
+  {
+   "file": "Data Delivery.wav",
+   "drive_ids": {
+    ".wav": "1XEJODcJWHbGnE9gbyci-0jMkFsWpQfG_"
+   },
+   "length": 3.0,
+   "events": [
+    {
+     "start": 0.0,
+     "end": 2.73,
+     "dur": 2.73,
+     "peak_at": 1.78,
+     "peak_db": -3.0,
+     "centroid": 7367,
+     "low": 0.0
+    }
+   ],
+   "desc": "زقزقة داتا تقنية متكررة 2.7 ث",
+   "tags": "تقني، داتا",
+   "use_for": "أرقام/إحصائيات، بحذر"
+  },
+  {
+   "file": "Data Feed.wav",
+   "drive_ids": {
+    ".wav": "1KoIcGOBmseSTl6dedJwZ-oNxaDAejQIY"
+   },
+   "length": 13.57,
+   "events": [
+    {
+     "start": 0.01,
+     "end": 0.51,
+     "dur": 0.5,
+     "peak_at": 0.01,
+     "peak_db": -21.1,
+     "centroid": 12995,
+     "low": 0.0
+    },
+    {
+     "start": 0.54,
+     "end": 1.17,
+     "dur": 0.63,
+     "peak_at": 0.68,
+     "peak_db": -21.0,
+     "centroid": 13348,
+     "low": 0.0
+    },
+    {
+     "start": 1.21,
+     "end": 2.17,
+     "dur": 0.96,
+     "peak_at": 1.34,
+     "peak_db": -21.0,
+     "centroid": 13218,
+     "low": 0.0
+    },
+    {
+     "start": 2.21,
+     "end": 2.83,
+     "dur": 0.63,
+     "peak_at": 2.35,
+     "peak_db": -21.0,
+     "centroid": 13347,
+     "low": 0.0
+    },
+    {
+     "start": 2.87,
+     "end": 3.5,
+     "dur": 0.63,
+     "peak_at": 3.01,
+     "peak_db": -21.0,
+     "centroid": 13349,
+     "low": 0.0
+    },
+    {
+     "start": 3.54,
+     "end": 4.5,
+     "dur": 0.96,
+     "peak_at": 4.01,
+     "peak_db": -21.2,
+     "centroid": 13218,
+     "low": 0.0
+    },
+    {
+     "start": 4.54,
+     "end": 5.17,
+     "dur": 0.63,
+     "peak_at": 4.67,
+     "peak_db": -21.0,
+     "centroid": 13347,
+     "low": 0.0
+    },
+    {
+     "start": 5.2,
+     "end": 6.83,
+     "dur": 1.63,
+     "peak_at": 5.34,
+     "peak_db": -21.0,
+     "centroid": 13228,
+     "low": 0.0
+    },
+    {
+     "start": 6.87,
+     "end": 7.5,
+     "dur": 0.63,
+     "peak_at": 7.0,
+     "peak_db": -21.0,
+     "centroid": 13347,
+     "low": 0.0
+    },
+    {
+     "start": 7.53,
+     "end": 8.49,
+     "dur": 0.96,
+     "peak_at": 7.67,
+     "peak_db": -21.0,
+     "centroid": 13218,
+     "low": 0.0
+    },
+    {
+     "start": 8.53,
+     "end": 9.16,
+     "dur": 0.63,
+     "peak_at": 8.67,
+     "peak_db": -21.1,
+     "centroid": 13346,
+     "low": 0.0
+    },
+    {
+     "start": 9.2,
+     "end": 9.82,
+     "dur": 0.63,
+     "peak_at": 9.34,
+     "peak_db": -21.0,
+     "centroid": 13347,
+     "low": 0.0
+    },
+    {
+     "start": 9.86,
+     "end": 10.82,
+     "dur": 0.96,
+     "peak_at": 10.0,
+     "peak_db": -21.0,
+     "centroid": 13217,
+     "low": 0.0
+    },
+    {
+     "start": 10.86,
+     "end": 11.49,
+     "dur": 0.63,
+     "peak_at": 11.0,
+     "peak_db": -21.0,
+     "centroid": 13346,
+     "low": 0.0
+    },
+    {
+     "start": 11.53,
+     "end": 12.15,
+     "dur": 0.63,
+     "peak_at": 11.66,
+     "peak_db": -21.0,
+     "centroid": 13347,
+     "low": 0.0
+    },
+    {
+     "start": 12.19,
+     "end": 13.15,
+     "dur": 0.96,
+     "peak_at": 12.66,
+     "peak_db": -21.2,
+     "centroid": 13216,
+     "low": 0.0
+    },
+    {
+     "start": 13.19,
+     "end": 13.31,
+     "dur": 0.12,
+     "peak_at": 13.27,
+     "peak_db": -24.5,
+     "centroid": 12086,
+     "low": 0.0
+    }
+   ],
+   "desc": "تكات داتا متكررة واطية 13 ث (17 مقطع)",
+   "tags": "تقني، خلفية",
+   "use_for": "تقطيع جزء صغير"
+  },
+  {
+   "file": "Glitch 01.wav",
+   "drive_ids": {
+    ".mp3": "10je0MIzqr69pGSUBctzct2uHl549ZEeR",
+    ".wav": "1yxjCPhnifofYM7j-mdwZhyiiYDH-Infx"
+   },
+   "length": 3.61,
+   "events": [
+    {
+     "start": 0.02,
+     "end": 3.1,
+     "dur": 3.08,
+     "peak_at": 0.86,
+     "peak_db": -2.4,
+     "centroid": 6597,
+     "low": 0.3
+    }
+   ],
+   "desc": "جليتش ديجيتال بذيل",
+   "tags": "جليتش",
+   "use_for": "تجنبه في المحتوى الهادي"
+  },
+  {
+   "file": "Glitch 02.wav",
+   "drive_ids": {
+    ".mp3": "1z0KZ0HWYn0z2S1CdDCMaAgD72YkhLwxL",
+    ".wav": "1-ndMH2wqvkILWorGdIAeNXNf68AqAqf4"
+   },
+   "length": 2.53,
+   "events": [
+    {
+     "start": 0.0,
+     "end": 2.25,
+     "dur": 2.25,
+     "peak_at": 0.03,
+     "peak_db": -10.0,
+     "centroid": 7248,
+     "low": 0.11
+    }
+   ],
+   "desc": "جليتش ديجيتال",
+   "tags": "جليتش",
+   "use_for": "تجنبه في المحتوى الهادي"
+  },
+  {
+   "file": "Glitch 03.wav",
+   "drive_ids": {
+    ".mp3": "1yN05jIj0Jy7e7gt6FOfgTGir1QyFUjQq",
+    ".wav": "1HTUPBSoHL6xP3mxfAIwsJrCOET3a8EiY"
+   },
+   "length": 1.49,
+   "events": [
+    {
+     "start": 0.08,
+     "end": 1.43,
+     "dur": 1.35,
+     "peak_at": 0.17,
+     "peak_db": -12.9,
+     "centroid": 8859,
+     "low": 0.11
+    }
+   ],
+   "desc": "جليتش قصير حاد",
+   "tags": "جليتش",
+   "use_for": "تجنبه في المحتوى الهادي"
+  },
+  {
+   "file": "Glitch 04.wav",
+   "drive_ids": {
+    ".mp3": "1qAOa1IRC7OeJftPGwOkKLEYSathS7rpb",
+    ".wav": "148VkzW_WtUELuTDRcIjwobBDFC6Ln0X4"
+   },
+   "length": 2.34,
+   "events": [
+    {
+     "start": 0.01,
+     "end": 1.99,
+     "dur": 1.98,
+     "peak_at": 0.32,
+     "peak_db": -11.8,
+     "centroid": 7271,
+     "low": 0.13
+    }
+   ],
+   "desc": "جليتش",
+   "tags": "جليتش",
+   "use_for": "تجنبه في المحتوى الهادي"
+  },
+  {
+   "file": "Glitch 05.wav",
+   "drive_ids": {
+    ".mp3": "18VGvcakz8OfgIeiPzGMlikCVw6ygWd8f",
+    ".wav": "161MFyipqr6sOQmYreAXFChmsEaAnpMoo"
+   },
+   "length": 2.39,
+   "events": [
+    {
+     "start": 0.01,
+     "end": 1.76,
+     "dur": 1.75,
+     "peak_at": 0.32,
+     "peak_db": -12.9,
+     "centroid": 9002,
+     "low": 0.05
+    }
+   ],
+   "desc": "جليتش",
+   "tags": "جليتش",
+   "use_for": "تجنبه في المحتوى الهادي"
+  },
+  {
+   "file": "Glitch 06.wav",
+   "drive_ids": {
+    ".mp3": "1ZAsbOeEC4Kk-MJoXROOAU8x3twoT20Nq",
+    ".wav": "1o4uw1MJh4W71BoBVa0bTMWnul8-yuqKW"
+   },
+   "length": 3.64,
+   "events": [
+    {
+     "start": 0.07,
+     "end": 2.23,
+     "dur": 2.16,
+     "peak_at": 1.14,
+     "peak_db": -8.9,
+     "centroid": 9060,
+     "low": 0.08
+    }
+   ],
+   "desc": "جليتش بموجات صاعدة ونازلة",
+   "tags": "جليتش",
+   "use_for": "تجنبه في المحتوى الهادي"
+  },
+  {
+   "file": "Impact 01.wav",
+   "drive_ids": {
+    ".mp3": "1YoYtwNDzY8LzHhdiPzbLIJpmDamQEK44",
+    ".wav": "1I6sUZD64iobaKtLVwLV0Npv9mIGJO-71"
+   },
+   "length": 4.34,
+   "events": [
+    {
+     "start": 0.07,
+     "end": 2.77,
+     "dur": 2.69,
+     "peak_at": 0.23,
+     "peak_db": -1.0,
+     "centroid": 310,
+     "low": 0.82
+    }
+   ],
+   "desc": "ضربة باص عميقة (sub)",
+   "tags": "إمباكت، باص",
+   "use_for": "تأكيد جملة قوية، واطي جدًا"
+  },
+  {
+   "file": "Impact 02.wav",
+   "drive_ids": {
+    ".mp3": "17U4e8jt5xlmbdLUWqkL6SRvIucjAPnxg",
+    ".wav": "1bjWEL3VElzbzHUtGOHtTZJZ66kTa8Gr8"
+   },
+   "length": 4.41,
+   "events": [
+    {
+     "start": 0.04,
+     "end": 2.92,
+     "dur": 2.89,
+     "peak_at": 0.2,
+     "peak_db": 0.1,
+     "centroid": 361,
+     "low": 0.75
+    }
+   ],
+   "desc": "ضربة باص عميقة",
+   "tags": "إمباكت، باص",
+   "use_for": "تأكيد جملة قوية"
+  },
+  {
+   "file": "Impact 03.wav",
+   "drive_ids": {
+    ".mp3": "1KjbfwNC8oU2bS528lxN7f6xvj9IRyIXJ",
+    ".wav": "1KJrzYqxG-tA1rdDAw-mXAK6UrZ7gnmt7"
+   },
+   "length": 3.02,
+   "events": [
+    {
+     "start": 0.07,
+     "end": 2.28,
+     "dur": 2.21,
+     "peak_at": 0.24,
+     "peak_db": 0.1,
+     "centroid": 251,
+     "low": 0.91
+    }
+   ],
+   "desc": "ضربة باص قصيرة وتقيلة",
+   "tags": "إمباكت، باص",
+   "use_for": "تأكيد جملة قوية"
+  },
+  {
+   "file": "Impact 04.wav",
+   "drive_ids": {
+    ".mp3": "1KsFaxYS0HNwneYt0mvsCvOmak2AhNl5r",
+    ".wav": "18XYKYhSRcIsTB7Gj6cZvhw0I5abnX5e4"
+   },
+   "length": 3.31,
+   "events": [
+    {
+     "start": 0.03,
+     "end": 2.69,
+     "dur": 2.67,
+     "peak_at": 0.53,
+     "peak_db": 0.9,
+     "centroid": 1183,
+     "low": 0.68
+    }
+   ],
+   "desc": "ضربة باص بهجمة أوضح",
+   "tags": "إمباكت",
+   "use_for": "تأكيد"
+  },
+  {
+   "file": "Impact 05.wav",
+   "drive_ids": {
+    ".mp3": "1QlJjMzjfiDOUnsR06DqaDD14tBp8jjm-",
+    ".wav": "19jyaC_N4IqNG8h5Wnj9n7G0z_sxFsoya"
+   },
+   "length": 4.58,
+   "events": [
+    {
+     "start": 0.01,
+     "end": 3.19,
+     "dur": 3.19,
+     "peak_at": 0.46,
+     "peak_db": 0.1,
+     "centroid": 905,
+     "low": 0.69
+    }
+   ],
+   "desc": "ضربة باص بهجمة أوضح",
+   "tags": "إمباكت",
+   "use_for": "تأكيد"
+  },
+  {
+   "file": "Impact 1.wav",
+   "drive_ids": {
+    ".mp3": "1DIRRJ9vGyQ0_NzEURiYA0dnxx4byxY8O",
+    ".wav": "1w9l3sR_HCzILC2DcUBcBZbROitCUQMnP"
+   },
+   "length": 5.95,
+   "events": [
+    {
+     "start": 0.07,
+     "end": 4.76,
+     "dur": 4.7,
+     "peak_at": 1.64,
+     "peak_db": -2.6,
+     "centroid": 3104,
+     "low": 0.41
+    }
+   ],
+   "desc": "ووش داخل على ضربة (whoosh-hit)",
+   "tags": "إمباكت، ووش",
+   "use_for": "عنوان/رقم بيدخل"
+  },
+  {
+   "file": "Impact 2.wav",
+   "drive_ids": {
+    ".mp3": "1HOtf3deUafdzkGDldnglZhDZ2IiFYdqm",
+    ".wav": "1cmSwMAFJwYWYMhdKGa9O0sR8v4eJgzQp"
+   },
+   "length": 5.12,
+   "events": [
+    {
+     "start": 0.1,
+     "end": 3.8,
+     "dur": 3.69,
+     "peak_at": 1.55,
+     "peak_db": -2.5,
+     "centroid": 2152,
+     "low": 0.52
+    }
+   ],
+   "desc": "ووش طويل داخل على ضربة",
+   "tags": "إمباكت، ووش",
+   "use_for": "عنوان بيدخل"
+  },
+  {
+   "file": "Impact 3.wav",
+   "drive_ids": {
+    ".mp3": "1drh5b_v0vh3doXRlXBkIldBKS3dgzRKu",
+    ".wav": "1xlLRfFh9lpMfeVj3rSeLCDPyplSDkXoj"
+   },
+   "length": 4.8,
+   "events": [
+    {
+     "start": 0.09,
+     "end": 3.58,
+     "dur": 3.49,
+     "peak_at": 0.81,
+     "peak_db": -0.6,
+     "centroid": 1183,
+     "low": 0.65
+    }
+   ],
+   "desc": "ووش داخل على ضربة",
+   "tags": "إمباكت، ووش",
+   "use_for": "عنوان بيدخل"
+  },
+  {
+   "file": "Impact.wav",
+   "drive_ids": {
+    ".wav": "1ThdNMRH1V_Oe9CtN1vzPgtUXmqAX5UpQ"
+   },
+   "length": 2.06,
+   "events": [
+    {
+     "start": 0.12,
+     "end": 1.38,
+     "dur": 1.26,
+     "peak_at": 0.49,
+     "peak_db": -7.9,
+     "centroid": 4077,
+     "low": 0.21
+    }
+   ],
+   "desc": "ضربة معدنية نغمية قصيرة",
+   "tags": "إمباكت، نغمي",
+   "use_for": "تأكيد خفيف"
+  },
+  {
+   "file": "MMDesignElement_BW.23589.wav",
+   "drive_ids": {
+    ".wav": "1a8plsdxPrWlXyiqD_QG9M-pyDhR8Ppcf"
+   },
+   "length": 2.14,
+   "events": [
+    {
+     "start": 0.0,
+     "end": 1.36,
+     "dur": 1.36,
+     "peak_at": 0.38,
+     "peak_db": -5.3,
+     "centroid": 5449,
+     "low": 0.0
+    }
+   ],
+   "desc": "نبضات نغمية إلكترونية 1.4 ث",
+   "tags": "نغمي، تقني",
+   "use_for": "ظهور جرافيك"
+  },
+  {
+   "file": "Magic Collect Shimmer Reveal Glitter Particles Tonal Multi Swell High Bright 02.wav",
+   "drive_ids": {
+    ".wav": "1nd_kI21K-AhElLrpZbpUZCjKyAQAu3zP"
+   },
+   "length": 3.53,
+   "events": [
+    {
+     "start": 0.17,
+     "end": 1.9,
+     "dur": 1.73,
+     "peak_at": 0.74,
+     "peak_db": -12.5,
+     "centroid": 13208,
+     "low": 0.0
+    }
+   ],
+   "desc": "لمعة/بريق سحري عالي 1.7 ث",
+   "tags": "لمعة، تجميل",
+   "use_for": "تجميل، نتيجة، إجراءات، بشرة منورة"
+  },
+  {
+   "file": "New Text Message Ding.wav",
+   "drive_ids": {
+    ".mp3": "1NCSpBDabArELhpq5G3RWxtSRv4OAF6E7",
+    ".wav": "1chTTO9Xc80TdtbdCeHL19c5JXGvjf6Bs"
+   },
+   "length": 6.13,
+   "events": [
+    {
+     "start": 0.12,
+     "end": 1.86,
+     "dur": 1.74,
+     "peak_at": 0.13,
+     "peak_db": -9.8,
+     "centroid": 5861,
+     "low": 0.0
+    }
+   ],
+   "desc": "دينج جرس ناعم بذيل 1.7 ث",
+   "tags": "جرس، ناعم",
+   "use_for": "معلومة مهمة بهدوء، قلب/اهتمام"
+  },
+  {
+   "file": "Pop.wav",
+   "drive_ids": {
+    ".wav": "1wwPqFVDcW8ECf3UALGLlsKlFIExpC9XO"
+   },
+   "length": 0.72,
+   "events": [
+    {
+     "start": 0.12,
+     "end": 0.17,
+     "dur": 0.05,
+     "peak_at": 0.12,
+     "peak_db": -2.4,
+     "centroid": 1493,
+     "low": 0.12
+    }
+   ],
+   "desc": "بوب قصير جدًا وعالي",
+   "tags": "بوب",
+   "use_for": "ظهور كلمة، واطي جدًا"
+  },
+  {
+   "file": "Riser Stop.wav",
+   "drive_ids": {
+    ".wav": "1iQSDxd__O_h2v-D-Z9Sp-eYUCZzvqP_J"
+   },
+   "length": 3.7,
+   "events": [
+    {
+     "start": 0.22,
+     "end": 3.29,
+     "dur": 3.07,
+     "peak_at": 3.03,
+     "peak_db": -9.1,
+     "centroid": 2246,
+     "low": 0.1
+    }
+   ],
+   "desc": "رايزر نويز 3 ث بيقف فجأة",
+   "tags": "رايزر",
+   "use_for": "قبل جملة مهمة، بحذر"
+  },
+  {
+   "file": "Shine Beam__Shine Beam.wav",
+   "drive_ids": {
+    ".mp3": "10Pa3Vu0IYvLicyjbR15keGfVdnyXLX4F",
+    ".wav": "1cZikVQsaIBVBT2651vcSYizFbDsnke8i"
+   },
+   "length": 5.01,
+   "events": [
+    {
+     "start": 0.28,
+     "end": 4.05,
+     "dur": 3.77,
+     "peak_at": 1.42,
+     "peak_db": -10.5,
+     "centroid": 6362,
+     "low": 0.0
+    }
+   ],
+   "desc": "لمعة نغمية ممتدة 3.8 ث (هادية وشيك)",
+   "tags": "لمعة، شيك",
+   "use_for": "ظهور اسم/لوجو، لحظة فخمة"
+  },
+  {
+   "file": "Stop Time 1.wav",
+   "drive_ids": {
+    ".mp3": "1Gioeo9AnH01uGuaBmrqeTVrNpStsDOzR",
+    ".wav": "1_r4P2NKQPqwVxMFALe9r_Ozt681Hzbdw"
+   },
+   "length": 3.85,
+   "events": [
+    {
+     "start": 0.01,
+     "end": 3.21,
+     "dur": 3.2,
+     "peak_at": 1.21,
+     "peak_db": -6.6,
+     "centroid": 1691,
+     "low": 0.34
+    }
+   ],
+   "desc": "صوت شريط بيبطأ ويقف (tape stop)",
+   "tags": "تيب ستوب",
+   "use_for": "توقف/لحظة تفكير، بحذر"
+  },
+  {
+   "file": "Stop Time 2.wav",
+   "drive_ids": {
+    ".mp3": "1XL4Zc9sJ8P3_U46V_5KJ_0T1tCVYP2ni",
+    ".wav": "1Z8m6UbKBmJbj51dpMReAyHjeoKNF26v4"
+   },
+   "length": 3.26,
+   "events": [
+    {
+     "start": 0.01,
+     "end": 2.69,
+     "dur": 2.69,
+     "peak_at": 0.52,
+     "peak_db": -6.5,
+     "centroid": 2164,
+     "low": 0.3
+    }
+   ],
+   "desc": "صوت شريط بيبطأ ويقف",
+   "tags": "تيب ستوب",
+   "use_for": "توقف"
+  },
+  {
+   "file": "Swoosh Accent 1.wav",
+   "drive_ids": {
+    ".mp3": "14T8pYAmH4L9A71InkFcA1YQbI85SV_fg",
+    ".wav": "1ikzwOKlzlzvx00tL7xQkPaT1FiQ0HPOQ"
+   },
+   "length": 3.74,
+   "events": [
+    {
+     "start": 0.09,
+     "end": 1.96,
+     "dur": 1.87,
+     "peak_at": 0.28,
+     "peak_db": -2.6,
+     "centroid": 1878,
+     "low": 0.6
+    }
+   ],
+   "desc": "ووش بجسم باص 1.9 ث",
+   "tags": "ووش",
+   "use_for": "ترانزيشن/حركة"
+  },
+  {
+   "file": "Swoosh Accent 2.wav",
+   "drive_ids": {
+    ".mp3": "10rLXKMoQCw89SHD9fJZhytWs7celo1h-",
+    ".wav": "1nB2xXIm0RqEuilVcqGjAPtHblAFPbSMl"
+   },
+   "length": 3.68,
+   "events": [
+    {
+     "start": 0.07,
+     "end": 1.9,
+     "dur": 1.83,
+     "peak_at": 0.39,
+     "peak_db": -2.0,
+     "centroid": 1902,
+     "low": 0.48
+    }
+   ],
+   "desc": "ووش بجسم باص",
+   "tags": "ووش",
+   "use_for": "ترانزيشن"
+  },
+  {
+   "file": "Swoosh Accent 3.wav",
+   "drive_ids": {
+    ".mp3": "1BaS55B6TRGdkncev5dHfnmYFUs5KLV-i",
+    ".wav": "1kNPhxzSbywXtxFEw2XoT-bRM6sG0AaQg"
+   },
+   "length": 3.75,
+   "events": [
+    {
+     "start": 0.1,
+     "end": 1.81,
+     "dur": 1.71,
+     "peak_at": 0.32,
+     "peak_db": -1.8,
+     "centroid": 1820,
+     "low": 0.5
+    }
+   ],
+   "desc": "ووش بجسم باص",
+   "tags": "ووش",
+   "use_for": "ترانزيشن"
+  },
+  {
+   "file": "Swoosh Accent 4.wav",
+   "drive_ids": {
+    ".mp3": "1JfYFcqgMJug0esgLvyUiXrccYshHKW-G",
+    ".wav": "1DDWQptJqvvAwBOI9lg7_UecDeI3I1nmU"
+   },
+   "length": 3.63,
+   "events": [
+    {
+     "start": 0.02,
+     "end": 1.76,
+     "dur": 1.75,
+     "peak_at": 0.2,
+     "peak_db": -3.4,
+     "centroid": 2102,
+     "low": 0.46
+    }
+   ],
+   "desc": "ووش أنعم شوية",
+   "tags": "ووش",
+   "use_for": "ترانزيشن/ظهور أيقونة"
+  },
+  {
+   "file": "Zoom 1.wav",
+   "drive_ids": {
+    ".mp3": "1BgjXa2646yYQgHKW0Tae8M92MkPq0zQ9",
+    ".wav": "1gRc9KTvNQ-B1wJ_MUu70FuXtKAXnwFvc"
+   },
+   "length": 3.01,
+   "events": [
+    {
+     "start": 0.1,
+     "end": 1.46,
+     "dur": 1.35,
+     "peak_at": 0.6,
+     "peak_db": -2.5,
+     "centroid": 1880,
+     "low": 0.48
+    }
+   ],
+   "desc": "ووش زوم صاعد بيتقفل",
+   "tags": "زوم، ووش",
+   "use_for": "ترانزيشن زوم"
+  },
+  {
+   "file": "Zoom 2.wav",
+   "drive_ids": {
+    ".mp3": "1bqy0n7HCni-L72niQvuLIzaIGoJRdkm5",
+    ".wav": "107O4ZXdFNQtOBfyZS95xEA1htP0004Jl"
+   },
+   "length": 3.31,
+   "events": [
+    {
+     "start": 0.24,
+     "end": 1.47,
+     "dur": 1.23,
+     "peak_at": 0.76,
+     "peak_db": -6.9,
+     "centroid": 2747,
+     "low": 0.34
+    }
+   ],
+   "desc": "ووش زوم",
+   "tags": "زوم، ووش",
+   "use_for": "ترانزيشن زوم"
+  },
+  {
+   "file": "Zoom 3.wav",
+   "drive_ids": {
+    ".mp3": "191Xpd2eRmDYwAyhqMRrjDaYoLa_NIbCV",
+    ".wav": "1sZdSqrkTyyuL3oMfV6F-s5Cm2OvQT0wj"
+   },
+   "length": 2.9,
+   "events": [
+    {
+     "start": 0.06,
+     "end": 1.16,
+     "dur": 1.1,
+     "peak_at": 0.6,
+     "peak_db": -2.1,
+     "centroid": 2063,
+     "low": 0.51
+    }
+   ],
+   "desc": "ووش زوم",
+   "tags": "زوم، ووش",
+   "use_for": "ترانزيشن زوم"
+  },
+  {
+   "file": "Zoom 4.wav",
+   "drive_ids": {
+    ".mp3": "1KT2vrpfiodZCIoU5uNTRYGfgH7qQqsM4",
+    ".wav": "1CRwFOEjlRWl8U1lM6yThXHzDjSE1r0dU"
+   },
+   "length": 2.24,
+   "events": [
+    {
+     "start": 0.03,
+     "end": 1.33,
+     "dur": 1.3,
+     "peak_at": 0.36,
+     "peak_db": -11.9,
+     "centroid": 1730,
+     "low": 0.41
+    }
+   ],
+   "desc": "ووش زوم ناعم وواطي",
+   "tags": "زوم، ووش",
+   "use_for": "ترانزيشن هادي / حركة لفوق"
+  },
+  {
+   "file": "Zoom 5.wav",
+   "drive_ids": {
+    ".mp3": "11jHJTxKXUdw1zhAvkBf0yYsuZkY4TiNJ",
+    ".wav": "1e7soCDECkdB0mEvHhgJ6YGAbHH22BX1K"
+   },
+   "length": 2.22,
+   "events": [
+    {
+     "start": 0.12,
+     "end": 1.3,
+     "dur": 1.19,
+     "peak_at": 0.37,
+     "peak_db": -17.3,
+     "centroid": 2481,
+     "low": 0.31
+    }
+   ],
+   "desc": "ووش زوم ناعم جدًا وواطي",
+   "tags": "زوم، ووش",
+   "use_for": "ترانزيشن هادي"
+  },
+  {
+   "file": "Zoom Popped.wav",
+   "drive_ids": {
+    ".wav": "1eMT9tx9xPh9YCmbngqO0MStB34CGRAnG"
+   },
+   "length": 0.85,
+   "events": [
+    {
+     "start": 0.05,
+     "end": 0.48,
+     "dur": 0.43,
+     "peak_at": 0.16,
+     "peak_db": -6.1,
+     "centroid": 3514,
+     "low": 0.16
+    }
+   ],
+   "desc": "بوب + ووش قصير",
+   "tags": "زوم، بوب",
+   "use_for": "ظهور عنصر"
+  },
+  {
+   "file": "Zoom Transition.wav",
+   "drive_ids": {
+    ".wav": "1b4uJctlIavzzBFj4UibPIPAChpVlGjWG"
+   },
+   "length": 1.86,
+   "events": [
+    {
+     "start": 0.07,
+     "end": 1.4,
+     "dur": 1.33,
+     "peak_at": 0.41,
+     "peak_db": -7.4,
+     "centroid": 7289,
+     "low": 0.17
+    }
+   ],
+   "desc": "ووش هوائي فاتح 1.3 ث",
+   "tags": "ووش، هوائي",
+   "use_for": "ترانزيشن ناعم"
+  },
+  {
+   "file": "chat-message__chat-message.wav",
+   "drive_ids": {
+    ".mp3": "1FWvM96J9cxPBs4ukX9nv6GBSdxV0V5A_",
+    ".wav": "1TVshlDKH_iKQlZEZkaQk0AyzfdxF48mJ"
+   },
+   "length": 1.1,
+   "events": [
+    {
+     "start": 0.1,
+     "end": 0.43,
+     "dur": 0.34,
+     "peak_at": 0.1,
+     "peak_db": -7.4,
+     "centroid": 5158,
+     "low": 0.0
+    }
+   ],
+   "desc": "بليب رسالة نغمي قصير",
+   "tags": "إشعار، بليب",
+   "use_for": "ظهور أيقونة صغيرة/نقطة"
+  },
+  {
+   "file": "data 1.MP3",
+   "drive_ids": {
+    ".mp3": "1f7pdarz6JqmzSg0cxrgf9E1Db6AytV27"
+   },
+   "length": 1.15,
+   "events": [
+    {
+     "start": 0.17,
+     "end": 0.18,
+     "dur": 0.02,
+     "peak_at": 0.17,
+     "peak_db": -20.1,
+     "centroid": 3948,
+     "low": 0.0
+    },
+    {
+     "start": 0.23,
+     "end": 0.24,
+     "dur": 0.02,
+     "peak_at": 0.23,
+     "peak_db": -19.3,
+     "centroid": 4074,
+     "low": 0.0
+    },
+    {
+     "start": 0.28,
+     "end": 0.42,
+     "dur": 0.14,
+     "peak_at": 0.29,
+     "peak_db": -19.2,
+     "centroid": 4326,
+     "low": 0.0
+    },
+    {
+     "start": 0.46,
+     "end": 0.65,
+     "dur": 0.2,
+     "peak_at": 0.58,
+     "peak_db": -19.1,
+     "centroid": 5172,
+     "low": 0.0
+    },
+    {
+     "start": 0.69,
+     "end": 0.77,
+     "dur": 0.08,
+     "peak_at": 0.69,
+     "peak_db": -19.3,
+     "centroid": 4012,
+     "low": 0.0
+    },
+    {
+     "start": 0.8,
+     "end": 0.82,
+     "dur": 0.03,
+     "peak_at": 0.81,
+     "peak_db": -19.2,
+     "centroid": 3999,
+     "low": 0.0
+    },
+    {
+     "start": 0.86,
+     "end": 0.94,
+     "dur": 0.09,
+     "peak_at": 0.86,
+     "peak_db": -20.6,
+     "centroid": 6132,
+     "low": 0.0
+    }
+   ],
+   "desc": "تكات نغمية ديجيتال سريعة (7 مقاطع)",
+   "tags": "تقني، تايبنج",
+   "use_for": "كتابة/أرقام"
+  },
+  {
+   "file": "iphone mix tabs.MP3",
+   "drive_ids": {
+    ".mp3": "1aFizbr38l7qalvWLTINr7WNyHCbAEA4R"
+   },
+   "length": 5.62,
+   "events": [
+    {
+     "start": 0.27,
+     "end": 0.28,
+     "dur": 0.01,
+     "peak_at": 0.28,
+     "peak_db": -9.3,
+     "centroid": 2455,
+     "low": 0.02
+    },
+    {
+     "start": 0.69,
+     "end": 0.7,
+     "dur": 0.01,
+     "peak_at": 0.69,
+     "peak_db": -8.6,
+     "centroid": 2382,
+     "low": 0.02
+    },
+    {
+     "start": 0.88,
+     "end": 0.9,
+     "dur": 0.02,
+     "peak_at": 0.88,
+     "peak_db": -8.4,
+     "centroid": 1576,
+     "low": 0.02
+    },
+    {
+     "start": 1.44,
+     "end": 1.45,
+     "dur": 0.01,
+     "peak_at": 1.44,
+     "peak_db": -6.9,
+     "centroid": 1553,
+     "low": 0.05
+    },
+    {
+     "start": 1.74,
+     "end": 1.75,
+     "dur": 0.01,
+     "peak_at": 1.74,
+     "peak_db": -8.6,
+     "centroid": 2381,
+     "low": 0.02
+    },
+    {
+     "start": 2.1,
+     "end": 2.12,
+     "dur": 0.01,
+     "peak_at": 2.1,
+     "peak_db": -10.2,
+     "centroid": 2444,
+     "low": 0.02
+    },
+    {
+     "start": 2.81,
+     "end": 2.82,
+     "dur": 0.01,
+     "peak_at": 2.81,
+     "peak_db": -6.9,
+     "centroid": 1523,
+     "low": 0.05
+    },
+    {
+     "start": 3.27,
+     "end": 3.29,
+     "dur": 0.01,
+     "peak_at": 3.27,
+     "peak_db": -6.9,
+     "centroid": 1585,
+     "low": 0.07
+    },
+    {
+     "start": 3.57,
+     "end": 3.58,
+     "dur": 0.01,
+     "peak_at": 3.57,
+     "peak_db": -8.4,
+     "centroid": 2347,
+     "low": 0.02
+    },
+    {
+     "start": 4.2,
+     "end": 4.21,
+     "dur": 0.01,
+     "peak_at": 4.2,
+     "peak_db": -9.6,
+     "centroid": 2423,
+     "low": 0.02
+    },
+    {
+     "start": 4.73,
+     "end": 4.74,
+     "dur": 0.01,
+     "peak_at": 4.73,
+     "peak_db": -8.7,
+     "centroid": 2397,
+     "low": 0.02
+    },
+    {
+     "start": 5.2,
+     "end": 5.21,
+     "dur": 0.02,
+     "peak_at": 5.2,
+     "peak_db": -7.1,
+     "centroid": 1578,
+     "low": 0.03
+    }
+   ],
+   "desc": "12 تاتش آيفون متفرقين على 5 ث",
+   "tags": "تاتش، موبايل",
+   "use_for": "موبايل، ضغطة زرار"
+  },
+  {
+   "file": "iphone tab 2.MP3",
+   "drive_ids": {
+    ".mp3": "1rXm_sLmC-F4a0D9welYtLxTPtymqZId7"
+   },
+   "length": 0.99,
+   "events": [
+    {
+     "start": 0.17,
+     "end": 0.2,
+     "dur": 0.02,
+     "peak_at": 0.18,
+     "peak_db": -8.3,
+     "centroid": 1583,
+     "low": 0.02
+    },
+    {
+     "start": 0.71,
+     "end": 0.73,
+     "dur": 0.02,
+     "peak_at": 0.71,
+     "peak_db": -8.4,
+     "centroid": 1576,
+     "low": 0.02
+    }
+   ],
+   "desc": "تاتش آيفون (صوتين)",
+   "tags": "تاتش، موبايل",
+   "use_for": "موبايل"
+  },
+  {
+   "file": "iphone tap 1.MP3",
+   "drive_ids": {
+    ".mp3": "1iHoVNrrPAe_il9JPpCyyEt6EfM_PdZFT"
+   },
+   "length": 0.78,
+   "events": [
+    {
+     "start": 0.21,
+     "end": 0.23,
+     "dur": 0.01,
+     "peak_at": 0.21,
+     "peak_db": -8.4,
+     "centroid": 2339,
+     "low": 0.01
+    },
+    {
+     "start": 0.52,
+     "end": 0.53,
+     "dur": 0.01,
+     "peak_at": 0.52,
+     "peak_db": -9.0,
+     "centroid": 2413,
+     "low": 0.02
+    }
+   ],
+   "desc": "تاتش آيفون (صوتين)",
+   "tags": "تاتش، موبايل",
+   "use_for": "موبايل"
+  },
+  {
+   "file": "notification 2.MP3",
+   "drive_ids": {
+    ".mp3": "1s7xgm62PDAmDyQe9bFfhvF0oWXrLJ2Ds"
+   },
+   "length": 0.99,
+   "events": [
+    {
+     "start": 0.03,
+     "end": 0.84,
+     "dur": 0.82,
+     "peak_at": 0.09,
+     "peak_db": -8.2,
+     "centroid": 1509,
+     "low": 0.0
+    }
+   ],
+   "desc": "نغمة إشعار ممتدة 0.8 ث",
+   "tags": "إشعار",
+   "use_for": "تنبيه"
+  },
+  {
+   "file": "notification.MP3",
+   "drive_ids": {
+    ".mp3": "175Ib_na_Mb8nYa7ONnWq9MqLOlEqfpj-"
+   },
+   "length": 2.06,
+   "events": [
+    {
+     "start": 0.66,
+     "end": 1.88,
+     "dur": 1.22,
+     "peak_at": 0.81,
+     "peak_db": -6.9,
+     "centroid": 722,
+     "low": 0.01
+    }
+   ],
+   "desc": "نغمة إشعار ميلودي 1.2 ث (مطمئنة)",
+   "tags": "إشعار، ميلودي",
+   "use_for": "طمأنة، معلومة إيجابية"
+  },
+  {
+   "file": "pop-up__pop-up.wav",
+   "drive_ids": {
+    ".mp3": "1XwLOZkCy_RxcGgKqjJ3_LDnjJXgpsYpr",
+    ".wav": "17ojwP_19ZjoXjtwaBuZTFfnB9huPR7Xt"
+   },
+   "length": 1.25,
+   "events": [
+    {
+     "start": 0.1,
+     "end": 0.3,
+     "dur": 0.2,
+     "peak_at": 0.12,
+     "peak_db": -1.4,
+     "centroid": 884,
+     "low": 0.03
+    }
+   ],
+   "desc": "بوب/ثمب واطي قصير",
+   "tags": "بوب",
+   "use_for": "ظهور أيقونة/تحذير"
+  },
+  {
+   "file": "soundjay_scroll_main__soundjay_scroll_main-01.wav",
+   "drive_ids": {
+    ".mp3": "1zn_gHvHGaY6j86MIJmCiHNFEsw8k1a45",
+    ".wav": "1iQ6BFXA4TKvUjr7AfcCMonQ6UIdL130v"
+   },
+   "length": 1.91,
+   "events": [
+    {
+     "start": 0.1,
+     "end": 1.05,
+     "dur": 0.95,
+     "peak_at": 0.84,
+     "peak_db": -15.2,
+     "centroid": 9549,
+     "low": 0.0
+    }
+   ],
+   "desc": "سكرول/تكات عجلة",
+   "tags": "تكات",
+   "use_for": "عدّاد، وقت"
+  },
+  {
+   "file": "soundjay_scroll_main__soundjay_scroll_main-02.wav",
+   "drive_ids": {
+    ".mp3": "1O9CI7m0KVIvk3FwEYl5eT794bhYoG_bN",
+    ".wav": "1SQLrYTKjX3wyrH9EWbl-dbxw_rF87dId"
+   },
+   "length": 2.24,
+   "events": [
+    {
+     "start": 0.1,
+     "end": 0.68,
+     "dur": 0.58,
+     "peak_at": 0.1,
+     "peak_db": -15.4,
+     "centroid": 9487,
+     "low": 0.0
+    },
+    {
+     "start": 0.73,
+     "end": 0.8,
+     "dur": 0.07,
+     "peak_at": 0.73,
+     "peak_db": -18.5,
+     "centroid": 8634,
+     "low": 0.01
+    },
+    {
+     "start": 0.83,
+     "end": 1.25,
+     "dur": 0.41,
+     "peak_at": 0.95,
+     "peak_db": -15.8,
+     "centroid": 9105,
+     "low": 0.0
+    },
+    {
+     "start": 1.29,
+     "end": 1.38,
+     "dur": 0.09,
+     "peak_at": 1.29,
+     "peak_db": -15.8,
+     "centroid": 8579,
+     "low": 0.01
+    },
+    {
+     "start": 1.43,
+     "end": 1.5,
+     "dur": 0.07,
+     "peak_at": 1.43,
+     "peak_db": -16.5,
+     "centroid": 9351,
+     "low": 0.01
+    },
+    {
+     "start": 1.54,
+     "end": 1.62,
+     "dur": 0.07,
+     "peak_at": 1.54,
+     "peak_db": -17.3,
+     "centroid": 8934,
+     "low": 0.01
+    }
+   ],
+   "desc": "تكات سكرول (6 مقاطع)",
+   "tags": "تكات",
+   "use_for": "عدّاد، وقت"
+  },
+  {
+   "file": "soundjay_scroll_main__soundjay_scroll_main-03.wav",
+   "drive_ids": {
+    ".mp3": "1f-UmEuQeXfUyJ9SiTycim0wYgwa8MBPR",
+    ".wav": "1BGWrYEa2xKR2jPgJenpZbrurFj25kWbr"
+   },
+   "length": 2.13,
+   "events": [
+    {
+     "start": 0.1,
+     "end": 0.17,
+     "dur": 0.07,
+     "peak_at": 0.1,
+     "peak_db": -16.4,
+     "centroid": 8250,
+     "low": 0.01
+    },
+    {
+     "start": 0.28,
+     "end": 0.35,
+     "dur": 0.07,
+     "peak_at": 0.28,
+     "peak_db": -14.7,
+     "centroid": 8594,
+     "low": 0.01
+    },
+    {
+     "start": 0.41,
+     "end": 0.49,
+     "dur": 0.07,
+     "peak_at": 0.41,
+     "peak_db": -13.6,
+     "centroid": 8207,
+     "low": 0.01
+    },
+    {
+     "start": 0.53,
+     "end": 0.73,
+     "dur": 0.2,
+     "peak_at": 0.65,
+     "peak_db": -13.6,
+     "centroid": 8838,
+     "low": 0.0
+    },
+    {
+     "start": 0.77,
+     "end": 1.19,
+     "dur": 0.42,
+     "peak_at": 0.88,
+     "peak_db": -13.2,
+     "centroid": 8810,
+     "low": 0.0
+    },
+    {
+     "start": 1.23,
+     "end": 1.39,
+     "dur": 0.16,
+     "peak_at": 1.23,
+     "peak_db": -17.4,
+     "centroid": 8751,
+     "low": 0.0
+    }
+   ],
+   "desc": "تكات سكرول (6 مقاطع)",
+   "tags": "تكات",
+   "use_for": "وقت/ساعة رملية"
+  },
+  {
+   "file": "soundjay_scroll_main__soundjay_scroll_main-04.wav",
+   "drive_ids": {
+    ".mp3": "1f_fB31_ZTBq7BdMcvjXDNrqfpx9I1Bvl",
+    ".wav": "16fM314K_ihjryz_p3H2uyO6sKwHM_Ihh"
+   },
+   "length": 3.66,
+   "events": [
+    {
+     "start": 0.1,
+     "end": 0.17,
+     "dur": 0.07,
+     "peak_at": 0.1,
+     "peak_db": -13.4,
+     "centroid": 8543,
+     "low": 0.01
+    },
+    {
+     "start": 0.39,
+     "end": 0.46,
+     "dur": 0.07,
+     "peak_at": 0.39,
+     "peak_db": -15.2,
+     "centroid": 8587,
+     "low": 0.01
+    },
+    {
+     "start": 0.66,
+     "end": 0.73,
+     "dur": 0.07,
+     "peak_at": 0.66,
+     "peak_db": -14.8,
+     "centroid": 8510,
+     "low": 0.01
+    },
+    {
+     "start": 0.91,
+     "end": 0.97,
+     "dur": 0.06,
+     "peak_at": 0.91,
+     "peak_db": -20.3,
+     "centroid": 8563,
+     "low": 0.01
+    },
+    {
+     "start": 1.21,
+     "end": 1.28,
+     "dur": 0.07,
+     "peak_at": 1.21,
+     "peak_db": -17.4,
+     "centroid": 8318,
+     "low": 0.02
+    },
+    {
+     "start": 1.53,
+     "end": 1.59,
+     "dur": 0.06,
+     "peak_at": 1.53,
+     "peak_db": -19.1,
+     "centroid": 8501,
+     "low": 0.01
+    },
+    {
+     "start": 1.83,
+     "end": 1.9,
+     "dur": 0.07,
+     "peak_at": 1.83,
+     "peak_db": -15.9,
+     "centroid": 8637,
+     "low": 0.0
+    },
+    {
+     "start": 2.19,
+     "end": 2.25,
+     "dur": 0.06,
+     "peak_at": 2.19,
+     "peak_db": -15.3,
+     "centroid": 8234,
+     "low": 0.0
+    },
+    {
+     "start": 2.67,
+     "end": 2.73,
+     "dur": 0.06,
+     "peak_at": 2.67,
+     "peak_db": -19.5,
+     "centroid": 8228,
+     "low": 0.0
+    }
+   ],
+   "desc": "9 تكات منتظمة زي الساعة",
+   "tags": "تكات، ساعة",
+   "use_for": "ساعة، وقت"
+  },
+  {
+   "file": "ui 1.MP3",
+   "drive_ids": {
+    ".mp3": "1dZijk_ULeMU2K-3bvhf9qveXBIw2td93"
+   },
+   "length": 1.23,
+   "events": [
+    {
+     "start": 0.22,
+     "end": 0.79,
+     "dur": 0.56,
+     "peak_at": 0.23,
+     "peak_db": -15.3,
+     "centroid": 6058,
+     "low": 0.01
+    }
+   ],
+   "desc": "شايم UI نغمي ناعم",
+   "tags": "UI، شايم",
+   "use_for": "ظهور أيقونة"
+  }
+ ]
+}
