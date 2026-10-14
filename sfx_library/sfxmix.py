@@ -7,7 +7,7 @@ def load(f):
     return a.reshape(-1,2).copy()
 # (time in video, file, event indices (first,last) or None=whole, align 'onset'|'peak', target peak dBFS, reason)
 PLAN=[
- (0.30,"Shine Beam__Shine Beam.wav",None,"onset",-27,"ظهور اسم الدكتورة"),
+ (0.30,"Swoosh Accent 2.wav",None,"peak",-27,"ظهور اسم الدكتورة"),
  (3.93,"iphone tap 1.MP3",(0,0),"onset",-24,"أيقونة الموبايل: كلنا ماسكين الموبايل"),
  (4.645,"Zoom 5.wav",None,"peak",-27,"ترانزيشن زوم هادي"),
  (6.08,"soundjay_scroll_main__soundjay_scroll_main-04.wav",(0,3),"onset",-27,"أيقونة الساعة: طول الوقت (تكتكة)"),
@@ -25,6 +25,10 @@ PLAN=[
  (36.84,"Chat Notification.wav",None,"onset",-26,"أيقونة النتيجة: احجزي استشارتك"),
 ]
 voice=np.concatenate([A[s:e] for s,e in segs]).astype(np.float32)
+vm=voice.mean(1); fr=vm[:len(vm)//480*480].reshape(-1,480); r=np.sqrt((fr**2).mean(1))
+VOICE_RMS=20*np.log10(np.sqrt((r[r>np.percentile(r,40)]**2).mean()))
+REL=float(sys.argv[1]) if len(sys.argv)>1 else -6
+print("voice speaking RMS dBFS",round(VOICE_RMS,1))
 mix=voice.copy(); log=[]
 for t,f,ev,al,tgt,why in PLAN:
     a=load(f); E=EV[f]["events"]
@@ -35,7 +39,10 @@ for t,f,ev,al,tgt,why in PLAN:
     fo=min(len(seg),int(0.04*SR)); seg[-fo:]*=np.linspace(1,0,fo)[:,None]
     env=np.abs(seg).max(1)
     off=0.01 if al=="onset" else np.argmax(np.convolve(env,np.ones(480)/480,"same"))/SR
-    g=10**((tgt-20*np.log10(np.abs(seg).max()+1e-9))/20); seg*=g
+    e1=np.abs(seg).max(1); act=seg[e1>e1.max()*0.1]
+    srms=20*np.log10(np.sqrt((act**2).mean())+1e-9); spk=20*np.log10(np.abs(seg).max()+1e-9)
+    gdb=min(VOICE_RMS+REL+(tgt+27)-srms, -4-spk)   # tgt now = small per-effect trim around -27
+    g=10**(gdb/20); seg*=g
     st=int(round((t-off)*SR)); en=min(len(mix),st+len(seg))
     mix[st:en]+=seg[:en-st]
     log.append(dict(t=round(t,2),file=f,events=ev,gain_db=round(float(20*np.log10(g)),1),why=why))

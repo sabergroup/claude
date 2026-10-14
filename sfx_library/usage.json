@@ -2,9 +2,9 @@
  "الرقبة والموبايل (د. مروة مجدي)": [
   {
    "t": 0.3,
-   "file": "Shine Beam__Shine Beam.wav",
+   "file": "Swoosh Accent 2.wav",
    "events": null,
-   "gain_db": -23.8,
+   "gain_db": -19.3,
    "why": "ظهور اسم الدكتورة"
   },
   {
@@ -14,14 +14,14 @@
     0,
     0
    ],
-   "gain_db": -23.8,
+   "gain_db": -18.0,
    "why": "أيقونة الموبايل: كلنا ماسكين الموبايل"
   },
   {
    "t": 4.64,
    "file": "Zoom 5.wav",
    "events": null,
-   "gain_db": -14.3,
+   "gain_db": -5.1,
    "why": "ترانزيشن زوم هادي"
   },
   {
@@ -31,70 +31,70 @@
     0,
     3
    ],
-   "gain_db": -24.5,
+   "gain_db": -15.9,
    "why": "أيقونة الساعة: طول الوقت (تكتكة)"
   },
   {
    "t": 10.29,
    "file": "Swoosh Accent 4.wav",
    "events": null,
-   "gain_db": -28.0,
+   "gain_db": -20.2,
    "why": "أيقونة الخطوط والتجاعيد"
   },
   {
    "t": 13.27,
    "file": "pop-up__pop-up.wav",
    "events": null,
-   "gain_db": -24.0,
+   "gain_db": -21.4,
    "why": "أيقونة التحذير: إهمال"
   },
   {
    "t": 14.57,
    "file": "ui 1.MP3",
    "events": null,
-   "gain_db": -14.2,
+   "gain_db": -4.8,
    "why": "أيقونة العين: تبان أكتر"
   },
   {
    "t": 18.15,
    "file": "New Text Message Ding.wav",
    "events": null,
-   "gain_db": -23.8,
+   "gain_db": -12.2,
    "why": "أيقونة القلب: نهتم"
   },
   {
    "t": 21.45,
    "file": "notification.MP3",
    "events": null,
-   "gain_db": -24.8,
+   "gain_db": -16.3,
    "why": "أيقونة الدرع: ماتقلقيش"
   },
   {
    "t": 24.17,
    "file": "Magic Collect Shimmer Reveal Glitter Particles Tonal Multi Swell High Bright 02.wav",
    "events": null,
-   "gain_db": -21.4,
+   "gain_db": -8.6,
    "why": "أيقونة اللمعة: إجراءات تجميلية"
   },
   {
    "t": 24.45,
    "file": "Zoom Transition.wav",
    "events": null,
-   "gain_db": -26.5,
+   "gain_db": -16.4,
    "why": "ترانزيشن زوم هادي"
   },
   {
    "t": 27.9,
    "file": "chat-message__chat-message.wav",
    "events": null,
-   "gain_db": -26.3,
+   "gain_db": -16.4,
    "why": "أيقونة النقطة: الكولاجين"
   },
   {
    "t": 29.82,
    "file": "Zoom 4.wav",
    "events": null,
-   "gain_db": -19.8,
+   "gain_db": -10.6,
    "why": "أيقونة الأسهم: شد الجلد"
   },
   {
@@ -104,7 +104,7 @@
     0,
     0
    ],
-   "gain_db": -19.5,
+   "gain_db": -11.9,
    "why": "أيقونة اللمبة: نصيحتي (كليك لمبة)"
   },
   {
@@ -114,14 +114,14 @@
     0,
     2
    ],
-   "gain_db": -25.4,
+   "gain_db": -17.1,
    "why": "أيقونة الساعة الرملية: ماتنتظريش"
   },
   {
    "t": 36.84,
    "file": "Chat Notification.wav",
    "events": null,
-   "gain_db": -26.0,
+   "gain_db": -19.8,
    "why": "أيقونة النتيجة: احجزي استشارتك"
   }
  ]
