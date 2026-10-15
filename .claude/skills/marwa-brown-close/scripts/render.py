@@ -194,7 +194,20 @@ def sparkle_img(r,a):
 # ---------------- camera: slow push + smooth emphasis + eased cut transitions
 CUTS=[o/SR for o,_,_ in tl[1:]]
 KINDS=["flash","zoom","blur","flash","zoom","dissolve","blur","zoom","flash"]
-TR={} if getattr(CFG,'OVERLAY_ONLY',False) else {c:KINDS[i%len(KINDS)] for i,c in enumerate(CUTS)}
+def detect_cuts(path,fps):
+    """hard cuts in an already-edited video: spikes in frame difference (works for jump cuts too)"""
+    raw=subprocess.run(["ffmpeg","-v","error","-i",path,"-vf","scale=64:114,format=gray","-f","rawvideo","-"],capture_output=True).stdout
+    f=np.frombuffer(raw,np.uint8).reshape(-1,114,64).astype(np.float32)
+    d=np.abs(np.diff(f,axis=0)).mean((1,2)); out=[]
+    for i in range(len(d)):
+        loc=np.median(d[max(0,i-6):i+7])
+        if d[i]>max(3.0*loc,4.0) and d[i]==d[max(0,i-3):i+4].max() and 0.3<(i+1)/fps<len(d)/fps-0.3: out.append((i+1)/fps)
+    return out
+if getattr(CFG,'OVERLAY_ONLY',False):
+    CUTS=list(getattr(CFG,'CUTS',None) or detect_cuts(SRC,SFPS))
+    KINDS=["flash","blur","dissolve"]          # no zoom-through: never upscale Saber's 4K edit
+    print("cuts found:",[round(c,2) for c in CUTS])
+TR={c:KINDS[i%len(KINDS)] for i,c in enumerate(CUTS)}
 BIG=set()
 EMPH=[]
 for c in chunks:
@@ -293,9 +306,12 @@ for fk in frames:
     z=zoom(t); fr=R.get(fi)
     for c,h in XF.items():
         if c-h<=t<c+h:
-            k=[i for i,(o,_,_) in enumerate(tl) if abs(o/SR-c)<1e-6][0]
-            if t<c: other=tl[k][1]/SR+(t-c)          # incoming shot, slightly before its start
-            else:   other=tl[k-1][2]/SR+(t-c)        # outgoing shot, slightly past its end
+            if getattr(CFG,'OVERLAY_ONLY',False):  # edited video: hold the first/last frame of the other shot
+                other=c+0.5/SFPS if t<c else c-1.5/SFPS
+            else:
+                k=[i for i,(o,_,_) in enumerate(tl) if abs(o/SR-c)<1e-6][0]
+                if t<c: other=tl[k][1]/SR+(t-c)          # incoming shot, slightly before its start
+                else:   other=tl[k-1][2]/SR+(t-c)        # outgoing shot, slightly past its end
             fr2=R2.get(min(max(int(other*SFPS),0),SNF-1))
             w=0.5+0.5*((t-c)/h)  # weight of incoming
             w=eio(w); wi=w if t>=c else w; 
