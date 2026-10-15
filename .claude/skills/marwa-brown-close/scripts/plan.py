@@ -33,6 +33,7 @@ def trim(a,b,last):
     out.append((cur,b)); return out
 segs=[]
 for pi,(a,b) in enumerate(PIECES):
+    if getattr(CFG,'OVERLAY_ONLY',False): segs.append((int(a*SR),int(b*SR))); continue   # already edited by Saber: no cuts
     for s,e in trim(a,b,pi==len(PIECES)-1): segs.append((zc(s),zc(e)))
 # output timeline
 tl=[]; t=0

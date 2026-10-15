@@ -194,7 +194,7 @@ def sparkle_img(r,a):
 # ---------------- camera: slow push + smooth emphasis + eased cut transitions
 CUTS=[o/SR for o,_,_ in tl[1:]]
 KINDS=["flash","zoom","blur","flash","zoom","dissolve","blur","zoom","flash"]
-TR={c:KINDS[i%len(KINDS)] for i,c in enumerate(CUTS)}
+TR={} if getattr(CFG,'OVERLAY_ONLY',False) else {c:KINDS[i%len(KINDS)] for i,c in enumerate(CUTS)}
 BIG=set()
 EMPH=[]
 for c in chunks:
@@ -212,6 +212,7 @@ def seg_bounds(t):
         if c>t: b=c; break
     return a,b
 def zoom(t):
+    if getattr(CFG,'OVERLAY_ONLY',False): return 1.0   # Saber does zooms on the 4K master
     z=getattr(CFG,'BASE_ZOOM',1.0)*1.0+0.035*(0.5-0.5*math.cos(2*math.pi*t/9.0))   # slow breathing push (kept)
     for s_,e_ in EMPH:
         z+=0.075*eio((t-s_)/0.4)*(1-eio((t-(e_-0.05))/0.4))
@@ -246,7 +247,7 @@ class Reader:
     def get(s,fi):
         if s.p is None or fi<s.idx or fi>s.idx+30:
             if s.p: s.p.kill()
-            s.p=subprocess.Popen(["ffmpeg","-v","error","-ss",f"{fi/SFPS:.4f}","-i",SRC,"-f","rawvideo","-pix_fmt","rgb24","-"],stdout=subprocess.PIPE,bufsize=10**8); s.idx=fi-1
+            s.p=subprocess.Popen(["ffmpeg","-v","error","-ss",f"{fi/SFPS:.4f}","-i",SRC,"-vf",f"scale={WD}:{HT}:flags=lanczos","-f","rawvideo","-pix_fmt","rgb24","-"],stdout=subprocess.PIPE,bufsize=10**8); s.idx=fi-1
         while s.idx<fi:
             s.fr=np.frombuffer(s.p.stdout.read(WD*HT*3),np.uint8).reshape(HT,WD,3); s.idx+=1
         return s.fr
