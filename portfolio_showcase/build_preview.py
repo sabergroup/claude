@@ -102,6 +102,13 @@ def main(slug, out):
         seen[url] = rec
         return rec
 
+    def poster(video_path):
+        """Grab a frame 1s in, for videos uploaded without a cover image."""
+        dest = os.path.join(out, video_path.replace(".mp4", "-poster.jpg"))
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "1", "-i", os.path.join(out, video_path),
+                        "-frames:v", "1", "-q:v", "4", dest], check=True)
+        return video_path.replace(".mp4", "-poster.jpg")
+
     def apply(obj, rec):
         if rec:
             obj["url"], obj["w"], obj["h"] = rec["url"], rec["w"], rec["h"]
@@ -118,6 +125,8 @@ def main(slug, out):
             if m.get("thumbnail"):
                 m["thumbnail"] = local(m["thumbnail"])["url"]
             apply(m, local(m.get("url"), "video"))
+            if not m.get("thumbnail") and m.get("url"):
+                m["thumbnail"] = poster(m["url"])
         elif m["type"] == "before_after":
             for side in ("before", "after"):
                 if m.get(side):

@@ -60,3 +60,22 @@ and keep `showcase.css`. As a quicker first step, the project route can
 render `<main id="showcase">` and load `showcase.js` with
 `window.SHOWCASE = { source: "api", imageProxy: "https://images.weserv.nl",
 slug }`.
+
+## Design directions
+
+`directions/` holds four more complete looks over the same automatic engine.
+`directions/core.js` loads the project and decides the content; each
+`d-*.js` only decides presentation. A switcher at the bottom of the page
+flips between them (`#magazine`, `#cinema`, `#exhibition`, `#atelier`).
+
+| Direction    | Idea                                                                                   |
+|--------------|----------------------------------------------------------------------------------------|
+| Magazine     | Printed fashion editorial: Didone headlines, staggered numbered plates, pull quotes     |
+| Cinema       | Full-screen scenes like a film: title cards, ambient blur, diptychs/triptychs, credits  |
+| Exhibition   | Gallery show: framed and matted works on a stone wall, museum labels, rooms             |
+| Atelier      | Jewellery-house: page colour taken from the photos, arched frames, loupe on detail      |
+
+Live: `directions/index.html?slug=<project-slug>#cinema`.
+
+`build_preview.py` now also extracts a poster frame for videos uploaded
+without a cover image.
