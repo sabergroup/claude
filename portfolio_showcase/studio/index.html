@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Showcase Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400;500;600&family=Syncopate:wght@400;700&family=Manrope:ital,wght@0,300..600;1,300&family=Anton&family=Barlow:wght@400;600&family=Instrument+Serif&family=Geist:wght@400;500;600&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@500&family=Figtree:wght@400;600;700;800&family=Cairo:wght@400;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap">
+<link rel="stylesheet" href="studio.css">
+</head>
+<body>
+<main id="showcase"></main>
+<script>
+  // Live mode: ?slug=<project-slug>  #gallery | #cinema | #campaign | #case | #bento | #feed
+  // extras: optional JSON with story / results / grid / quote until the dashboard holds them.
+  window.SHOWCASE = { source: "api", imageProxy: "https://images.weserv.nl", extras: new URLSearchParams(location.search).get("extras") };
+</script>
+<script src="core.js" charset="utf-8"></script>
+<script src="parts.js" charset="utf-8"></script>
+<script src="d-gallery.js" charset="utf-8"></script>
+<script src="d-cinema.js" charset="utf-8"></script>
+<script src="d-campaign.js" charset="utf-8"></script>
+<script src="d-case.js" charset="utf-8"></script>
+<script src="d-bento.js" charset="utf-8"></script>
+<script src="d-feed.js" charset="utf-8"></script>
+<script>SC.boot();</script>
+</body>
+</html>

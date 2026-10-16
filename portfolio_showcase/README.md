@@ -79,3 +79,23 @@ Live: `directions/index.html?slug=<project-slug>#cinema`.
 
 `build_preview.py` now also extracts a poster frame for videos uploaded
 without a cover image.
+
+## Studio (round 3)
+
+`studio/` is the current working set: six directions over one core, each
+designed for phone, tablet portrait, tablet landscape and desktop.
+
+- Gallery (the first layout, developed): mosaic that keeps many photos in
+  view, column count follows the screen and every row closes.
+- Cinema (developed): proximity snap, one scene per chapter with a
+  horizontal reel, chapter index, grid shown as a widescreen frame.
+- Campaign: condensed type, photos turn from black and white to colour
+  as they reach the middle of the screen, pinned text column.
+- Case study: agency case study, story and numbers first, contents rail.
+- Bento: one tiled board; rows sized so 1x2 tiles are exactly 4:5.
+- Feed: the work as Instagram posts and carousels beside the profile.
+
+`studio/parts.js` builds the marketing blocks (results, brief and idea,
+scope of work, Instagram profile and grid, client quote). Until the
+dashboard holds that data it comes from an `extras` JSON; anything marked
+`example` is a placeholder and is labelled "Example" on the page.
