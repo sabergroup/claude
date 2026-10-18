@@ -7,6 +7,7 @@ import sys,os,subprocess,numpy as np,argparse
 from PIL import Image,ImageDraw,ImageFont,ImageFilter
 ap=argparse.ArgumentParser(); ap.add_argument("inp"); ap.add_argument("out")
 ap.add_argument("--top",type=int,default=1622,help="top of the CREATED BY capitals")
+ap.add_argument("--corner",choices=["bottom","tr"],default="bottom",help="tr = top-right corner (wide shots where her legs show)")
 ap.add_argument("--only5",action="store_true"); ap.add_argument("--still",action="store_true")
 ap.add_argument("--fonts",default=os.environ.get("FONTS","fonts")); ap.add_argument("--color",default="FFFFFF")
 a=ap.parse_args()
@@ -40,6 +41,10 @@ G1=glyphs("CREATED BY",f1,tr1)
 L2=Image.new("RGBA",(int(w2)+24,f2.size*2),(0,0,0,0)); ImageDraw.Draw(L2).text((12,f2.size*1.4),"SABERGROUPSTUDIO ©",font=f2,fill=TXT+(255,),anchor="ls"); L2=shadow(L2)
 logo=Image.open(os.path.join(ASSETS,"saber-group-vertical.png")).convert("RGBA").resize((LOGO,LOGO),Image.LANCZOS)
 LOGO_L=shadow(logo,6,0.35,3)
+CX=WD/2
+if a.corner=="tr":   # block keeps its own centre line, tucked into the top-right corner under Instagram's top bar
+    CX=WD-56-max(W1,w2,LOGO)/2
+    if a.top==1622: a.top=176
 B1=a.top+CAP1; B2=B1+GAP12+CAP2; LT=B2+GAP2L          # baselines and logo top
 def put(img,lay,cx,cy_base,al=1.0,sc=1.0,clipx=None,base_off=None):
     if al<=0.004: return
@@ -52,12 +57,12 @@ def put(img,lay,cx,cy_base,al=1.0,sc=1.0,clipx=None,base_off=None):
 def draw(img,t):
     if t>=OUT_T: return
     out=eio((t-(OUT_T-0.6))/0.6); fo=1-out; dy=8*out; p=t-IN_T
-    x0=WD/2-w1/2
+    x0=CX-w1/2
     for k,(m,cx) in enumerate(G1):
         q=eo((p-k*0.035)/0.35)
         put(img,m,x0+cx,B1+dy+10*(1-q),al=q*fo,base_off=m.height*0.7)
-    q=eo((p-0.4)/0.45); put(img,L2,WD/2,B2+dy+8*(1-q),al=q*fo,base_off=L2.height*0.7)
-    q=eo((p-0.7)/0.6); put(img,LOGO_L,WD/2,LT+dy+LOGO_L.height/2,al=clamp(q*1.5)*fo,sc=0.94+0.06*q,clipx=q)
+    q=eo((p-0.4)/0.45); put(img,L2,CX,B2+dy+8*(1-q),al=q*fo,base_off=L2.height*0.7)
+    q=eo((p-0.7)/0.6); put(img,LOGO_L,CX,LT+dy+LOGO_L.height/2,al=clamp(q*1.5)*fo,sc=0.94+0.06*q,clipx=q)
 if __name__=="__main__":
     if a.still:
         im=Image.open(a.inp).convert("RGBA").resize((WD,HT)); draw(im,2.5); im.convert("RGB").save(a.out); sys.exit()
