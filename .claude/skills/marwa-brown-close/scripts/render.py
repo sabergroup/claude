@@ -209,7 +209,7 @@ def detect_cuts(path,fps):
     return out
 if getattr(CFG,'OVERLAY_ONLY',False):
     CUTS=list(getattr(CFG,'CUTS',None) or detect_cuts(SRC,SFPS))
-    KINDS=["flash","dip"]                     # never blend two shots (a dissolve reads as motion blur) and never upscale the 4K edit
+    KINDS=["flash","flash2"]                  # cream flashes only: never blend two shots, never darken (dip read as a blackout), never upscale
     print("cuts found:",[round(c,2) for c in CUTS])
 TR={c:KINDS[i%len(KINDS)] for i,c in enumerate(CUTS)}
 BIG=set()
@@ -249,6 +249,7 @@ def blur_at(t):
 def flash_at(t):
     for c,k in TR.items():
         if k=="flash" and abs(t-c)<0.16: return 0.2*eio(1-abs(t-c)/0.16)
+        if k=="flash2" and abs(t-c)<0.11: return 0.13*eio(1-abs(t-c)/0.11)   # shorter, softer variant
     return 0
 def dip_at(t):
     for c,k in TR.items():
