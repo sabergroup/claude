@@ -229,7 +229,8 @@ def seg_bounds(t):
         if c>t: b=c; break
     return a,b
 def zoom(t):
-    if getattr(CFG,'OVERLAY_ONLY',False): return 1.0   # Saber does zooms on the 4K master
+    if getattr(CFG,'OVERLAY_ONLY',False):   # Saber's edit: keep only the slow breathing push (he does the punch-ins on the 4K master)
+        return 1.0+0.035*(0.5-0.5*math.cos(2*math.pi*t/9.0))
     z=getattr(CFG,'BASE_ZOOM',1.0)*1.0+0.035*(0.5-0.5*math.cos(2*math.pi*t/9.0))   # slow breathing push (kept)
     for s_,e_ in EMPH:
         z+=0.075*eio((t-s_)/0.4)*(1-eio((t-(e_-0.05))/0.4))
