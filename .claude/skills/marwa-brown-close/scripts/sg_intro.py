@@ -1,12 +1,12 @@
 """Saber Group credit for the first 5 s of every reel:  ■ CREATED BY / sabergroupstudios © / logo.
-usage: python3 sg_intro.py <in.mp4> <out.mp4> [--top 170] [--only5]   (logo PNG used as-is: no recolour, no re-layout)"""
+usage: python3 sg_intro.py <in.mp4> <out.mp4> [--top 1490] [--only5]  (square logo under the name)   (logo PNG used as-is: no recolour, no re-layout)"""
 import sys,os,subprocess,numpy as np,math,argparse
 from PIL import Image,ImageDraw,ImageFont,ImageFilter
-ap=argparse.ArgumentParser(); ap.add_argument("inp"); ap.add_argument("out"); ap.add_argument("--top",type=int,default=140)
+ap=argparse.ArgumentParser(); ap.add_argument("inp"); ap.add_argument("out"); ap.add_argument("--top",type=int,default=1490)   # bottom area, under the doctor's name
 ap.add_argument("--only5",action="store_true"); ap.add_argument("--fonts",default=os.environ.get("FONTS","fonts"))
-ap.add_argument("--logo_w",type=int,default=310); a=ap.parse_args()
+ap.add_argument("--logo_w",type=int,default=175); ap.add_argument("--logo",default="saber-group-vertical.png"); ap.add_argument("--color",default="F8EEDC",help="text colour per video background (default cream)"); a=ap.parse_args()
 HERE=os.path.dirname(os.path.abspath(__file__)); ASSETS=os.path.join(HERE,"..","assets")
-WD,HT,FPS=1080,1920,30; RED=(0xE4,0x2E,0x2B); TXT=(0xF8,0xEE,0xDC); SH=(30,15,8)
+WD,HT,FPS=1080,1920,30; RED=(0xE4,0x2E,0x2B); TXT=tuple(int(a.color[i:i+2],16) for i in (0,2,4)); SH=(30,15,8)
 IN_T,OUT_T=0.15,5.0
 def clamp(x): return max(0.0,min(1.0,x))
 def eo(x): x=clamp(x); return 1-(1-x)**3
@@ -32,9 +32,9 @@ t2="sabergroupstudios ©"; w2=fO.getlength(t2)+0.06*29*(len(t2)-1)
 x=(700-w2)/2
 for c in t2: d.text((x,14),c,font=fO,fill=TXT+(235,)); x+=fO.getlength(c)+0.06*29
 L2=shadow(L2)
-logo=Image.open(os.path.join(ASSETS,"saber-group-horizontal.png")).convert("RGBA")
+logo=Image.open(os.path.join(ASSETS,a.logo)).convert("RGBA")
 lh=int(logo.height*a.logo_w/logo.width); LOGO=shadow(logo.resize((a.logo_w,lh),Image.LANCZOS),r=10,op=0.55,dy=4)
-Y1=a.top; Y2=Y1+44; Y3=Y2+44
+Y1=a.top; Y2=Y1+42; Y3=Y2+40
 def put(img,lay,cx,cy,al=1.0,sc=1.0,clipx=None):
     if al<=0.004: return
     if abs(sc-1)>0.003: lay=lay.resize((max(1,int(lay.width*sc)),max(1,int(lay.height*sc))),Image.BICUBIC)
