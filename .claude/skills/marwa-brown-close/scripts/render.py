@@ -29,7 +29,7 @@ CH=CFG.CH
 chunks=[]
 for line in CH.splitlines():
     ws=[]
-    for tok in line.split():
+    for tok in [x for x in line.split(" ") if x]:   # NBSP keeps multi-word English terms together
         r,w=tok.split(":"); a,b=(r.split("-")+[r])[:2]; a,b=int(a),int(b)
         g=w.startswith("*"); w=w.lstrip("*")
         s,_=wt(a); _,e=wt(b); ws.append(dict(w=w,g=g,s=s-0.04,e=e,i0=a,i1=b))
@@ -54,10 +54,12 @@ ASC=max(a for a,_ in _mt); DESC=max(d for _,d in _mt)
 def sprite(w,g,size=58):
     # every word shares one baseline: fixed box height, text drawn on the baseline
     f=font(FB if g else FM,size+(2 if g else 0))
-    bb=f.getbbox(w,direction="rtl",language="ar",anchor="ls")
+    lat=all(ord(ch)<0x600 for ch in w)          # English terms (Biostimulators, Skin Boosters…) are laid out LTR
+    dr,lg=("ltr","en") if lat else ("rtl","ar")
+    bb=f.getbbox(w,direction=dr,language=lg,anchor="ls")
     tw,th=bb[2]-bb[0],ASC+DESC
     Wd,Hd=tw+2*PAD,th+2*PAD
-    m=Image.new("L",(Wd,Hd),0); ImageDraw.Draw(m).text((PAD-bb[0],PAD+ASC),w,font=f,fill=255,direction="rtl",language="ar",anchor="ls")
+    m=Image.new("L",(Wd,Hd),0); ImageDraw.Draw(m).text((PAD-bb[0],PAD+ASC),w,font=f,fill=255,direction=dr,language=lg,anchor="ls")
     ma=np.array(m,np.float32)/255
     s1=np.array(m.filter(ImageFilter.GaussianBlur(4)),np.float32)/255
     s2=np.array(m.filter(ImageFilter.GaussianBlur(13)),np.float32)/255
@@ -207,7 +209,7 @@ def detect_cuts(path,fps):
     return out
 if getattr(CFG,'OVERLAY_ONLY',False):
     CUTS=list(getattr(CFG,'CUTS',None) or detect_cuts(SRC,SFPS))
-    KINDS=["flash","dissolve"]                # no zoom-through (never upscale the 4K edit) and no blur (Saber: no motion blur)
+    KINDS=["flash","dip"]                     # never blend two shots (a dissolve reads as motion blur) and never upscale the 4K edit
     print("cuts found:",[round(c,2) for c in CUTS])
 TR={c:KINDS[i%len(KINDS)] for i,c in enumerate(CUTS)}
 BIG=set()
@@ -236,16 +238,21 @@ def zoom(t):
             if c-0.3<=t<c: z+=0.045*eio((t-(c-0.3))/0.3)
             elif c<=t<c+0.4: z+=0.045*(1-eio((t-c)/0.4))
     return z
-HALF={"flash":0.09,"zoom":0.1,"blur":0.14,"dissolve":0.1}
-XF={c:HALF[k] for c,k in TR.items()}
+HALF={"zoom":0.1,"blur":0.14,"dissolve":0.1}
+XF={c:HALF[k] for c,k in TR.items() if k in HALF}   # flash/dip never blend frames
 def blur_at(t):
     for c,k in TR.items():
+        if c not in XF: continue
         h=XF[c]
         if k in("blur","zoom") and abs(t-c)<h: return (0.45 if k=="blur" else 0.2)*eio(1-abs(t-c)/h)
     return 0
 def flash_at(t):
     for c,k in TR.items():
         if k=="flash" and abs(t-c)<0.16: return 0.2*eio(1-abs(t-c)/0.16)
+    return 0
+def dip_at(t):
+    for c,k in TR.items():
+        if k=="dip" and abs(t-c)<0.16: return 0.28*eio(1-abs(t-c)/0.16)
     return 0
 AX,AY=getattr(CFG,'ANCHOR',(540,560))   # punch-in / base-zoom anchor (face)
 def frame_zoom(fr,z,bl):
@@ -326,6 +333,9 @@ for fk in frames:
     fl=flash_at(t)
     if fl>0.005:
         fr=(fr.astype(np.float32)*(1-fl)+np.array(CREAM,np.float32)*fl).astype(np.uint8)
+    dp=dip_at(t)
+    if dp>0.005:   # soft dip toward the warm shadow brown
+        fr=(fr.astype(np.float32)*(1-dp)+np.array(SH,np.float32)*dp).astype(np.uint8)
     img=frame_zoom(fr,z,0).convert("RGBA")
     # icons
     for ic in icons:

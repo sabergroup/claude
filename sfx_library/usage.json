@@ -236,5 +236,101 @@
    "gain_db": null,
    "why": "تاب آيفون مع أول كلمة في كل سطر (51 سطر)"
   }
+ ],
+ "المونجارو وتأثيره على الوش (فولدر 1)": [
+  {
+   "t": 0.3,
+   "file": "data 1.MP3",
+   "events": [
+    3,
+    3
+   ],
+   "gain_db": -5.6,
+   "why": "ظهور الاسم: رنة ديجيتال واحدة"
+  },
+  {
+   "t": 5.16,
+   "file": "Click 4.wav",
+   "events": [
+    0,
+    0
+   ],
+   "gain_db": -11.4,
+   "why": "فقدان الوزن (ميزان): كليك"
+  },
+  {
+   "t": 19.08,
+   "file": "ComputerDesktop 6103_69_4.wav",
+   "events": [
+    108,
+    108
+   ],
+   "gain_db": 17.1,
+   "why": "التجاعيد: بليب نغمي"
+  },
+  {
+   "t": 24.0,
+   "file": "ComputerDesktop 6103_69_4.wav",
+   "events": [
+    50,
+    50
+   ],
+   "gain_db": 6.4,
+   "why": "أكتر من إجراء: بليب"
+  },
+  {
+   "t": 29.26,
+   "file": "Click 7.wav",
+   "events": [
+    1,
+    1
+   ],
+   "gain_db": -13.7,
+   "why": "الفيلر (سرنجة): كليك"
+  },
+  {
+   "t": 35.54,
+   "file": "Zoom 4.wav",
+   "events": null,
+   "gain_db": -8.2,
+   "why": "تحفيز الكولاجين (أسهم لفوق): ووش ناعم"
+  },
+  {
+   "t": 40.94,
+   "file": "data 1.MP3",
+   "events": [
+    6,
+    6
+   ],
+   "gain_db": -2.2,
+   "why": "Skin Boosters / إبر نضارة: رنة"
+  },
+  {
+   "t": 48.58,
+   "file": "ComputerDesktop 6103_69_4.wav",
+   "events": [
+    61,
+    61
+   ],
+   "gain_db": 11.5,
+   "why": "الأنسب لحالتك: بليب تأكيد"
+  },
+  {
+   "t": 50.92,
+   "file": "soundjay_scroll_main__soundjay_scroll_main-04.wav",
+   "events": [
+    4,
+    6
+   ],
+   "gain_db": -12.3,
+   "why": "الفحص السليم: تكات"
+  },
+  {
+   "t": "أول كل سطر",
+   "file": "iphone mix tabs / iphone tab 2 / iphone tap 1",
+   "events": "16 تاب بالتناوب",
+   "gain_db": null,
+   "why": "تاب آيفون مع أول كلمة في كل سطر (33 سطر)"
+  }
  ]
 }
