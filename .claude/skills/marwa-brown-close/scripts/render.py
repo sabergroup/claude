@@ -86,7 +86,8 @@ for c in chunks:
         w["im"],w["tw"],w["th"],w["bb"]=sprite(w["w"],w["g"])
     tot=sum(w["tw"] for w in c["words"])+sp*(len(c["words"])-1)
     lines=[c["words"]]
-    if getattr(CFG,"MAX_LINES",2)>1 and (len(c["words"])>=6 or tot>(BLOCK_W-2*BPADX if STYLE=="block" else 840)):
+    MLW=getattr(CFG,"MAX_LINE_W",BLOCK_W-2*BPADX if STYLE=="block" else 840); MWL=getattr(CFG,"MAX_WORDS_LINE",5)
+    if getattr(CFG,"MAX_LINES",2)>1 and (len(c["words"])>=6 or len(c["words"])>MWL or tot>MLW):
         best=None
         for k in range(1,len(c["words"])):
             a=sum(w["tw"] for w in c["words"][:k]); b=sum(w["tw"] for w in c["words"][k:])
