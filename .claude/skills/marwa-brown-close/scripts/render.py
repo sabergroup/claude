@@ -205,7 +205,7 @@ def detect_cuts(path,fps):
     return out
 if getattr(CFG,'OVERLAY_ONLY',False):
     CUTS=list(getattr(CFG,'CUTS',None) or detect_cuts(SRC,SFPS))
-    KINDS=["flash","blur","dissolve"]          # no zoom-through: never upscale Saber's 4K edit
+    KINDS=["flash","dissolve"]                # no zoom-through (never upscale the 4K edit) and no blur (Saber: no motion blur)
     print("cuts found:",[round(c,2) for c in CUTS])
 TR={c:KINDS[i%len(KINDS)] for i,c in enumerate(CUTS)}
 BIG=set()
