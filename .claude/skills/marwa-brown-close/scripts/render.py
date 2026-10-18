@@ -10,6 +10,12 @@ OUT=sys.argv[1]; PREVIEW=sys.argv[2] if len(sys.argv)>2 else None
 WD,HT,FPS=1080,1920,30
 CREAM=(0xF8,0xEE,0xDC); GOLD=(0xE9,0xB8,0x72); BEIGE=(0xF0,0xD9,0xB3); SH=(52,28,12)
 FM=f"{S}/fonts/EM500.ttf"; FB=f"{S}/fonts/EM700.ttf"
+# ---- per-folder style knobs (default = "بني كلوز": El Messiri, cream/gold, soft drop shadow, no box)
+STYLE=getattr(CFG,'STYLE','close')
+CREAM=getattr(CFG,'CREAM',CREAM); GOLD=getattr(CFG,'GOLD',GOLD); BEIGE=getattr(CFG,'BEIGE',BEIGE); SH=getattr(CFG,'SH',SH)
+if hasattr(CFG,'FONT_REG'): FM=f"{S}/fonts/{CFG.FONT_REG}"
+if hasattr(CFG,'FONT_BOLD'): FB=f"{S}/fonts/{CFG.FONT_BOLD}"
+CAP_SIZE=getattr(CFG,'CAP_SIZE',58)
 def font(p,s): return ImageFont.truetype(p,s,layout_engine=ImageFont.Layout.RAQM)
 def clamp(x,a=0.0,b=1.0): return max(a,min(b,x))
 def eo(x): x=clamp(x); return 1-(1-x)**3
@@ -49,9 +55,9 @@ for c in chunks:
         for w in ws_: w["s"]=c["s"]+(w["s"]-c["s"])*f
 # ---------------- word sprites with soft drop shadow (no box, no stroke)
 PAD=30
-_mt=[font(p,z).getmetrics() for p,z in ((FM,58),(FB,60))]
+_mt=[font(p,z).getmetrics() for p,z in ((FM,CAP_SIZE),(FB,CAP_SIZE+2))]
 ASC=max(a for a,_ in _mt); DESC=max(d for _,d in _mt)
-def sprite(w,g,size=58):
+def sprite(w,g,size=CAP_SIZE):
     # every word shares one baseline: fixed box height, text drawn on the baseline
     f=font(FB if g else FM,size+(2 if g else 0))
     lat=all(ord(ch)<0x600 for ch in w)          # English terms (Biostimulators, Skin Boosters…) are laid out LTR
@@ -64,32 +70,39 @@ def sprite(w,g,size=58):
     s1=np.array(m.filter(ImageFilter.GaussianBlur(4)),np.float32)/255
     s2=np.array(m.filter(ImageFilter.GaussianBlur(13)),np.float32)/255
     s1=np.roll(s1,3,0); s2=np.roll(s2,4,0)
-    sh=np.clip(s1*0.85+s2*0.55,0,1)
+    sh=np.clip(s1*0.85+s2*0.55,0,1)*(0.3 if STYLE=='block' else 1.0)
     col=np.array(GOLD if g else CREAM,np.float32)
     a=ma+sh*(1-ma)
     rgb=(col[None,None,:]*ma[...,None]+np.array(SH,np.float32)[None,None,:]*(sh*(1-ma))[...,None])/np.maximum(a,1e-6)[...,None]
     im=Image.fromarray(np.dstack([rgb,a*255]).clip(0,255).astype(np.uint8),"RGBA")
     return im,tw,th,bb
 CAP_CY=getattr(CFG,'CAP_CY',1290)   # caption centre (name sits 125 px below)
+BLOCK_W=getattr(CFG,'BLOCK_W',648); BPADX=getattr(CFG,'BLOCK_PADX',44); BPADY=getattr(CFG,'BLOCK_PADY',30)
+BLOCK_TOP=getattr(CFG,'BLOCK_TOP',1160); LHC=getattr(CFG,'LH',78); NAME_H=getattr(CFG,'BLOCK_NAME_H',74)
 for c in chunks:
-    sp=font(FM,58).getlength(" ")
+    sp=font(FM,CAP_SIZE).getlength(" ")
     for w in c["words"]:
         w["im"],w["tw"],w["th"],w["bb"]=sprite(w["w"],w["g"])
     tot=sum(w["tw"] for w in c["words"])+sp*(len(c["words"])-1)
     lines=[c["words"]]
-    if getattr(CFG,"MAX_LINES",2)>1 and (len(c["words"])>=6 or tot>840):
+    if getattr(CFG,"MAX_LINES",2)>1 and (len(c["words"])>=6 or tot>(BLOCK_W-2*BPADX if STYLE=="block" else 840)):
         best=None
         for k in range(1,len(c["words"])):
             a=sum(w["tw"] for w in c["words"][:k]); b=sum(w["tw"] for w in c["words"][k:])
             if c["words"][k-1]["g"] and c["words"][k]["g"]: continue
             if best is None or abs(a-b)<best[0]: best=(abs(a-b),k)
         lines=[c["words"][:best[1]],c["words"][best[1]:]]
-    LH=78; y0=CAP_CY-(len(lines)-1)*LH/2
+    LH=LHC; y0=CAP_CY-(len(lines)-1)*LH/2
+    if STYLE=="block": y0=BLOCK_TOP+BPADY+LH/2+2
     for li,l in enumerate(lines):
         lw=sum(w["tw"] for w in l)+sp*(len(l)-1); x=WD/2+lw/2
         for w in l:
             w["cx"]=x-w["tw"]/2; w["cy"]=y0+li*LH; x-=w["tw"]+sp
     c["top"]=y0-40
+    if STYLE=="block":
+        lw_max=max(sum(w["tw"] for w in l)+sp*(len(l)-1) for l in lines)
+        c["nl"]=len(lines); c["bw"]=max(lw_max+2*BPADX,getattr(CFG,'BLOCK_MINW',420))
+        c["bh"]=len(lines)*LH+2*BPADY
     gws=[w for w in c["words"] if w["g"]]
     if gws:  # underline under the gold phrase, same line only
         l0=[w for w in gws if w["cy"]==gws[0]["cy"]]
@@ -156,7 +169,8 @@ icons.sort(key=lambda d:d['s'])
 for k in range(len(icons)-1):  # never overlap
     icons[k]["e"]=min(icons[k]["e"],icons[k+1]["s"])
 ISZ=118; SS=3
-def draw_icon(name,p,size=ISZ,width=5.0):
+def draw_icon(name,p,size=ISZ,width=5.0,color=None,shadow=True):
+    color=color or GOLD
     paths=ICONS[name]; L=[sum(math.dist(q[j],q[j+1]) for j in range(len(q)-1)) for q in paths]
     tot=sum(L); left=p*tot; M=24
     im=Image.new("L",((size+2*M)*SS,)*2,0); d=ImageDraw.Draw(im); k=(size/100)*SS
@@ -178,9 +192,9 @@ def draw_icon(name,p,size=ISZ,width=5.0):
     ma=np.array(m,np.float32)/255
     sh=np.roll(np.array(m.filter(ImageFilter.GaussianBlur(5)),np.float32)/255,3,0)*0.9
     sh2=np.array(m.filter(ImageFilter.GaussianBlur(16)),np.float32)/255*0.6
-    sh=np.clip(sh+sh2,0,1)
+    sh=np.clip(sh+sh2,0,1)*(1.0 if shadow else 0.0)
     a=ma+sh*(1-ma)
-    rgb=(np.array(GOLD,np.float32)*ma[...,None]+np.array(SH,np.float32)*(sh*(1-ma))[...,None])/np.maximum(a,1e-6)[...,None]
+    rgb=(np.array(color,np.float32)*ma[...,None]+np.array(SH,np.float32)*(sh*(1-ma))[...,None])/np.maximum(a,1e-6)[...,None]
     return Image.fromarray(np.dstack([rgb,a*255]).clip(0,255).astype(np.uint8),"RGBA")
 ICON_CACHE={}
 def icon_full(n):
@@ -192,6 +206,60 @@ def put(img,lay,cx,cy,alpha=1.0,scale=1.0):
     if alpha<0.999:
         a=np.array(lay); a[...,3]=(a[...,3]*alpha).astype(np.uint8); lay=Image.fromarray(a)
     img.alpha_composite(lay,(int(round(cx-lay.width/2)),int(round(cy-lay.height/2))))
+# ---------------- "البلوك البني" style: translucent rounded block + gold badge + stars
+BLOCK_RGB=getattr(CFG,'BLOCK_RGB',(74,42,20)); BLOCK_A=getattr(CFG,'BLOCK_A',0.84); BRAD=getattr(CFG,'BLOCK_RADIUS',34)
+BADGE_R=getattr(CFG,'BADGE_R',44); TOPIC_ICON=getattr(CFG,'TOPIC_ICON','sparkle')
+_MASKS={}
+def rounded_mask(w,h,r):
+    k=(w,h,r)
+    if k not in _MASKS:
+        m=Image.new("L",(w*3,h*3),0); ImageDraw.Draw(m).rounded_rectangle((0,0,w*3-1,h*3-1),radius=r*3,fill=255)
+        _MASKS[k]=m.resize((w,h),Image.LANCZOS)
+    return _MASKS[k]
+def draw_block(img,cx,top,w,h,al):
+    if al<=0.01: return
+    w=int(round(w)); h=int(round(h)); x0=int(round(cx-w/2)); y0=int(round(top))
+    reg=img.crop((x0,y0,x0+w,y0+h)).filter(ImageFilter.GaussianBlur(16))            # backdrop blur
+    reg.alpha_composite(Image.new("RGBA",(w,h),tuple(BLOCK_RGB)+(int(255*BLOCK_A),)))
+    m=rounded_mask(w,h,BRAD)
+    if al<0.999: m=m.point(lambda v:int(v*al))
+    img.paste(reg,(x0,y0),m)
+    b=Image.new("RGBA",(w*3,h*3),(0,0,0,0))                                          # thin faded gold frame
+    ImageDraw.Draw(b).rounded_rectangle((2,2,w*3-3,h*3-3),radius=BRAD*3,outline=GOLD+(int(255*0.45*al),),width=5)
+    img.alpha_composite(b.resize((w,h),Image.LANCZOS),(x0,y0))
+_BADGE={}
+def badge_img(name,p):
+    key=(name,round(p,2))
+    if key in _BADGE: return _BADGE[key]
+    S3=3; r=BADGE_R; im=Image.new("RGBA",((2*r+12)*S3,)*2,(0,0,0,0)); d=ImageDraw.Draw(im); c=im.width/2
+    d.ellipse((c-(r+4)*S3,c-(r+4)*S3,c+(r+4)*S3,c+(r+4)*S3),fill=tuple(BLOCK_RGB)+(255,))   # brown ring like the cover
+    d.ellipse((c-r*S3,c-r*S3,c+r*S3,c+r*S3),fill=GOLD+(255,))
+    im=im.resize((2*r+12,)*2,Image.LANCZOS)
+    if name.startswith("#"):   # a number in the badge (e.g. 1/2/3 for "أول/تاني/تالت حاجة")
+        f=ImageFont.truetype(FB,int(r*1.25)); t_=ImageDraw.Draw(im)
+        t_.text((im.width/2,im.height/2+r*0.05),name[1:],font=f,fill=tuple(BLOCK_RGB)+(int(255*min(1,p*1.6)),),anchor="mm")
+    else:
+        ic=draw_icon(name,p,size=int(r*1.15),width=3.6,color=tuple(BLOCK_RGB),shadow=False)
+        im.alpha_composite(ic,(int(im.width/2-ic.width/2),int(im.height/2-ic.height/2)))
+    if len(_BADGE)<400: _BADGE[key]=im
+    return im
+def block_state(t):
+    """(cx,top,w,h,alpha,name_alpha) of the caption block at time t; morphs smoothly between chunks"""
+    cur=None
+    for k,c in enumerate(chunks):
+        if c["s"]<=t<c["end"]: cur=k
+    if cur is None:
+        prev=[c for c in chunks if c["end"]<=t]; nxt=[c for c in chunks if c["s"]>t]
+        c=prev[-1] if prev else nxt[0]; a=0.0
+        if prev and t-prev[-1]["end"]<0.2: a=1-eio((t-prev[-1]["end"])/0.2)
+        return WD/2,BLOCK_TOP,c["bw"],c["bh"]+(NAME_H if c["s"]<NAME_OUT-0.2 else 0),a,0.0
+    c=chunks[cur]; nm=1.0 if c["s"]<NAME_OUT-0.2 else 0.0
+    w,h=c["bw"],c["bh"]+NAME_H*nm; a=1.0; nma=nm
+    if cur>0 and abs(chunks[cur-1]["end"]-c["s"])<0.06:
+        p_=chunks[cur-1]; q=eio((t-c["s"])/0.22); pn=1.0 if p_["s"]<NAME_OUT-0.2 else 0.0
+        w=p_["bw"]+(w-p_["bw"])*q; h=(p_["bh"]+NAME_H*pn)+(h-(p_["bh"]+NAME_H*pn))*q; nma=pn+(nm-pn)*q
+    else: a=eio((t-c["s"])/0.2)
+    return WD/2,BLOCK_TOP,w,h,a,nma
 def sparkle_img(r,a):
     im=Image.new("RGBA",(int(r*2+6),)*2,(0,0,0,0)); c=im.width/2
     ImageDraw.Draw(im).polygon(star(c,c,r,0.2),fill=GOLD+(int(255*a),)); return im
@@ -295,7 +363,15 @@ def name_layer(size=36,track=0.22,line_len=60,y=1415):
     sh=np.clip(s1*0.95+s2*0.75,0,255)
     out=Image.fromarray(np.dstack([np.full(sh.shape+(3,),SH,np.uint8),sh.astype(np.uint8)]),"RGBA"); out.alpha_composite(L)
     return out
+def block_name_layer():
+    f=ImageFont.truetype(f"{S}/fonts/{getattr(CFG,'NAME_FONT','Alexandria400.ttf')}",26); nm="DR. MARWA MAGDY"; tr=26*0.34
+    wd=sum(f.getlength(ch) for ch in nm)+tr*(len(nm)-1)
+    im=Image.new("RGBA",(int(wd)+20,70),(0,0,0,0)); d=ImageDraw.Draw(im); x=10
+    d.line((im.width/2-34,8,im.width/2+34,8),fill=GOLD+(255,),width=2)
+    for ch in nm: d.text((x,56),ch,font=f,fill=CREAM+(255,),anchor="ls"); x+=f.getlength(ch)+tr
+    return im
 NAME_L=name_layer(); NAME_Y=getattr(CFG,'NAME_Y',CAP_CY+125); NAME_IN=0.3; NAME_OUT=getattr(CFG,'NAME_OUT',6.2)
+BNAME=block_name_layer() if STYLE=='block' else None
 def draw_name(img,t):
     if not (NAME_IN<=t<NAME_OUT): return
     p=t-NAME_IN; fo=1-eio((t-(NAME_OUT-0.5))/0.5)
@@ -339,8 +415,24 @@ for fk in frames:
     if dp>0.005:   # soft dip toward the warm shadow brown
         fr=(fr.astype(np.float32)*(1-dp)+np.array(SH,np.float32)*dp).astype(np.uint8)
     img=frame_zoom(fr,z,0).convert("RGBA")
+    if STYLE=="block":
+        cx,top,bw,bh,ba,nma=block_state(t)
+        draw_block(img,cx,top,bw,bh,ba)
+        if ba>0.01:
+            cur=[ic for ic in icons if ic["s"]<=t<ic["e"]]
+            if cur: nm_,p_=cur[0]["n"],t-cur[0]["s"]
+            else:
+                last=[ic for ic in icons if ic["e"]<=t]; nm_=TOPIC_ICON; p_=(t-last[-1]["e"]) if last else t
+            dp=eo(p_/0.55); bimg=badge_img(nm_,1.0 if dp>0.995 else round(dp,2))
+            put(img,bimg,cx,top,alpha=ba,scale=0.85+0.15*eback(clamp(p_/0.35)) if p_<0.35 else 1.0)
+            for k,(dx,dy,r) in enumerate(((bw/2+22,-18,17),(bw/2+50,22,9),(-bw/2-16,bh+12,14))):
+                tw_=0.8+0.2*math.sin(2*math.pi*(t*0.8+k/3))
+                put(img,sparkle_img(r*tw_,1),cx+dx,top+dy,alpha=ba*0.95)
+            if nma>0.01:
+                ylast=top+BPADY+(bh-NAME_H*nma-2*BPADY)+8
+                put(img,BNAME,cx,ylast+BNAME.height/2,alpha=nma*ba)
     # icons
-    for ic in icons:
+    for ic in (icons if STYLE!="block" else []):
         if ic["s"]<=t<ic["e"]:
             p=t-ic["s"]; out=clamp((t-(ic["e"]-0.18))/0.18)
             cy=ic["top"]-ISZ/2-28
@@ -368,7 +460,7 @@ for fk in frames:
                 d=ImageDraw.Draw(img); xs=x1-(x1-x0)*q
                 a=int(255*(1-out))
                 d.line((xs,y,x1,y),fill=GOLD+(a,),width=3)
-    draw_name(img,t)
+    if STYLE!='block': draw_name(img,t)
     o=img.convert("RGB")
     if PREVIEW: o.save(f"{S}/prev/p_{t:06.2f}.png")
     else: enc.stdin.write(o.tobytes())
