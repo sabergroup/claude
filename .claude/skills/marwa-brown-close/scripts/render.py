@@ -449,6 +449,14 @@ for fk in frames:
             p=t-ic["s"]; out=clamp((t-(ic["e"]-0.18))/0.18)
             cy=ic["top"]-ISZ/2-28; icx=WD/2; isz=ISZ
             if ICON_POS=="side": icx,cy=side_anchor(t); isz=ISZ_SIDE
+            if ICON_POS=="background":   # wide shots: never on her body — empty backdrop to the right, at caption height
+                act=[c_ for c_ in chunks if c_["s"]<=t<c_["end"]]
+                isz=getattr(CFG,'ICON_BG_SIZE',92); icx=getattr(CFG,'ICON_X',915); cy=CAP_CY
+                if act:
+                    ws_=act[0]["words"]; cy=min(w["cy"] for w in ws_)
+                    right=max(w["cx"]+w["tw"]/2 for w in ws_); left=min(w["cx"]-w["tw"]/2 for w in ws_)
+                    icx=max(icx,right+isz*0.5+34)
+                    if icx>WD-isz*0.5-18: icx=min(WD-icx,left-isz*0.5-34)   # no room on the right: mirror to the left
             dp=eo(p/0.55)
             lay=icon_full(ic["n"],isz) if dp>=0.999 else draw_icon(ic["n"],dp,size=isz)
             sc=(0.6+0.4*eback(p/0.4))*(1-0.15*out)
