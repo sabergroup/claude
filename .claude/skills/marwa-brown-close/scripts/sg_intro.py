@@ -39,12 +39,20 @@ def glyphs(text,f,tr):
     return out
 G1=glyphs("CREATED BY",f1,tr1)
 L2=Image.new("RGBA",(int(w2)+24,f2.size*2),(0,0,0,0)); ImageDraw.Draw(L2).text((12,f2.size*1.4),"SABERGROUPSTUDIO ©",font=f2,fill=TXT+(255,),anchor="ls"); L2=shadow(L2)
-logo=Image.open(os.path.join(ASSETS,"saber-group-vertical.png")).convert("RGBA").resize((LOGO,LOGO),Image.LANCZOS)
+def load_logo(size):
+    """scale the logo without losing its thin outer red frame: draw at 4x, keep the frame's own position
+    (outer edge of the canvas, 1.5/1104 inset) but never thinner than 1 final pixel, then downsample"""
+    src=Image.open(os.path.join(ASSETS,"saber-group-vertical.png")).convert("RGBA")
+    big=src.resize((size*4,size*4),Image.LANCZOS); d=ImageDraw.Draw(big)
+    sw=max(4,round(size*4*3/1104)); inset=round(size*4*1.5/1104)
+    d.rectangle((inset,inset,size*4-1-inset,size*4-1-inset),outline=(0xE4,0x2E,0x2B,255),width=sw)
+    return big.resize((size,size),Image.LANCZOS)
+logo=load_logo(LOGO)
 LOGO_L=shadow(logo,6,0.35,3)
 CX=WD/2
 if a.corner=="tr":   # block keeps its own centre line, tucked into the top-right corner under Instagram's top bar
     CX=WD-56-max(W1,w2,LOGO)/2
-    if a.top==1622: a.top=176
+    if a.top==1622: a.top=56
 B1=a.top+CAP1; B2=B1+GAP12+CAP2; LT=B2+GAP2L          # baselines and logo top
 def put(img,lay,cx,cy_base,al=1.0,sc=1.0,clipx=None,base_off=None):
     if al<=0.004: return
