@@ -78,7 +78,7 @@ if __name__=="__main__":
     if a.only5: dur=min(dur,5.0)
     dec=subprocess.Popen(["ffmpeg","-v","error","-i",a.inp,"-t",f"{dur}","-vf",f"scale={WD}:{HT},fps={FPS}","-f","rawvideo","-pix_fmt","rgb24","-"],stdout=subprocess.PIPE)
     enc=subprocess.Popen(["ffmpeg","-v","error","-y","-f","rawvideo","-pix_fmt","rgb24","-s",f"{WD}x{HT}","-r",str(FPS),"-i","-","-i",a.inp,"-t",f"{dur}",
-        "-map","0:v","-map","1:a","-c:v","libx264","-preset","slow","-crf","16","-pix_fmt","yuv420p","-c:a","copy","-movflags","+faststart","-shortest",a.out],stdin=subprocess.PIPE)
+        "-map","0:v","-map","1:a","-c:v","libx264","-preset","slow","-crf","16","-pix_fmt","yuv420p","-c:a","copy","-movflags","+faststart",a.out],stdin=subprocess.PIPE)
     k=0
     while True:
         b=dec.stdout.read(WD*HT*3)
