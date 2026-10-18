@@ -4,6 +4,7 @@ import os, sys
 S=os.environ.get("WORK") or sys.exit("set WORK=<work dir with src/vid.mp4, words.json, config.py>")
 sys.path.insert(0,S); sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 import config as CFG
+from floorfix import clean_floor
 from plan import *
 os.makedirs(f"{S}/prev",exist_ok=True)
 OUT=sys.argv[1]; PREVIEW=sys.argv[2] if len(sys.argv)>2 else None
@@ -346,7 +347,7 @@ class Reader:
 R=Reader(); R2=Reader()
 # ---------------- end name
 def name_layer(size=36,track=0.22,line_len=60,y=1415):
-    SS=3; f=ImageFont.truetype(FM,size*SS); name="DR. MARWA MAGDY"
+    SS=3; f=ImageFont.truetype(f"{S}/fonts/{CFG.NAME_FONT}" if hasattr(CFG,"NAME_FONT") else FM,size*SS); name="DR. MARWA MAGDY"
     adv=[f.getlength(c) for c in name]; tr=size*SS*track; nw=sum(adv)+tr*(len(name)-1)
     gap=18*SS; ih=size*SS; iw=ih*0.55
     L=Image.new("RGBA",(WD*SS,160*SS),(0,0,0,0)); d=ImageDraw.Draw(L)
@@ -391,6 +392,7 @@ frames=range(NF) if not PREVIEW else [int(float(x)*FPS) for x in PREVIEW.split("
 for fk in frames:
     t=fk/FPS; ts=out2src(t+0.5/FPS); fi=min(int(ts*SFPS),SNF-1)
     z=zoom(t); fr=R.get(fi)
+    if getattr(CFG,'CLEAN_FLOOR',False): fr=clean_floor(fr,getattr(CFG,'FLOOR_Y',1000))   # smooth creases in the backdrop paper on the floor
     for c,h in XF.items():
         if c-h<=t<c+h:
             if getattr(CFG,'OVERLAY_ONLY',False):  # edited video: hold the first/last frame of the other shot
