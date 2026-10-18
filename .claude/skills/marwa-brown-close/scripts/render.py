@@ -199,9 +199,18 @@ def draw_icon(name,p,size=ISZ,width=5.0,color=None,shadow=True):
     rgb=(np.array(color,np.float32)*ma[...,None]+np.array(SH,np.float32)*(sh*(1-ma))[...,None])/np.maximum(a,1e-6)[...,None]
     return Image.fromarray(np.dstack([rgb,a*255]).clip(0,255).astype(np.uint8),"RGBA")
 ICON_CACHE={}
-def icon_full(n):
-    if n not in ICON_CACHE: ICON_CACHE[n]=draw_icon(n,1.0)
-    return ICON_CACHE[n]
+def icon_full(n,size=ISZ):
+    if (n,size) not in ICON_CACHE: ICON_CACHE[(n,size)]=draw_icon(n,1.0,size=size)
+    return ICON_CACHE[(n,size)]
+ICON_POS=getattr(CFG,'ICON_POS','above'); ISZ_SIDE=getattr(CFG,'ICON_SIDE_SIZE',72)
+def side_anchor(t):
+    """icon beside the caption: just right of the first line (where Arabic starts), on that line's height"""
+    act=[c for c in chunks if c["s"]<=t<c["end"]]
+    if not act:
+        prev=[c for c in chunks if c["s"]<=t]; act=prev[-1:] or chunks[:1]
+    c=act[0]; y1=min(w["cy"] for w in c["words"]); l1=[w for w in c["words"] if w["cy"]==y1]
+    right=max(w["cx"]+w["tw"]/2 for w in l1)
+    return right+ISZ_SIDE*0.5+26, y1
 def put(img,lay,cx,cy,alpha=1.0,scale=1.0):
     if alpha<=0.003 or scale<=0.02: return
     if abs(scale-1)>0.004: lay=lay.resize((max(1,int(lay.width*scale)),max(1,int(lay.height*scale))),Image.BICUBIC)
@@ -438,15 +447,16 @@ for fk in frames:
     for ic in (icons if STYLE!="block" else []):
         if ic["s"]<=t<ic["e"]:
             p=t-ic["s"]; out=clamp((t-(ic["e"]-0.18))/0.18)
-            cy=ic["top"]-ISZ/2-28
+            cy=ic["top"]-ISZ/2-28; icx=WD/2; isz=ISZ
+            if ICON_POS=="side": icx,cy=side_anchor(t); isz=ISZ_SIDE
             dp=eo(p/0.55)
-            lay=icon_full(ic["n"]) if dp>=0.999 else draw_icon(ic["n"],dp)
+            lay=icon_full(ic["n"],isz) if dp>=0.999 else draw_icon(ic["n"],dp,size=isz)
             sc=(0.6+0.4*eback(p/0.4))*(1-0.15*out)
-            put(img,lay,WD/2,cy-10*out,alpha=clamp(p/0.12)*(1-out),scale=sc)
+            put(img,lay,icx,cy-10*out,alpha=clamp(p/0.12)*(1-out),scale=sc)
             if p<0.7:   # tiny sparkle burst
                 for k,ang in enumerate((-35,215,95)):
-                    q=eo(p/0.7); r=ISZ*0.55+40*q
-                    put(img,sparkle_img(9+4*(k==0),1),WD/2+r*math.cos(math.radians(ang)),cy-r*math.sin(math.radians(ang))*0.8,alpha=(1-q)*clamp(p/0.1))
+                    q=eo(p/0.7); r=isz*0.55+40*q*isz/ISZ
+                    put(img,sparkle_img((9+4*(k==0))*isz/ISZ+2,1),icx+r*math.cos(math.radians(ang)),cy-r*math.sin(math.radians(ang))*0.8,alpha=(1-q)*clamp(p/0.1))
     # captions (word-by-word)
     for c in chunks:
         if not (c["s"]<=t<c["end"]): continue
