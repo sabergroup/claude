@@ -43,7 +43,7 @@ const toS=(c,p)=>({x:(p.x-c.x)*c.z+540,y:(p.y-c.y)*c.z+960});
 let WP=null;
 function wordPos(){ WP=true; const keep=W.style.transform; W.style.transform='none';
   D.cards.forEach(cd=>{ (cd.titles||[]).concat(cd.subs||[]).forEach(L=>{ const rs=L.ws.map(o=>o.el.parentElement.getBoundingClientRect()); const lx=Math.min(...rs.map(r=>r.left));
-    L.ws.forEach((o,i)=>{ o.wx=lx-34; o.wy=(rs[i].top+14+rs[i].bottom-30)/2; }); }); });
+    L.ws.forEach((o,i)=>{ o.wx=lx-52; o.wy=(rs[i].top+14+rs[i].bottom-30)/2; }); }); });
   W.style.transform=keep; }
 function wdw(a){ const cd=D.cards[a[0]]; const L=(a[1]=='s'?cd.subs:cd.titles)[a[2]]; const o=L.ws[a[3]]; return {x:o.wx,y:o.wy}; }
 const pos=(wp,c)=>wp.s?wp.s:toS(c,wp.wd?wdw(wp.wd):wp.w);
