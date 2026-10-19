@@ -37,7 +37,8 @@ d2={"type":"num","num":"٢","start":25.99,"ringT":26.03,"title":[sh(w(66),26.03)
 s2=[sh(w(105),43.14),sh(w(106),43.2),w(107)]
 d3={"type":"cmp","start":41.56,"end":45.22,"sections":[{"head":[sh(w(102),41.6),sh(w(103),41.66),w(104)],"traits":[]},{"head":s2,"traits":[[w(108),w(109)]]}]}
 d3['sections'][1]['traits'][0][0]['t']=max(d3['sections'][1]['traits'][0][0]['t'],43.54)
-END=round(54.36+0.8,2); CL=round(END+0.80,2); DUR=round(CL+(3.16-0.795)+0.15,2)
+END=54.30; CL=55.04   # Saber's clip ends at 55.08: the ring must close while her video is still playing (no frozen frame) DUR=round(CL+(3.16-0.795)+0.15,2)
+DUR=round(CL+(3.16-0.795)+0.15,2)
 D={"lap":[950,950,950,950],"cuts":[10.04,29.12,33.28],"chunks":chunks,"devices":[d1,d2,d3],"insert":{"start":OPEN,"end":iend},
    "trans":[[10.04,"flash"],[29.12,"sweep"],[33.28,"flash"],[5.78,"cam"],[13.28,"cam"],[52.2,"cam"]],
    "END":{"start":END,"close":CL,"dur":DUR,"cy":620},"capBase":110,"nameY":272,

@@ -67,7 +67,7 @@ const HOLD=(D.devices||[]).map(d=>[d.start,d.end]).concat(D.split?[[D.split.star
   blocks.forEach(B=>{ const dv=HOLD.filter(([s,e])=>s<=B.c[0].t+0.05).reduce((a,[s,e])=>Math.max(a,e),-1);
     B.c.forEach(o=>o.ta=Math.max(o.t-pre, prevLeave+0.04, dv+0.04));
     const last=B.c[B.c.length-1];
-    const hard=Math.min(B.brk===B.nxt?1e9:B.brk, D.END.start);
+    const hard=Math.min(B.brk===B.nxt?1e9:B.brk, D.END.close);   // the ring covers the last caption while it closes
     B.start=B.c[0].ta;
     B.leave=Math.min(Math.max(B.nxt-pre, last.ta+0.8), last.e+1.6, hard);
     prevLeave=(B.brk===B.nxt)?B.leave:-1; }); }

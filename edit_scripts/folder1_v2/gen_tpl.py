@@ -24,12 +24,6 @@ open(B+"reel_f1.html","w").write(h)
 i=open(T+"insert_cards.html").read()
 for a,b in [("Alexandria500.ttf","EM500.ttf"),("Alexandria800.ttf","EM700.ttf"),("#F0C98A","#E9B872"),("rgba(240,201,138,","rgba(233,184,114,"),("#F6EAD6","#F8EEDC"),("rgba(246,234,214,","rgba(248,238,220,"),("#2E1A0D","#341C0C")]:
     assert a in i,a; i=i.replace(a,b)
-# Saber: the ball never covers a number or a letter -- it waits in the free space left of the line (after its last word, RTL), level with that line
-a="function wdw(a){ const cd=D.cards[a[0]]; const L=(a[1]=='s'?cd.subs:cd.titles)[a[2]]; const o=L.ws[a[3]]; return {x:o.wx,y:o.wy+(L.size||52)*0.22}; }"
-assert a in i
-i=i.replace(a,"function wdw(a){ const cd=D.cards[a[0]]; const L=(a[1]=='s'?cd.subs:cd.titles)[a[2]]; const fs=L.size||(a[1]=='s'?38:52);\n  const xl=Math.min(...L.ws.map(o=>o.wl)); return {x:xl-30,y:L.ws[0].wc}; }")
-a="o.wx=(r.left+r.right)/2; o.wy=r.bottom-30+8;"
-assert a in i
-i=i.replace(a,"o.wx=(r.left+r.right)/2; o.wy=r.bottom-30+8; const g=o.el.getBoundingClientRect(); o.wl=g.left; o.wc=(g.top+g.bottom)/2+2;")
+# ball placement beside the line comes from the skill template itself
 open(B+"ins_f1.html","w").write(i)
 print("ok")
