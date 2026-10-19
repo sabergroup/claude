@@ -6,7 +6,7 @@ w=json.load(open('/home/user/claude/work/folder5/pdrn/words.json'))
 FIX={52:'أو',7:'جاي',20:'بروتين',27:'الهدف',28:'الأساسي',30:'إننا',31:'نملا',33:'الفراغات،',40:'إصلاح',41:'الأنسجة',44:'البشرة.',
      47:'إننا',50:'تغيير',53:'إضافة',55:'للوش،',59:'نضارة',62:'حيويتها،',64:'تفضلي',67:'الطبيعية.',75:'للوجه،',76:'لأن',84:'والإيدين',
      92:'منطقة.',96:'جدًا',98:'تعرفي:',99:'إن',107:'الناس،',119:'الأنسب',120:'ليكي.',5:'فيلر،',10:'بينهم.',8:'أقولك',6:'وأنا'}
-MERGE={(0,3):'PDRN',(15,18):'الـPDRN',(23,25):'الـDNA',(68,71):'والـPDRN',(100,103):'الـPDRN'}
+MERGE={(0,3):'PDRN',(15,18):'PDRN',(23,25):'DNA',(68,71):'PDRN',(100,103):'PDRN'}
 W=[{'w':FIX.get(i,x[2]),'t':x[0],'e':x[1],'g':False} for i,x in enumerate(w)]
 for (a,b),txt in MERGE.items():
     W[a]=dict(W[a],w=txt,e=W[b]['e'])
@@ -16,11 +16,12 @@ ROWS=[[0,6],[6,9],[9,11],[11,15],[15,21],[21,26],[26,30],[30,34],[34,36],[36,39]
       [68,74],[74,76],[76,80],[80,82],[82,85],[85,88],[88,90],[90,93],
       [93,97],[97,99],[99,104],[104,108],[108,111],[111,113],[113,117],[117,121]]
 assert [r[0] for r in ROWS[1:]]==[r[1] for r in ROWS[:-1]] and ROWS[-1][1]==len(w)
-chunks=[[dict(W[i],w=W[i]['w'].rstrip('،.:')) for i in range(a,b) if W[i]] for a,b in ROWS]
+KEY={0,9,20,33,40,67,75,80,95,105,112}
+chunks=[[dict(W[i],w=W[i]['w'].rstrip('،.:'),key=i in KEY) for i in range(a,b) if W[i]] for a,b in ROWS]
 json.dump([x for x in W if x],open('words_fixed_pdrn.json','w'),ensure_ascii=False)
 for c in chunks: assert 1<=len(c)<=4,c
 cuts=[3.48,8.44,11.28,17.16,21.32,25.0,27.92,30.36,34.44,37.4,39.76]
-LAP=1060
+LAP=1070
 d={'chunks':chunks,'devices':[],'cuts':cuts,'lap':[LAP]*(len(cuts)+1),'xs':[540]*(len(cuts)+1),
    'N':{'appear':0.0,'stretch':0.25,'split':0.45,'dr':0.6,'marwa':0.9,'magdy':1.2,'title':1.6,'exit':4.6},
    'END':{'start':48.62,'close':49.42,'dur':49.52},
@@ -28,5 +29,5 @@ d={'chunks':chunks,'devices':[],'cuts':cuts,'lap':[LAP]*(len(cuts)+1),'xs':[540]
    'insert':{'start':17.3,'end':25.5,'drop_from':17.0,'drop_to':24.95},'nameHold':None,'nameBase':150,'nameCap':40}
 json.dump(d,open('data_pdrn.json','w'),ensure_ascii=False)
 f,wt=LATF[lf]
-open(f'pp_pdrn_{lf}.html','w').write(open('p5.html').read().replace('LATFILE',f).replace('LATW',str(wt)).replace('DATA',json.dumps(d,ensure_ascii=False)))
+open(f'pp_pdrn_{lf}.html','w').write(open('p6.html').read().replace('LATFILE',f).replace('LATW',str(wt)).replace('DATA',json.dumps(d,ensure_ascii=False)))
 print('\n'.join(' '.join(o['w'] for o in c) for c in chunks))
