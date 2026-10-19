@@ -1,0 +1,277 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:A5;src:url(../fonts/IBMPA500.ttf)}
+@font-face{font-family:A8;src:url(../fonts/IBMPA700.ttf)}
+@font-face{font-family:MM;src:url(../fonts/MontserratM.ttf)}
+@font-face{font-family:MS;src:url(../fonts/MontserratSB.ttf)}
+html,body{margin:0;background:transparent}
+#st{position:relative;width:1080px;height:1920px;overflow:hidden}
+#L{position:absolute;left:0;top:0;width:1080px;height:1920px}
+.blk{position:absolute;left:0;top:0;width:1080px}
+.row{display:flex;justify-content:center;direction:rtl;gap:16px;margin-top:-26px}
+.row:first-child{margin-top:0}
+.grp{position:absolute;display:flex;justify-content:center;direction:rtl;gap:14px;white-space:nowrap}
+.m{overflow:hidden;padding:12px 6px 28px;display:inline-block}
+.w{display:inline-block;font:54px/1.25 A5;color:#FFFFFF;text-shadow:0 3px 14px rgba(23,34,63,.75)}
+.w.g{font-family:A8;color:#FFFFFF}
+.row.s .w{font:44px/1.25 A5}
+.row.b{margin-top:-34px}
+.row.b .w{font:92px/1.12 A8;text-shadow:0 4px 20px rgba(23,34,63,.7)}
+.w.lat{direction:ltr;unicode-bidi:isolate}
+.nb{position:relative;display:inline-block;width:84px;height:84px;align-self:center;margin-left:6px}
+.nb svg{position:absolute;left:0;top:0;overflow:visible}
+.nb b{position:absolute;left:0;top:0;width:84px;font:46px/84px A8;color:#FFFFFF;text-align:center;font-weight:normal;text-shadow:0 3px 12px rgba(23,34,63,.7)}
+.orn{display:flex;justify-content:center;align-items:center;gap:0;margin-top:-14px;height:20px;margin-bottom:22px}
+.orn .ln{width:70px;height:3px;background:#FFFFFF;box-shadow:0 1px 4px rgba(23,34,63,.7);transform:scaleX(0)}
+.orn .ln.r{transform-origin:0 50%} .orn .ln.l{transform-origin:100% 50%}
+.orn .dm{width:12px;height:12px;margin:0 16px;background:#FFFFFF;transform:rotate(45deg) scale(0);box-shadow:0 1px 4px rgba(23,34,63,.7)}
+.w.chip{font-size:46px}
+.badge{position:absolute;width:84px;height:84px;overflow:hidden}
+.d{position:absolute;left:0;top:0;width:84px;font:46px/84px A8;color:#FFFFFF;text-align:center;text-shadow:0 3px 10px rgba(23,34,63,.6)}
+.nw{position:absolute;font:36px/50px MS;color:#FFFFFF;white-space:nowrap;text-shadow:0 3px 12px rgba(23,34,63,.75)}
+.tt{position:absolute;font:26px/40px MM;color:#FFFFFF;letter-spacing:.12em;white-space:nowrap;text-shadow:0 3px 12px rgba(23,34,63,.75)}
+svg{position:absolute;left:0;top:0;overflow:visible}
+#Lsvg{filter:drop-shadow(0 2px 4px rgba(23,34,63,.55))}
+#flash{position:absolute;inset:0;background:#FFFFFF;opacity:0}
+#gline{position:absolute;left:0;top:0;width:1080px;height:3px;background:#FFFFFF;visibility:hidden;box-shadow:0 0 0 rgba(0,0,0,0)}
+#sweep{position:absolute;left:0;top:-400px;width:260px;height:2800px;background:#FFFFFF;visibility:hidden}
+#end{position:absolute;inset:0}
+.pill{position:absolute;overflow:hidden;left:0;top:0;display:flex;direction:rtl;align-items:center;gap:26px;padding:12px 30px 14px;border-radius:28px;white-space:nowrap;
+ background:repeating-linear-gradient(90deg,rgba(255,255,255,0) 0px,rgba(255,255,255,.30) 5px,rgba(255,255,255,0) 10px,rgba(23,34,63,.035) 13px,rgba(255,255,255,0) 16px),linear-gradient(150deg,rgba(255,255,255,.68) 0%,rgba(255,255,255,.42) 55%,rgba(255,255,255,.50) 100%);border:1.5px solid rgba(255,255,255,.9);box-shadow:inset 0 2px 0 rgba(255,255,255,.95),inset 0 -14px 28px rgba(255,255,255,.10),0 18px 40px -14px rgba(23,34,63,.35);transform-origin:50% 50%}
+.pill .m{padding:6px 2px 10px;margin:-6px 0 -10px}
+.pill .w{font:46px/1.3 A8;color:#17223F;text-shadow:none}
+.tag{display:flex;direction:rtl;gap:10px;background:#17223F;border-radius:14px;padding:2px 14px 4px;transform-origin:100% 50%}
+
+
+.pill .hl{position:absolute;left:0;top:0;height:66px;border-radius:16px;background:linear-gradient(180deg,rgba(58,78,128,.93) 0%,rgba(23,34,63,.95) 52%,rgba(16,24,46,.97) 100%);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.42),inset 0 -3px 8px rgba(0,0,0,.20),0 0 0 1px rgba(255,255,255,.22),0 10px 24px rgba(23,34,63,.30)}
+.pill .hl::before{content:'';position:absolute;left:3px;right:3px;top:2px;height:46%;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,0));pointer-events:none}
+.pill .m{position:relative;z-index:2}
+.pill .sh{position:absolute;top:-40px;bottom:-40px;width:120px;left:0;z-index:3;pointer-events:none;
+ background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.75) 50%,rgba(255,255,255,0) 100%);transform:skewX(-18deg)}
+.pill .nb{position:relative;z-index:2;flex-shrink:0;width:54px;height:54px;border-radius:50%;font:30px/54px A8;color:#FFFFFF;text-align:center;background:linear-gradient(180deg,rgba(58,78,128,.93) 0%,rgba(23,34,63,.95) 52%,rgba(16,24,46,.97) 100%);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.42),inset 0 -3px 8px rgba(0,0,0,.20),0 0 0 1px rgba(255,255,255,.22),0 6px 14px rgba(23,34,63,.25)}
+body.mask .pill{background:#fff;border-color:#fff;box-shadow:none} body.mask .pill *{visibility:hidden !important} body.mask #L>*:not(.pill), body.mask #flash, body.mask #sweep, body.mask #gline, body.mask #end{visibility:hidden !important}
+</style></head><body><div id="st">
+<div id="flash"></div><div id="sweep"></div><div id="gline"></div>
+<div id="L">
+ <svg id="Lsvg" width="1080" height="1920"><path id="np" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/><circle id="ndot" fill="#FFFFFF" r="0"/>
+  <circle id="r1" fill="none" stroke="#FFFFFF" stroke-width="3" r="40"/><circle id="r2" fill="none" stroke="#FFFFFF" stroke-width="3" r="40"/>
+  <path id="u1" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/><path id="u2" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/></svg>
+ <div class="nw" id="n0" style="font-family:MM">DR.</div><div class="nw" id="n1">MARWA</div><div class="nw" id="n2">MAGDY</div>
+ <div class="tt" id="ntt">Aesthetic Dermatologist</div>
+ <div class="badge" id="b1"><div class="d" id="d1">١</div><div class="d" id="d3">٣</div></div><div class="badge" id="b2"><div class="d" id="d2">٢</div></div>
+</div>
+<div id="end"><svg width="1080" height="1920"><path id="mask" fill="#17223F" fill-rule="evenodd"/><circle id="ering" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+ <path id="ep" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/><circle id="edot" fill="#FFFFFF" r="0"/></svg>
+ <div class="nw" id="e0" style="font-family:MM">DR.</div><div class="nw" id="e1">MARWA</div><div class="nw" id="e2">MAGDY</div>
+ <div class="tt" id="ett">Aesthetic Dermatologist</div></div>
+</div>
+<script>
+const D=DATA, FPS=25, pre=3/FPS;
+function spr(t,Ts){ if(t<=0) return 0; const z=0.82,w=4/(z*Ts),wd=w*Math.sqrt(1-z*z);
+  return 1-Math.exp(-z*w*t)*(Math.cos(wd*t)+(z*w/wd)*Math.sin(wd*t)); }
+function spx(t,Ts){ if(t<=0) return 0; const w=5.8/Ts; return 1-(1+w*t)*Math.exp(-w*t); }
+const cl=(x,a,b)=>Math.max(a,Math.min(b,x)), $=id=>document.getElementById(id);
+const Lc=$('L');
+// ---------- shot-aware anchor: top of her lap in each shot (springs at every cut) ----------
+function lap(t){ let y=D.lap[0]; for(let i=0;i<D.cuts.length;i++) y+=(D.lap[i+1]-D.lap[i])*spr(t-D.cuts[i],.22); return y; }
+function bx(t){ if(!D.xs) return 540; let x=D.xs[0]; for(let i=0;i<D.cuts.length;i++) x+=(D.xs[i+1]-D.xs[i])*spr(t-D.cuts[i],.22); return x; }
+// ---------- caption pills (one line, frosted white glass, navy text, key words in a navy tag) ----------
+if(D.insert) D.chunks=D.chunks.filter(c=>!(c[0].t>=(D.insert.drop_from??D.insert.start)-0.05 && c[0].t<(D.insert.drop_to??(D.insert.end-0.6))));
+{ const out=[]; D.chunks.forEach(c=>{ if(c.length<=4){out.push(c);return;} const k=Math.ceil(c.length/Math.ceil(c.length/5)); for(let i=0;i<c.length;i+=k) out.push(c.slice(i,i+k)); }); D.chunks=out; }
+const blocks=[];
+D.chunks.forEach((c,ci)=>{ const P=document.createElement('div'); P.className='pill';
+  const hl=document.createElement('div'); hl.className='hl'; P.appendChild(hl); const sh=document.createElement('div'); sh.className='sh'; P.appendChild(sh); P.hl=hl; P.sh=sh;
+  if(c[0].num){ const nb=document.createElement('span'); nb.className='nb'; nb.textContent=c[0].num; P.appendChild(nb); }   // counted points carry their number in a navy glass dot
+  c.forEach((o,k)=>{ const m=document.createElement('span'); m.className='m'; const s=document.createElement('span'); s.className='w'+(/[A-Za-z]/.test(o.w)?' lat':''); s.textContent=o.w; m.appendChild(s); P.appendChild(m); o.el=s; o.m=m; });
+  Lc.appendChild(P);
+  const nxt=ci+1<D.chunks.length?D.chunks[ci+1][0].t:1e9;
+  const starts=(D.devices||[]).map(d=>d.start).concat(D.insert?[D.insert.start]:[]);
+  const brk=starts.filter(s=>c[0].t<s && nxt>s).reduce((a,b)=>Math.min(a,b),nxt);
+  blocks.push({el:P,c,brk,nxt}); });
+const HOLD=(D.nameHold?[[-1,D.nameHold]]:[]).concat((D.devices||[]).map(d=>[d.start,d.end])).concat(D.insert?[[D.insert.start,D.insert.end]]:[]);
+// strictly on her voice: each word rises 3 frames before it is said; the pill leaves when the next one starts
+blocks.forEach((B,i)=>{ B.c.forEach(o=>o.ta=o.t-pre); const last=B.c[B.c.length-1]; B.start=B.c[0].ta;
+  const I=D.insert; if(I && B.start<I.end && B.start>=I.start-0.3) B.start=I.end;   // back only after the insert circle has closed
+  const hard=(I && B.start<I.start)?Math.min(D.END.start,I.start+0.1):D.END.start;
+  B.leave=Math.min(B.nxt-pre-0.06, Math.max(last.e+1.2, last.ta+0.8), hard); });
+function pillSeek(t){
+  blocks.forEach(B=>{ const vis=t>=B.start && t<B.leave+0.06; B.el.style.visibility=vis?'visible':'hidden'; if(!vis){ B.el.hl.style.visibility='hidden'; return; }
+    const W=B.el.offsetWidth, H=B.el.offsetHeight; B.el.style.left=(540-W/2)+'px'; B.el.style.top=(-H/2+40)+'px';
+    const a0=spr(t-(B.start-0.04),.32), xo=spx(t-B.leave,.06);
+    // the pill pops in, then grows with the words (revealed from the right, RTL)
+    // the pill holds only the words already said: it widens around them, centered
+    if(B.fullW===undefined){ B.c.forEach(o=>o.m.style.display=''); B.fullW=B.el.offsetWidth; }
+    // right edge stays where the full line will end centered, so said words never jump
+    
+    { const W2=B.el.offsetWidth; B.el.style.left=(540-W2/2)+'px'; B.el.style.transformOrigin='50% 50%'; }
+    const R=B.el.getBoundingClientRect();
+    let cur=-1; B.c.forEach((o,k)=>{ if(t>=o.t-pre) cur=k; });
+    B.c.forEach((o,k)=>{ const a=spr(t-B.start,.2);
+      o.el.style.transform='none'; o.el.style.opacity=1; o.el.style.color='#17223F'; });
+    // navy tag: springs from word to word, exactly on each word onset
+    const sc0=B.el.getBoundingClientRect().width/B.el.offsetWidth||1;
+    // the tag hugs the ink of the word (Arabic tails like ي reach past the letter box), equal padding on both sides
+    const box=k=>{ const o=B.c[k], r=o.el.getBoundingClientRect(); if(o.ink===undefined){ const cv=document.createElement('canvas'); cv.width=600; cv.height=160; const cx=cv.getContext('2d'); cx.font=getComputedStyle(o.el).font; cx.direction='rtl'; cx.textAlign='right'; cx.fillStyle='#000';
+        const adv=cx.measureText(o.w).width; cx.fillText(o.w,500,110); const im=cx.getImageData(0,0,600,160).data; let mn=600,mx=-1;
+        for(let x=0;x<600;x++) for(let y=0;y<160;y++) if(im[(y*600+x)*4+3]>60){ mn=Math.min(mn,x); mx=Math.max(mx,x); break; }
+        o.ink=[mn-(500-adv), mx+1-(500-adv), adv]; }   // ink edges measured from the drawn word, relative to its letter box
+      const s=r.width/sc0/o.ink[2], L=(r.left-R.left)/sc0-1.5+o.ink[0]*s, Rr=(r.left-R.left)/sc0-1.5+o.ink[1]*s; return {x:L-12, w:(Rr-L)+24}; };
+    if(cur>=0){ let x=box(0).x, w=box(0).w; for(let k=1;k<=cur;k++){ const s=spr(t-(B.c[k].t-pre),.12), p=box(k-1), q=box(k); x+=(q.x-p.x)*s; w+=(q.w-p.w)*s; }
+      const g=spr(t-B.start,.14); B.el.hl.style.left=x.toFixed(1)+'px'; B.el.hl.style.width=w.toFixed(1)+'px'; B.el.hl.style.top=((B.el.offsetHeight-66)/2+3)+'px';
+      B.el.hl.style.transform=`scaleY(${Math.max(0.001,g).toFixed(3)})`; B.el.hl.style.visibility='visible';
+      const sk=cur>0?spr(t-(B.c[cur].t-pre),.12):1; B.c[cur].el.style.color=sk>0.5?'#FFFFFF':'#17223F'; if(cur>0) B.c[cur-1].el.style.color=sk>0.5?'#17223F':'#FFFFFF'; } else B.el.hl.style.visibility='hidden';
+    // glass shine: one slow light band (1.6 s) every 3.6 s
+    const SP=3.6, SD=1.6, ph=(t%SP), Wp=B.el.offsetWidth, u=ph/SD; B.el.sh.style.left=(-160+(Wp+320)*(0.5-0.5*Math.cos(Math.PI*Math.min(1,u)))).toFixed(1)+'px'; B.el.sh.style.opacity=u<1?1:0;   // one slow shine every 3.6 s on the video clock
+    const sc=0.9+0.1*a0; B.el.style.clipPath='none';
+    B.el.style.transform=`scale(${(sc*(1-0.12*xo)).toFixed(3)})`; B.el.style.opacity=(1-xo).toFixed(3); });
+}
+// ---------- split section ----------
+const SP=D.split||null;
+function grp(words,cls){ const g=document.createElement('div'); g.className='grp'; words.forEach(o=>{ const m=document.createElement('span'); m.className='m';
+  const s=document.createElement('span'); s.className='w'+(o.g?' g':'')+(cls?' '+cls:''); s.textContent=o.w; m.appendChild(s); g.appendChild(m); o.el=s; }); Lc.appendChild(g); return g; }
+let G1,G2,C1,C2,TT,CH; if(SP){ G1=grp(SP.c1);G2=grp(SP.c2);C1=grp(SP.cap[0]);C2=grp(SP.cap[1]);TT=grp(SP.title);CH=grp(SP.chips,'chip'); }
+const place=(g,cx,top)=>{ const w=g.getBoundingClientRect().width; g.style.left=(cx-w/2)+'px'; g.style.top=top+'px'; };
+const RW=98, rowRing=(c,tw)=>c+(tw+RW)/2-42, rowText=(c,tw)=>c-(tw+RW)/2+tw/2;
+let WD=null;
+function wordAnim(o,tin,tout,dir){ const a=spr(tin,.32), x=tout; o.el.style.transform=`translateY(${((1-a)*135+dir*x*135).toFixed(1)}px)`; o.el.style.opacity=(a>0.001&&x<.999)?1:0; }
+function splitSeek(t){
+  if(!SP){ ['r1','r2','u1','u2','b1','b2'].forEach(i=>$(i).style.visibility='hidden'); return; }
+  const on=t>SP.start-0.3 && t<SP.end+0.6; [G1,G2,C1,C2,TT,CH].forEach(g=>g.style.visibility=on?'visible':'hidden');
+  ['r1','r2','u1','u2'].forEach(i=>$(i).style.visibility=on?'visible':'hidden'); ['b1','b2'].forEach(i=>$(i).style.visibility=on?'visible':'hidden');
+  if(!on) return;
+  const F1=SP.f1,F2=SP.f2,M=SP.merge,TTt=SP.tt,C2t=SP.cap[1][0].t, ex=spx(t-(SP.end-pre-.05),.25);
+  const mg=spr(t-(M-pre),.42), mg2=spr(t-(M-pre-.05),.48), sB=spr(t-(C2t-pre),.3), sC=spr(t-(TTt-pre),.34);
+  const rA=rowRing(540,WD.c1), rB=rowRing(540,WD.c2), rC=rowRing(540,WD.tt), r1s=rowRing(800,WD.g1), r2s=rowRing(280,WD.g2);
+  const x1=r1s+(rA-r1s)*mg2+(rB-rA)*sB+(rC-rB)*sC, x2=r2s+(rA-r2s)*mg+(rB-rA)*sB+(rC-rB)*sC, Y=46;
+  const dr=(el,x,tt)=>{ const s=cl(spr(t-(tt-pre),.34),0,1)*(1-ex); el.setAttribute('cx',x); el.setAttribute('cy',Y);
+    const L=2*Math.PI*40; el.setAttribute('stroke-dasharray',`${(L*s).toFixed(1)} ${L}`); el.setAttribute('transform',`rotate(-90 ${x} ${Y})`); el.style.opacity=s>0.002?1:0; };
+  dr($('r1'),x1,F1); dr($('r2'),x2,F2); if(mg>0.995) $('r2').style.opacity=0;
+  $('b1').style.left=(x1-42)+'px'; $('b1').style.top=(Y-42)+'px'; $('b2').style.left=(x2-42)+'px'; $('b2').style.top=(Y-42)+'px';
+  const fl=(el,tin,tout)=>{ const a=spr(t-(tin-pre),.3), b=tout?spx(t-(tout-pre),.3):ex; el.style.transform=`translateY(${((1-a)*84-b*84).toFixed(1)}px)`; el.style.opacity=(a>0.001&&b<.999)?1:0; };
+  fl($('d1'),F1,M); fl($('d2'),F2,M); fl($('d3'),M+.08,null); if(mg>0.995) $('b2').style.visibility='hidden';
+  place(G1,rowText(800,WD.g1)+(rowText(540,WD.g1)-rowText(800,WD.g1))*mg2,0); place(G2,rowText(280,WD.g2)+(rowText(540,WD.g2)-rowText(280,WD.g2))*mg,0);
+  const xo=spx(t-(M-pre-.04),.25);
+  SP.c1.concat(SP.c2).forEach(o=>wordAnim(o,t-(o.t-pre),xo,1));
+  SP.cap[0].forEach(o=>wordAnim(o,t-(o.t-pre),spx(t-(C2t-pre-.1),.22),-1));
+  SP.cap[1].forEach(o=>wordAnim(o,t-(o.t-pre),spx(t-(TTt-pre-.1),.22),-1));
+  SP.title.forEach(o=>wordAnim(o,t-(o.t-pre),ex,-1));
+  SP.chips.forEach((o,i)=>{ wordAnim(o,t-(o.t-pre),ex,-1);
+    const r=o.el.getBoundingClientRect(), off=lap(t); const u=cl(spr(t-o.t,.3),0,1)*(1-ex), yy=r.bottom-4-off+ (o.el.style.transform?0:0), cx=(r.left+r.right)/2, hw=(r.width/2-14)*u;
+    $('u'+(i+1)).setAttribute('d',hw>0.5?`M${cx-hw} ${yy} L${cx+hw} ${yy}`:''); });
+}
+// ---------- generic devices (captions pause while one is on) ----------
+const DEV=D.devices||[];
+function mkdot(){ const s=document.createElementNS('http://www.w3.org/2000/svg','circle'); s.setAttribute('r','0'); s.setAttribute('fill','#FFFFFF'); $('Lsvg').appendChild(s); return s; }
+function mkring(){ const s=document.createElementNS('http://www.w3.org/2000/svg','circle'); s.setAttribute('r','40'); s.setAttribute('fill','none'); s.setAttribute('stroke','#FFFFFF'); s.setAttribute('stroke-width','3'); $('Lsvg').appendChild(s); return s; }
+function mkpath(){ const s=document.createElementNS('http://www.w3.org/2000/svg','path'); s.setAttribute('fill','none'); s.setAttribute('stroke','#FFFFFF'); s.setAttribute('stroke-width','3'); s.setAttribute('stroke-linecap','round'); s.setAttribute('stroke-linejoin','round'); $('Lsvg').appendChild(s); return s; }
+function mkbadge(nums){ const b=document.createElement('div'); b.className='badge'; const ds=nums.map(n=>{ const d=document.createElement('div'); d.className='d'; d.textContent=n; b.appendChild(d); return d; }); Lc.appendChild(b); return {b,ds}; }
+DEV.forEach(dv=>{
+  if(dv.type=='cmp'){ dv.S=dv.sections.map(s=>({H:grp(s.head), T:s.traits.map(x=>grp(x,'chip')), dots:s.traits.slice(1).map(mkdot)})); }
+  if(dv.type=='counter'){ dv.T=dv.items.map(it=>grp(it.words)); dv.ring=mkring(); dv.bd=mkbadge(dv.items.map(i=>i.num)); }
+  if(dv.type=='pair'){ dv.T=dv.items.map(it=>grp(it.words)); dv.rings=dv.items.map(mkring); dv.bds=dv.items.map(it=>mkbadge([it.num])); dv.arrow=mkpath(); }
+  if(dv.type=='pair') dv.strikes=dv.items.map(it=>it.strike?mkpath():null);
+});
+function devSeek(t){
+  DEV.forEach(dv=>{
+    const on=t>dv.start-0.25 && t<dv.end+0.6, ex=spx(t-dv.end,.25);
+    const show=(els)=>els.forEach(e=>e.style.visibility=on?'visible':'hidden');
+    if(dv.type=='cmp'){
+      dv.S.forEach((S,si)=>{ show([S.H].concat(S.T)); S.dots.forEach(d=>d.style.visibility=on?'visible':'hidden'); });
+      if(!on) return;
+      if(!dv.geo){ dv.geo=dv.S.map(S=>{ place(S.H,540,0); const ws=S.T.map(g=>g.getBoundingClientRect().width), gap=44, tot=ws.reduce((a,b)=>a+b,0)+gap*(ws.length-1);
+        let x=540+tot/2; const cx=[]; ws.forEach(v=>{cx.push(x-v/2); x-=v+gap;}); S.T.forEach((g,i)=>place(g,cx[i],80)); return {dx:cx.slice(0,-1).map((c,i)=>c-ws[i]/2-gap/2)}; }); }
+      dv.sections.forEach((s,si)=>{ const nxt=si+1<dv.sections.length?dv.sections[si+1].head[0].t:null;
+        const out=nxt?spx(t-(nxt-pre-.06),.25):ex;
+        s.head.forEach(o=>wordAnim(o,t-(o.t-pre),out,-1));
+        s.traits.forEach(ws=>ws.forEach(o=>wordAnim(o,t-(o.t-pre),out,-1)));
+        dv.S[si].dots.forEach((d,i)=>{ const tt=s.traits[i+1][0].t, a=cl(spr(t-(tt-pre-.05),.25),0,1)*(1-out); d.setAttribute('cx',dv.geo[si].dx[i]); d.setAttribute('cy',80+12+34); d.setAttribute('r',(5*a).toFixed(2)); }); });
+    }
+    if(dv.type=='counter'){
+      show(dv.T.concat([dv.bd.b])); dv.ring.style.visibility=on?'visible':'hidden'; if(!on) return;
+      if(!dv.geo){ dv.geo=dv.T.map(g=>g.getBoundingClientRect().width); }
+      // ring sits to the right of the current item's text; it slides as the text width changes
+      let x=rowRing(540,dv.geo[0]); dv.items.forEach((it,i)=>{ if(i) x+=(rowRing(540,dv.geo[i])-rowRing(540,dv.geo[i-1]))*spr(t-(it.t-pre),.3); });
+      const Y=46, s=cl(spr(t-(dv.items[0].t-pre),.34),0,1)*(1-ex), L=2*Math.PI*40;
+      dv.ring.setAttribute('cx',x); dv.ring.setAttribute('cy',Y); dv.ring.setAttribute('stroke-dasharray',`${(L*s).toFixed(1)} ${L}`); dv.ring.setAttribute('transform',`rotate(-90 ${x} ${Y})`);
+      dv.bd.b.style.left=(x-42)+'px'; dv.bd.b.style.top=(Y-42)+'px';
+      dv.items.forEach((it,i)=>{ const nt=i+1<dv.items.length?dv.items[i+1].t:null, out=nt?spx(t-(nt-pre),.3):ex;
+        const a=spr(t-(it.t-pre),.3); dv.bd.ds[i].style.transform=`translateY(${((1-a)*84-out*84).toFixed(1)}px)`; dv.bd.ds[i].style.opacity=(a>0.001&&out<.999)?1:0;
+        place(dv.T[i],rowText(540,dv.geo[i]),0); it.words.forEach(o=>wordAnim(o,t-(o.t-pre),out,-1)); });
+    }
+    if(dv.type=='pair'){
+      show(dv.T.concat(dv.bds.map(b=>b.b))); dv.rings.concat([dv.arrow]).forEach(e=>e.style.visibility=on?'visible':'hidden'); if(!on) return;
+      if(!dv.geo){ dv.geo=dv.T.map(g=>g.getBoundingClientRect().width); }
+      const L=2*Math.PI*40;   // two stacked rows, each: ring+number on the right of its words
+      dv.items.forEach((it,i)=>{ const CX=dv.side?[790,290][i]:540, Y=dv.side?46:46+i*86, rx=rowRing(CX,dv.geo[i]); const s=cl(spr(t-(it.t-pre),.34),0,1)*(1-ex);
+        dv.rings[i].setAttribute('cx',rx); dv.rings[i].setAttribute('cy',Y); dv.rings[i].setAttribute('stroke-dasharray',`${(L*s).toFixed(1)} ${L}`); dv.rings[i].setAttribute('transform',`rotate(-90 ${rx} ${Y})`);
+        dv.bds[i].b.style.left=(rx-42)+'px'; dv.bds[i].b.style.top=(Y-42)+'px';
+        const a=spr(t-(it.t-pre),.3); dv.bds[i].ds[0].style.transform=`translateY(${((1-a)*84-ex*84).toFixed(1)}px)`; dv.bds[i].ds[0].style.opacity=(a>0.001&&ex<.999)?1:0;
+        place(dv.T[i],rowText(CX,dv.geo[i]),dv.side?0:i*86); it.words.forEach(o=>wordAnim(o,t-(o.t-pre),ex,-1));
+        if(dv.strikes&&dv.strikes[i]){ const tx=rowText(CX,dv.geo[i]), w=dv.geo[i], u=cl(spx(t-it.strike,.3),0,1)*(1-ex); const x1=tx+w/2, x2=x1-w*u;
+          dv.strikes[i].setAttribute('d',u>0.01?`M${x1} ${Y+4} L${x2} ${Y-2}`:''); dv.strikes[i].style.visibility=on?'visible':'hidden'; } });
+      dv.arrow.setAttribute('d','');
+    }
+  });
+}
+// ---------- name intro: gold point -> line -> two dividers; DR. / MARWA / MAGDY revealed by masks; title under it ----------
+const NM=D.N, FS=0.2, F0=0.95; let NG=null;
+function nameGeo(){ const ws=[0,1,2].map(i=>$('n'+i)); ws.forEach(e=>{e.style.letterSpacing=FS+'em'; e.style.paddingLeft=FS+'em';});
+  const wd=ws.map(e=>e.getBoundingClientRect().width), gp=22, tot=wd[0]+wd[1]+wd[2]+2*gp; let x=540-tot/2; const cx=[];
+  wd.forEach(v=>{cx.push(x+v/2); x+=v+gp;}); return {cx,tot}; }
+function nameSeek(t, ids, Tm, base, capY, opt){   // shared by the intro (under the captions) and the end card
+  const g=22, Ll=64, half=NG.tot/2, ny=base;
+  const ap=spr(t-(Tm.appear-pre),.22), drop=spr(t-(Tm.appear+.06),.30);
+  const outer=(half+g+Ll)*spr(t-(Tm.stretch-pre),.34)*(1-spx(t-(Tm.exit+.12),.32));
+  const inner=(half+g)*spr(t-(Tm.split-pre),.40)*(1-spx(t-Tm.exit,.28));
+  const back=spr(t-(Tm.exit+.40),.28);
+  const y=capY+(ny-capY)*drop-(ny-capY)*back;
+  const dot=$(ids.dot), dotR=5*ap*(1-spx(t-(Tm.exit+.62),.22));
+  dot.setAttribute('cx',540); dot.setAttribute('cy',y.toFixed(1)); dot.setAttribute('r',Math.max(0,outer<6?dotR:0).toFixed(2));
+  const p=$(ids.path);
+  if(outer>=6){ p.setAttribute('d', inner<1? `M${540-outer} ${y} L${540+outer} ${y}` : `M${540-outer} ${y} L${540-inner} ${y} M${540+inner} ${y} L${540+outer} ${y}`); p.style.opacity=1; } else p.style.opacity=0;
+  const T=[Tm.dr,Tm.marwa,Tm.magdy];
+  [0,1,2].forEach(i=>{ const e=$(ids.w+i);
+    const m=cl(spr(t-(T[i]-pre),.36),0,1)*(1-spx(t-(Tm.exit-.04-.06*(2-i)),.26));
+    const ls=FS+(F0-FS)*(1-spr(t-(T[i]-pre),.5)); e.style.letterSpacing=ls.toFixed(3)+'em'; e.style.paddingLeft=ls.toFixed(3)+'em';
+    const w=e.getBoundingClientRect().width; e.style.left=(NG.cx[i]-w/2).toFixed(1)+'px'; e.style.top=(ny-25)+'px';
+    const ins=(50*(1-m)).toFixed(2); e.style.clipPath=`inset(-10px ${ins}% -10px ${ins}%)`; e.style.visibility=m<=0.001?'hidden':'visible'; });
+  const e=$(ids.tt), m=cl(spr(t-(Tm.title-pre),.4),0,1)*(1-spx(t-(Tm.exit-.1),.26)), w=e.getBoundingClientRect().width;
+  e.style.left=(540-w/2).toFixed(1)+'px'; e.style.top=(ny+30)+'px';
+  const ins=(50*(1-m)).toFixed(2); e.style.clipPath=`inset(-8px ${ins}% -8px ${ins}%)`; e.style.visibility=m<=0.001?'hidden':'visible';
+}
+// ---------- seek ----------
+function seek(t){
+  if(!WD){ WD={}; if(SP){ [['g1',G1],['g2',G2],['c1',C1],['c2',C2],['tt',TT]].forEach(([k,g])=>WD[k]=g.getBoundingClientRect().width);
+    place(C1,rowText(540,WD.c1),0); place(C2,rowText(540,WD.c2),0); place(TT,rowText(540,WD.tt),0); place(CH,540,92); } NG=nameGeo(); }
+  const ly=lap(t); Lc.style.transform=`translate(${(bx(t)-540).toFixed(2)}px,${ly.toFixed(2)}px)`;
+  pillSeek(t);
+  splitSeek(t); devSeek(t);
+  // name intro sits under a two-row caption block (block bottom ~ +150)
+  nameSeek(t,{dot:'ndot',path:'np',w:'n',tt:'ntt'},NM,D.nameBase??300,D.nameCap??150,{});
+  // cream flash on Saber's cuts (no frame blending)
+  let f=0, col='#FFFFFF', sw=null, ln=null; D.trans.forEach(([c,k])=>{ const d=t-c; if(d<0||d>.6) return;
+    if(k=='flash'){ f=.30*Math.exp(-d*14); col='#FFFFFF'; } else if(k=='line'){ ln=d; } else { sw=d; } });
+  const fe=$('flash'); fe.style.background=col; fe.style.opacity=f.toFixed(3);
+  const se=$('sweep'); if(sw!==null && sw<.45){ const p=sw/.45, x=-700+p*2500; se.style.visibility='visible'; se.style.transform=`translateX(${x.toFixed(0)}px) rotate(18deg)`; se.style.opacity=(.22*(1-p)).toFixed(3); } else se.style.visibility='hidden';
+  const le=$('gline'); if(ln!==null && ln<.4){ const p=ln/.4, y=-20+p*1960; le.style.visibility='visible'; le.style.transform=`translateY(${y.toFixed(0)}px)`; le.style.opacity=(1-p*p).toFixed(3); } else le.style.visibility='hidden';
+  // ending: gold ring closes on her, the world turns brown, the point becomes the dividers of the end card
+  const E=D.END, cx=540, cy=760;
+  const R=1500*(1-spx(t-E.start,.80));
+  const vis=t>E.start-0.01; $('end').style.visibility=vis?'visible':'hidden';
+  if(vis){ const r=Math.max(0,R);
+    $('mask').setAttribute('d',`M0 0 H1080 V1920 H0Z M${cx} ${cy-r} a${r} ${r} 0 1 0 0.01 0Z`);
+    $('ering').setAttribute('cx',cx); $('ering').setAttribute('cy',cy); $('ering').setAttribute('r',r.toFixed(1)); $('ering').style.opacity=r>2?1:0;
+    const dr=4.5*spr(t-(E.close-0.06),.18)*(1-spx(t-(E.close+0.30),.25));
+    $('edot').setAttribute('cx',cx); $('edot').setAttribute('cy',cy); $('edot').setAttribute('r',Math.max(0,dr).toFixed(2));
+    ['e0','e1','e2','ett'].forEach(i=>$(i).style.visibility='hidden'); }
+}
+window.seek=seek; if(location.hash=='#mask') document.body.classList.add('mask');
+// audit: how long each word stays readable (captions + devices)
+window.audit=()=>{ const out=[]; blocks.forEach(B=>B.c.forEach(o=>out.push(['cap',o.w,+(B.leave-o.ta).toFixed(2),+o.ta.toFixed(2)])));
+  (D.devices||[]).forEach(d=>{ const ws=[]; const walk=x=>{ if(Array.isArray(x)) x.forEach(walk); else if(x&&typeof x=='object'){ if('w' in x) ws.push(x); else Object.values(x).forEach(walk);} }; walk(d.items||d.sections);
+    if(d.type=='cmp') d.sections.forEach((s,si)=>{ const nx=si+1<d.sections.length?d.sections[si+1].head[0].t:d.end; const w2=[]; const wk=x=>{ if(Array.isArray(x)) x.forEach(wk); else if(x&&'w' in x) w2.push(x); else if(x) Object.values(x).forEach(wk);}; wk(s); w2.forEach(o=>out.push([d.type,o.w,+(nx-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])); });
+    else if(d.type=='counter') d.items.forEach((it,i)=>{ const nx=i+1<d.items.length?d.items[i+1].t:d.end; it.words.forEach(o=>out.push([d.type,o.w,+(nx-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])); });
+    else ws.forEach(o=>out.push([d.type,o.w,+(d.end-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])); });
+  if(SP){ ['c1','c2','title','chips'].forEach(k=>SP[k].forEach(o=>out.push(['split',o.w,+((k=='c1'||k=='c2'?SP.merge:SP.end)-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])));
+    SP.cap.forEach((r,ri)=>r.forEach(o=>out.push(['split',o.w,+((ri==0?SP.cap[1][0].t:SP.tt)-(o.t-pre)).toFixed(2),+o.t.toFixed(2)]))); }
+  return out; };
+</script></body></html>
