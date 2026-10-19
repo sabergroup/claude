@@ -5,90 +5,57 @@ html,body{margin:0;background:transparent}
 #st{position:relative;width:1080px;height:1920px;overflow:hidden}
 #ins{position:absolute;inset:0;background:#2E1A0D;overflow:hidden}
 #world{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:0 0}
-#grid{position:absolute;left:-1200px;top:-1200px;width:3480px;height:4320px;
-  background-image:radial-gradient(circle,rgba(246,234,214,.10) 2px,transparent 2.5px);background-size:44px 44px}
-.card{position:absolute;background:rgb(74,42,20);border:2px solid rgba(240,201,138,.45);border-radius:34px;transform-origin:50% 0;
-  box-shadow:0 14px 30px rgba(20,10,4,.45)}
-.num{position:absolute;top:26px;right:26px;width:74px;height:74px;border:3px solid #F0C98A;border-radius:50%;
-  font:40px/74px A8;color:#F0C98A;text-align:center}
-.ttl{position:absolute;left:0;right:0;text-align:center;font:58px/1.3 A8;color:#F6EAD6;direction:rtl;white-space:nowrap}
-.chip{position:absolute;height:110px;border:3px solid #F0C98A;border-radius:55px;background:#3A2112;overflow:hidden;direction:rtl}
-.chip span{position:absolute;right:0;top:0;height:110px;font:56px/104px A5;color:#F6EAD6;white-space:nowrap;padding:0 34px}
-svg.ic{position:absolute;overflow:visible}
+#grid{position:absolute;left:-1500px;top:-1500px;width:4080px;height:4920px;background-image:radial-gradient(circle,rgba(246,234,214,.10) 2px,transparent 2.5px);background-size:44px 44px}
+.card{position:absolute;background:rgb(74,42,20);border:2px solid rgba(240,201,138,.45);border-radius:34px;transform-origin:50% 0;box-shadow:0 14px 30px rgba(20,10,4,.45)}
+.num{position:absolute;top:24px;right:24px;width:70px;height:70px;border:3px solid #F0C98A;border-radius:50%;font:38px/70px A8;color:#F0C98A;text-align:center}
+.ttl{position:absolute;left:24px;right:24px;text-align:center;font:52px/1.3 A8;color:#F6EAD6;direction:rtl;white-space:nowrap}
+.ttl.g{color:#F0C98A}
+.sub{position:absolute;left:24px;right:24px;text-align:center;font:38px/1.3 A5;color:#F6EAD6;opacity:.92;direction:rtl;white-space:nowrap}
+.chip{position:absolute;height:84px;border:3px solid #F0C98A;border-radius:42px;background:#3A2112;overflow:hidden;direction:rtl}
+.chip span{position:absolute;right:0;top:0;height:84px;font:40px/80px A5;color:#F6EAD6;white-space:nowrap;padding:0 30px}
+svg.top{position:absolute;left:0;top:0;overflow:visible}
 #ball{position:absolute;left:0;top:0;border-radius:50%;background:#F6EAD6;box-shadow:0 6px 14px rgba(20,10,4,.5)}
-</style></head><body><div id="st">
-<div id="ins"><div id="world"><div id="grid"></div>
- <div class="card" id="c1" style="left:570px;top:560px;width:420px;height:340px"><div class="num">١</div>
-  <svg class="ic" style="left:165px;top:100px" width="90" height="110" viewBox="0 0 90 110"><path id="drop" d="M45 6 C45 6 10 50 10 70 a35 35 0 0 0 70 0 C80 50 45 6 45 6Z" stroke="#F0C98A" stroke-width="4" fill="#F0C98A" fill-opacity="0" stroke-linejoin="round"/></svg>
-  <div class="ttl" id="t1" style="top:226px">دهنية</div></div>
- <div class="card" id="c2" style="left:90px;top:560px;width:420px;height:340px"><div class="num">٢</div>
-  <svg class="ic" style="left:150px;top:108px" width="120" height="100" viewBox="0 0 120 100"><g id="flk" stroke="#F0C98A" stroke-width="4" fill="#F0C98A" fill-opacity="0" stroke-linejoin="round">
-   <path d="M10 30 L42 18 L50 40 L20 52Z"/><path d="M66 10 L100 16 L94 40 L62 34Z"/><path d="M34 66 L70 58 L76 84 L40 92Z"/><path d="M88 60 L110 64 L106 82 L86 78Z"/></g></svg>
-  <div class="ttl" id="t2" style="top:226px">جافة</div></div>
- <div class="card" id="c3" style="left:90px;top:980px;width:900px;height:380px"><div class="num">٣</div>
-  <div class="ttl" id="t3" style="top:40px;right:130px;left:auto;text-align:right;font-size:76px">أمراض جلدية</div>
-  <div class="chip" id="h1" style="top:200px"><span>الصدفية</span></div>
-  <div class="chip" id="h2" style="top:200px"><span>الحزاز</span></div></div>
-</div><div id="ball"></div></div></div>
+</style></head><body><div id="st"><div id="ins"><div id="world"><div id="grid"></div><svg class="top" id="wsvg" width="1080" height="1920"></svg></div><div id="ball"></div></div></div>
 <script>
-const C0=10.6, pre=3/25;
-const T={open:11.40,c1:11.62,l1:11.92,c2:12.42,l2:13.10,cam3:13.62,c3:15.30,l3:15.52,a1:16.22,a2:16.80,h1:18.52,h2:19.82,back:20.36,l4:20.80,close:21.02};
-function spr(t,Ts){ if(t<=0) return 0; const z=0.82,w=4/(z*Ts),wd=w*Math.sqrt(1-z*z);
-  return 1-Math.exp(-z*w*t)*(Math.cos(wd*t)+(z*w/wd)*Math.sin(wd*t)); }
-const cl=(x,a,b)=>Math.max(a,Math.min(b,x));
-// camera: summed springs per target change (center x,y and log zoom)
-const CAM=[[0,540,960,1.0],[T.c1-.25,780,735,1.7],[T.c2-pre-.1,300,735,1.7],[T.cam3,540,1150,1.16],[T.back-pre,540,980,0.92]];
-function cam(t){ let x=CAM[0][1],y=CAM[0][2],lz=Math.log(CAM[0][3]);
-  for(let i=1;i<CAM.length;i++){ const s=spr(t-CAM[i][0], i==3?.9:.6);
-    x+=(CAM[i][1]-CAM[i-1][1])*s; y+=(CAM[i][2]-CAM[i-1][2])*s; lz+=(Math.log(CAM[i][3])-Math.log(CAM[i-1][3]))*s; }
-  return {x,y,z:Math.exp(lz)}; }
+const D=DATA, pre=3/25;
+function spr(t,Ts){ if(t<=0) return 0; const z=0.82,w=4/(z*Ts),wd=w*Math.sqrt(1-z*z); return 1-Math.exp(-z*w*t)*(Math.cos(wd*t)+(z*w/wd)*Math.sin(wd*t)); }
+const cl=(x,a,b)=>Math.max(a,Math.min(b,x)), $=id=>document.getElementById(id), W=$('world'), SV=$('wsvg');
+const NS='http://www.w3.org/2000/svg';
+function svgEl(tag,attrs,parent){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); (parent||SV).appendChild(e); return e; }
+// cards
+D.cards.forEach(c=>{ const e=document.createElement('div'); e.className='card'; Object.assign(e.style,{left:c.x+'px',top:c.y+'px',width:c.w+'px',height:c.h+'px'}); W.insertBefore(e,SV); c.el=e;
+  if(c.num){ const n=document.createElement('div'); n.className='num'; n.textContent=c.num; e.appendChild(n); }
+  c.lines=(c.titles||[]).map(L=>{ const d=document.createElement('div'); d.className='ttl'+(L.g?' g':''); d.style.top=L.y+'px'; if(L.size) d.style.fontSize=L.size+'px'; d.textContent=L.text; e.appendChild(d); return d; });
+  c.subs=(c.subs||[]).map(L=>{ const d=document.createElement('div'); d.className='sub'; d.style.top=L.y+'px'; d.textContent=L.text; e.appendChild(d); L.el=d; return L; });
+  c.chipEls=(c.chips||[]).map(ch=>{ const d=document.createElement('div'); d.className='chip'; d.style.top=ch.y+'px'; const s=document.createElement('span'); s.textContent=ch.text; d.appendChild(s); e.appendChild(d); ch.el=d; ch.sp=s; return ch; });
+});
+// extra world drawings: timeline lines, X marks, arrows (gold line icons, one stroke width)
+(D.marks||[]).forEach(m=>{ m.el=svgEl('path',{d:m.d,fill:'none',stroke:'#F0C98A','stroke-width':m.sw||4,'stroke-linecap':'round','stroke-linejoin':'round'}); m.len=m.el.getTotalLength(); });
+function cam(t){ const C=D.cam; let x=C[0][1],y=C[0][2],lz=Math.log(C[0][3]);
+  for(let i=1;i<C.length;i++){ const s=spr(t-C[i][0],C[i][4]||.6); x+=(C[i][1]-C[i-1][1])*s; y+=(C[i][2]-C[i-1][2])*s; lz+=(Math.log(C[i][3])-Math.log(C[i-1][3]))*s; } return {x,y,z:Math.exp(lz)}; }
 const toS=(c,p)=>({x:(p.x-c.x)*c.z+540,y:(p.y-c.y)*c.z+960});
-// ball route: waypoints in screen (lap) or world space; land on the word onset
-const LAP={s:{x:540,y:1185}};
-const R=[ [T.open-.05,LAP], [T.l1,{w:{x:780,y:668}}], [T.l2,{w:{x:300,y:668}}], [T.l3,{w:{x:927,y:1006}}],
-          [T.h1,null], [T.h2,null], [T.l4,{w:{x:780,y:668}}], [T.close+.34,LAP] ];
-let H=null;
-function chipGeo(){ // chip widths from text (measured once)
-  const s1=document.querySelector('#h1 span'), s2=document.querySelector('#h2 span');
-  const w1=s1.offsetWidth, w2=s2.offsetWidth, right=900-60;
-  H={w1,w2,r1:right,r2:right-w1-28};
-  R[4][1]={w:{x:90+H.r1-w1/2,y:980+200}}; R[5][1]={w:{x:90+H.r2-w2/2,y:980+200}}; }
-function pos(wp,c){ return wp.s? wp.s : toS(c,wp.w); }
-function seek(ta){ const t=ta+C0; if(!H) chipGeo();
-  const c=cam(t), W=document.getElementById('world');
-  W.style.transform=`translate(${540-c.x*c.z}px,${960-c.y*c.z}px) scale(${c.z})`;
-  // ball
-  let bx,by,sq=0; const rad=17*Math.min(c.z,1.4);
+const pos=(wp,c)=>wp.s?wp.s:toS(c,wp.w);
+function seek(t){
+  const c=cam(t); W.style.transform=`translate(${540-c.x*c.z}px,${960-c.y*c.z}px) scale(${c.z})`;
+  // ball route: lands on each waypoint at its word
+  const R=D.ball; let bx,by,sq=0; const rad=17*Math.min(c.z,1.4);
   let k=0; while(k<R.length-1 && t>R[k+1][0]) k++;
-  if(k>=R.length-1){ const p=pos(R[R.length-1][1],c); bx=p.x;by=p.y; }
-  else { const [ta0,A]=R[k],[tb,B]=R[k+1]; const lead=Math.min(.5,Math.max(.22,(tb-ta0)*.55));
-    const t0=Math.max(ta0,tb-lead), u=cl((t-t0)/(tb-t0),0,1);
-    const e=u<1? (1-Math.cos(Math.PI*u))/2 : 1; const pa=pos(A,c), pb=pos(B,c);
-    const hop=Math.min(260,Math.hypot(pb.x-pa.x,pb.y-pa.y)*.35);
-    bx=pa.x+(pb.x-pa.x)*e; by=pa.y+(pb.y-pa.y)*e - hop*Math.sin(Math.PI*u) - (k>0?rad:0)*(1)+(k==0?0:0); }
+  if(k>=R.length-1){ const p=pos(R[R.length-1][1],c); bx=p.x; by=p.y; }
+  else { const [ta,A]=R[k],[tb,B]=R[k+1]; const lead=Math.min(.55,Math.max(.22,(tb-ta)*.55)), t0=Math.max(ta,tb-lead), u=cl((t-t0)/(tb-t0),0,1);
+    const e=(1-Math.cos(Math.PI*u))/2, pa=pos(A,c), pb=pos(B,c), hop=Math.min(240,Math.hypot(pb.x-pa.x,pb.y-pa.y)*.35);
+    bx=pa.x+(pb.x-pa.x)*e; by=pa.y+(pb.y-pa.y)*e-hop*Math.sin(Math.PI*u); }
   for(let i=1;i<R.length-1;i++){ const d=t-R[i][0]; if(d>=0&&d<.4) sq+=Math.exp(-d*14)*Math.sin(d*28)*.5; }
-  sq=cl(sq,-.3,.35); const B=document.getElementById('ball');
-  B.style.width=B.style.height=(2*rad)+'px';
+  sq=cl(sq,-.3,.35); const B=$('ball'); B.style.width=B.style.height=(2*rad)+'px';
   B.style.transform=`translate(${bx-rad}px,${by-rad}px) scale(${1+sq*.6},${1-sq})`;
-  // circular reveal centred on the ball (mask, never a cross-fade)
-  const Rr=2300*spr(t-T.open,.55)*(1-spr(t-T.close,.36));
-  document.getElementById('ins').style.clipPath=`circle(${Math.max(0,Rr).toFixed(1)}px at ${bx.toFixed(1)}px ${by.toFixed(1)}px)`;
-  B.style.visibility=(t<T.open-.12||t>T.close+.55)?'hidden':'visible';
-  document.getElementById('ins').style.visibility=(t<T.open-.05||t>T.close+.6)?'hidden':'visible';
-  // cards arrive on their words
-  [['c1',T.c1],['c2',T.c2],['c3',T.c3]].forEach(([id,tt])=>{ const s=spr(t-(tt-pre),.38), e=document.getElementById(id);
-    e.style.transform=`translateY(${(1-s)*60}px) scale(${.9+.1*s})`; e.style.opacity=cl(s*1.8,0,1); });
-  // icons fill gold when the ball lands
-  document.getElementById('drop').setAttribute('fill-opacity',cl(spr(t-T.l1,.3),0,1));
-  document.getElementById('flk').setAttribute('fill-opacity',cl(spr(t-T.l2,.3),0,1));
-  // titles wipe in from the right (RTL) on their word
-  const wipe=(id,tt,Ts)=>{ const s=cl(spr(t-(tt-pre),Ts),0,1); document.getElementById(id).style.clipPath=`inset(0 0 0 ${(100*(1-s)).toFixed(1)}%)`; };
-  wipe('t1',T.l1,.35); wipe('t2',T.l2,.35);
-  // "أمراض جلدية": first word then second word
-  { const s1=cl(spr(t-(T.a1-pre),.3),0,1)*.52+cl(spr(t-(T.a2-pre),.3),0,1)*.48; document.getElementById('t3').style.clipPath=`inset(0 0 0 ${(100*(1-s1)).toFixed(1)}%)`; }
-  // chips stretch out of the card (right edge anchored), text stays attached
-  [['h1',T.h1,H.w1,H.r1],['h2',T.h2,H.w2,H.r2]].forEach(([id,tt,w,r])=>{ const s=spr(t-(tt-pre),.32), e=document.getElementById(id);
-    const ww=Math.max(0,w*s); e.style.width=ww+'px'; e.style.left=(r-ww)+'px'; e.style.opacity=t<tt-pre?0:1; });
+  const Rr=2400*spr(t-D.open,.55)*(1-spr(t-D.close,.36));
+  $('ins').style.clipPath=`circle(${Math.max(0,Rr).toFixed(1)}px at ${bx.toFixed(1)}px ${by.toFixed(1)}px)`;
+  B.style.visibility=(t<D.open-.12||t>D.close+.55)?'hidden':'visible'; $('ins').style.visibility=(t<D.open-.05||t>D.close+.6)?'hidden':'visible';
+  D.cards.forEach(cd=>{ const s=spr(t-(cd.t-pre),.38); cd.el.style.transform=`translateY(${(1-s)*60}px) scale(${.9+.1*s})`; cd.el.style.opacity=cl(s*1.8,0,1);
+    (cd.titles||[]).forEach((L,i)=>{ const s=cl(spr(t-(L.t-pre),.35),0,1); cd.lines[i].style.clipPath=`inset(0 0 0 ${(100*(1-s)).toFixed(1)}%)`; });
+    cd.subs.forEach(L=>{ const s=cl(spr(t-(L.t-pre),.35),0,1); L.el.style.clipPath=`inset(0 0 0 ${(100*(1-s)).toFixed(1)}%)`; });
+    cd.chipEls.forEach(ch=>{ if(ch.w===undefined){ ch.w=ch.sp.offsetWidth; }
+      const s=spr(t-(ch.t-pre),.32), ww=Math.max(0,ch.w*s); const right=(ch.cx!==undefined?ch.cx:cd.w/2)+ch.w/2; ch.el.style.width=ww+'px'; ch.el.style.left=(right-ww)+'px'; ch.el.style.opacity=t<ch.t-pre?0:1; }); });
+  (D.marks||[]).forEach(m=>{ const s=cl(spr(t-(m.t-pre),m.ts||.4),0,1); m.el.setAttribute('stroke-dasharray',`${(m.len*s).toFixed(1)} ${m.len+1}`); m.el.style.opacity=s>0.002?1:0; });
 }
 window.seek=seek;
 </script></body></html>

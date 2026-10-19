@@ -7,7 +7,7 @@ html,body{margin:0;background:transparent}
 #st{position:relative;width:1080px;height:1920px;overflow:hidden}
 #L{position:absolute;left:0;top:0;width:1080px;height:1920px}
 .blk{position:absolute;left:0;top:0;width:1080px}
-.row{display:flex;justify-content:center;direction:rtl;gap:16px;margin-top:-36px}
+.row{display:flex;justify-content:center;direction:rtl;gap:16px;margin-top:-26px}
 .row:first-child{margin-top:0}
 .grp{position:absolute;display:flex;justify-content:center;direction:rtl;gap:14px;white-space:nowrap}
 .m{overflow:hidden;padding:12px 6px 28px;display:inline-block}
@@ -49,13 +49,15 @@ const Lc=$('L');
 function lap(t){ let y=D.lap[0]; for(let i=0;i<D.cuts.length;i++) y+=(D.lap[i+1]-D.lap[i])*spr(t-D.cuts[i],.22); return y; }
 // ---------- caption blocks (two rows, word by word, each block stays until the next one starts) ----------
 const blocks=[];
+if(D.insert) D.chunks=D.chunks.filter(c=>!(c[0].t>=D.insert.start-0.05 && c[0].t<D.insert.end-0.2));   // the insert says these words itself
 D.chunks.forEach((c,ci)=>{ const B=document.createElement('div'); B.className='blk'; const rows=[];
   c.forEach(o=>{ if(!rows[o.r]){ rows[o.r]=document.createElement('div'); rows[o.r].className='row'; B.appendChild(rows[o.r]); }
     const m=document.createElement('span'); m.className='m'; const s=document.createElement('span'); s.className='w'+(o.g?' g':'');
     s.textContent=o.w; m.appendChild(s); rows[o.r].appendChild(m); o.el=s; });
   Lc.appendChild(B);
   const nxt=ci+1<D.chunks.length?D.chunks[ci+1][0].t:1e9;
-  const brk=(c[0].t<D.split.start && nxt>D.split.start)?D.split.start:nxt;   // the split section takes over
+  const starts=(D.devices||[]).map(d=>d.start).concat(D.split?[D.split.start]:[]).concat(D.insert?[D.insert.start]:[]);
+  const brk=starts.filter(s=>c[0].t<s && nxt>s).reduce((a,b)=>Math.min(a,b),nxt);
   blocks.push({el:B,c,brk,nxt}); });
 { let prevLeave=-1;
   blocks.forEach(B=>{ B.c.forEach(o=>o.ta=Math.max(o.t-pre, prevLeave+0.04));
@@ -65,15 +67,16 @@ D.chunks.forEach((c,ci)=>{ const B=document.createElement('div'); B.className='b
     B.leave=Math.min(Math.max(B.nxt-pre, last.ta+0.8), last.e+1.6, hard);
     prevLeave=(B.brk===B.nxt)?B.leave:-1; }); }
 // ---------- split section ----------
-const SP=D.split;
+const SP=D.split||null;
 function grp(words,cls){ const g=document.createElement('div'); g.className='grp'; words.forEach(o=>{ const m=document.createElement('span'); m.className='m';
   const s=document.createElement('span'); s.className='w'+(o.g?' g':'')+(cls?' '+cls:''); s.textContent=o.w; m.appendChild(s); g.appendChild(m); o.el=s; }); Lc.appendChild(g); return g; }
-const G1=grp(SP.c1),G2=grp(SP.c2),C1=grp(SP.cap[0]),C2=grp(SP.cap[1]),TT=grp(SP.title),CH=grp(SP.chips,'chip');
+let G1,G2,C1,C2,TT,CH; if(SP){ G1=grp(SP.c1);G2=grp(SP.c2);C1=grp(SP.cap[0]);C2=grp(SP.cap[1]);TT=grp(SP.title);CH=grp(SP.chips,'chip'); }
 const place=(g,cx,top)=>{ const w=g.getBoundingClientRect().width; g.style.left=(cx-w/2)+'px'; g.style.top=top+'px'; };
 const RW=98, rowRing=(c,tw)=>c+(tw+RW)/2-42, rowText=(c,tw)=>c-(tw+RW)/2+tw/2;
 let WD=null;
 function wordAnim(o,tin,tout,dir){ const a=spr(tin,.32), x=tout; o.el.style.transform=`translateY(${((1-a)*135+dir*x*135).toFixed(1)}px)`; o.el.style.opacity=(a>0.001&&x<.999)?1:0; }
 function splitSeek(t){
+  if(!SP){ ['r1','r2','u1','u2','b1','b2'].forEach(i=>$(i).style.visibility='hidden'); return; }
   const on=t>SP.start-0.3 && t<SP.end+0.6; [G1,G2,C1,C2,TT,CH].forEach(g=>g.style.visibility=on?'visible':'hidden');
   ['r1','r2','u1','u2'].forEach(i=>$(i).style.visibility=on?'visible':'hidden'); ['b1','b2'].forEach(i=>$(i).style.visibility=on?'visible':'hidden');
   if(!on) return;
@@ -97,21 +100,56 @@ function splitSeek(t){
     const r=o.el.getBoundingClientRect(), off=lap(t); const u=cl(spr(t-o.t,.3),0,1)*(1-ex), yy=r.bottom-4-off+ (o.el.style.transform?0:0), cx=(r.left+r.right)/2, hw=(r.width/2-14)*u;
     $('u'+(i+1)).setAttribute('d',hw>0.5?`M${cx-hw} ${yy} L${cx+hw} ${yy}`:''); });
 }
-// ---------- comparison device ----------
-const CP=D.cmp; const H1=grp(CP.h1),T1=grp(CP.t1,'chip'),H2=grp(CP.h2); const T2=CP.t2.map(x=>grp(x,'chip'));
-const dots=[0,1].map(()=>{ const s=document.createElementNS('http://www.w3.org/2000/svg','circle'); s.setAttribute('r','5'); s.setAttribute('fill','#F0C98A'); $('Lsvg').appendChild(s); return s; });
-let CW=null;
-function cmpSeek(t){
-  const on=t>CP.start-0.2 && t<CP.end+0.6; [H1,T1,H2].concat(T2).forEach(g=>g.style.visibility=on?'visible':'hidden'); dots.forEach(s=>s.style.visibility=on?'visible':'hidden');
-  if(!on) return;
-  if(!CW){ CW={}; place(H1,540,0); place(H2,540,0); place(T1,540,80);
-    const ws=T2.map(g=>g.getBoundingClientRect().width), gap=44, tot=ws.reduce((a,b)=>a+b,0)+gap*2; let x=540+tot/2; CW.cx=[];
-    ws.forEach(v=>{ CW.cx.push(x-v/2); x-=v+gap; }); T2.forEach((g,i)=>place(g,CW.cx[i],80)); CW.dx=[CW.cx[0]-ws[0]/2-gap/2, CW.cx[1]-ws[1]/2-gap/2]; }
-  const fl=spr(t-(CP.flip-pre),.22), ex=spr(t-(CP.end),.2);
-  CP.h1.forEach(o=>wordAnim(o,t-(o.t-pre),fl,-1)); CP.t1.forEach(o=>wordAnim(o,t-(o.t-pre),fl,-1));
-  CP.h2.forEach(o=>wordAnim(o,t-(o.t-pre),ex,-1));
-  CP.t2.forEach((ws,i)=>ws.forEach(o=>wordAnim(o,t-(ws[0].t-pre)-(o.t-ws[0].t),ex,-1)));
-  dots.forEach((s,i)=>{ const tt=CP.t2[i+1][0].t, a=cl(spr(t-(tt-pre-.05),.25),0,1)*(1-ex); s.setAttribute('cx',CW.dx[i]); s.setAttribute('cy',80+12+34); s.setAttribute('r',(5*a).toFixed(2)); });
+// ---------- generic devices (captions pause while one is on) ----------
+const DEV=D.devices||[];
+function mkdot(){ const s=document.createElementNS('http://www.w3.org/2000/svg','circle'); s.setAttribute('r','0'); s.setAttribute('fill','#F0C98A'); $('Lsvg').appendChild(s); return s; }
+function mkring(){ const s=document.createElementNS('http://www.w3.org/2000/svg','circle'); s.setAttribute('r','40'); s.setAttribute('fill','none'); s.setAttribute('stroke','#F0C98A'); s.setAttribute('stroke-width','3'); $('Lsvg').appendChild(s); return s; }
+function mkpath(){ const s=document.createElementNS('http://www.w3.org/2000/svg','path'); s.setAttribute('fill','none'); s.setAttribute('stroke','#F0C98A'); s.setAttribute('stroke-width','3'); s.setAttribute('stroke-linecap','round'); s.setAttribute('stroke-linejoin','round'); $('Lsvg').appendChild(s); return s; }
+function mkbadge(nums){ const b=document.createElement('div'); b.className='badge'; const ds=nums.map(n=>{ const d=document.createElement('div'); d.className='d'; d.textContent=n; b.appendChild(d); return d; }); Lc.appendChild(b); return {b,ds}; }
+DEV.forEach(dv=>{
+  if(dv.type=='cmp'){ dv.S=dv.sections.map(s=>({H:grp(s.head), T:s.traits.map(x=>grp(x,'chip')), dots:s.traits.slice(1).map(mkdot)})); }
+  if(dv.type=='counter'){ dv.T=dv.items.map(it=>grp(it.words)); dv.ring=mkring(); dv.bd=mkbadge(dv.items.map(i=>i.num)); }
+  if(dv.type=='pair'){ dv.T=dv.items.map(it=>grp(it.words)); dv.rings=dv.items.map(mkring); dv.bds=dv.items.map(it=>mkbadge([it.num])); dv.arrow=mkpath(); }
+});
+function devSeek(t){
+  DEV.forEach(dv=>{
+    const on=t>dv.start-0.25 && t<dv.end+0.6, ex=spr(t-dv.end,.2);
+    const show=(els)=>els.forEach(e=>e.style.visibility=on?'visible':'hidden');
+    if(dv.type=='cmp'){
+      dv.S.forEach((S,si)=>{ show([S.H].concat(S.T)); S.dots.forEach(d=>d.style.visibility=on?'visible':'hidden'); });
+      if(!on) return;
+      if(!dv.geo){ dv.geo=dv.S.map(S=>{ place(S.H,540,0); const ws=S.T.map(g=>g.getBoundingClientRect().width), gap=44, tot=ws.reduce((a,b)=>a+b,0)+gap*(ws.length-1);
+        let x=540+tot/2; const cx=[]; ws.forEach(v=>{cx.push(x-v/2); x-=v+gap;}); S.T.forEach((g,i)=>place(g,cx[i],80)); return {dx:cx.slice(0,-1).map((c,i)=>c-ws[i]/2-gap/2)}; }); }
+      dv.sections.forEach((s,si)=>{ const nxt=si+1<dv.sections.length?dv.sections[si+1].head[0].t:null;
+        const out=nxt?spr(t-(nxt-pre-.06),.22):ex;
+        s.head.forEach(o=>wordAnim(o,t-(o.t-pre),out,-1));
+        s.traits.forEach(ws=>ws.forEach(o=>wordAnim(o,t-(o.t-pre),out,-1)));
+        dv.S[si].dots.forEach((d,i)=>{ const tt=s.traits[i+1][0].t, a=cl(spr(t-(tt-pre-.05),.25),0,1)*(1-out); d.setAttribute('cx',dv.geo[si].dx[i]); d.setAttribute('cy',80+12+34); d.setAttribute('r',(5*a).toFixed(2)); }); });
+    }
+    if(dv.type=='counter'){
+      show(dv.T.concat([dv.bd.b])); dv.ring.style.visibility=on?'visible':'hidden'; if(!on) return;
+      if(!dv.geo){ dv.geo=dv.T.map(g=>g.getBoundingClientRect().width); }
+      // ring sits to the right of the current item's text; it slides as the text width changes
+      let x=rowRing(540,dv.geo[0]); dv.items.forEach((it,i)=>{ if(i) x+=(rowRing(540,dv.geo[i])-rowRing(540,dv.geo[i-1]))*spr(t-(it.t-pre),.3); });
+      const Y=46, s=cl(spr(t-(dv.items[0].t-pre),.34),0,1)*(1-ex), L=2*Math.PI*40;
+      dv.ring.setAttribute('cx',x); dv.ring.setAttribute('cy',Y); dv.ring.setAttribute('stroke-dasharray',`${(L*s).toFixed(1)} ${L}`); dv.ring.setAttribute('transform',`rotate(-90 ${x} ${Y})`);
+      dv.bd.b.style.left=(x-42)+'px'; dv.bd.b.style.top=(Y-42)+'px';
+      dv.items.forEach((it,i)=>{ const nt=i+1<dv.items.length?dv.items[i+1].t:null, out=nt?spr(t-(nt-pre),.3):ex;
+        const a=spr(t-(it.t-pre),.3); dv.bd.ds[i].style.transform=`translateY(${((1-a)*84-out*84).toFixed(1)}px)`; dv.bd.ds[i].style.opacity=(a>0.001&&out<.999)?1:0;
+        place(dv.T[i],rowText(540,dv.geo[i]),0); it.words.forEach(o=>wordAnim(o,t-(o.t-pre),out,-1)); });
+    }
+    if(dv.type=='pair'){
+      show(dv.T.concat(dv.bds.map(b=>b.b))); dv.rings.concat([dv.arrow]).forEach(e=>e.style.visibility=on?'visible':'hidden'); if(!on) return;
+      if(!dv.geo){ dv.geo=dv.T.map(g=>g.getBoundingClientRect().width); }
+      const L=2*Math.PI*40;   // two stacked rows, each: ring+number on the right of its words
+      dv.items.forEach((it,i)=>{ const Y=46+i*86, rx=rowRing(540,dv.geo[i]); const s=cl(spr(t-(it.t-pre),.34),0,1)*(1-ex);
+        dv.rings[i].setAttribute('cx',rx); dv.rings[i].setAttribute('cy',Y); dv.rings[i].setAttribute('stroke-dasharray',`${(L*s).toFixed(1)} ${L}`); dv.rings[i].setAttribute('transform',`rotate(-90 ${rx} ${Y})`);
+        dv.bds[i].b.style.left=(rx-42)+'px'; dv.bds[i].b.style.top=(Y-42)+'px';
+        const a=spr(t-(it.t-pre),.3); dv.bds[i].ds[0].style.transform=`translateY(${((1-a)*84-ex*84).toFixed(1)}px)`; dv.bds[i].ds[0].style.opacity=(a>0.001&&ex<.999)?1:0;
+        place(dv.T[i],rowText(540,dv.geo[i]),i*86); it.words.forEach(o=>wordAnim(o,t-(o.t-pre),ex,-1)); });
+      dv.arrow.setAttribute('d','');
+    }
+  });
 }
 // ---------- name intro: gold point -> line -> two dividers; DR. / MARWA / MAGDY revealed by masks; title under it ----------
 const NM=D.N, FS=0.2, F0=0.95; let NG=null;
@@ -141,15 +179,15 @@ function nameSeek(t, ids, Tm, base, capY, opt){   // shared by the intro (under 
 }
 // ---------- seek ----------
 function seek(t){
-  if(!WD){ WD={}; [['g1',G1],['g2',G2],['c1',C1],['c2',C2],['tt',TT]].forEach(([k,g])=>WD[k]=g.getBoundingClientRect().width);
-    place(C1,rowText(540,WD.c1),0); place(C2,rowText(540,WD.c2),0); place(TT,rowText(540,WD.tt),0); place(CH,540,92); NG=nameGeo(); }
+  if(!WD){ WD={}; if(SP){ [['g1',G1],['g2',G2],['c1',C1],['c2',C2],['tt',TT]].forEach(([k,g])=>WD[k]=g.getBoundingClientRect().width);
+    place(C1,rowText(540,WD.c1),0); place(C2,rowText(540,WD.c2),0); place(TT,rowText(540,WD.tt),0); place(CH,540,92); } NG=nameGeo(); }
   const ly=lap(t); Lc.style.transform=`translateY(${ly.toFixed(2)}px)`;
   // captions
-  const inIns=t>D.insert.start+0.45 && t<D.insert.end-0.3;
+  const inIns=D.insert? (t>D.insert.start+0.45 && t<D.insert.end-0.3):false;
   blocks.forEach(B=>{ const vis=!inIns && t>B.start-0.02 && t<B.leave+0.4; B.el.style.visibility=vis?'visible':'hidden'; if(!vis) return;
     const xo=spr(t-B.leave,.16);
     B.c.forEach(o=>{ const a=spr(t-o.ta,.30); o.el.style.transform=`translateY(${((1-a)*135-xo*135).toFixed(1)}px)`; o.el.style.opacity=(a>0.001&&xo<.999)?1:0; }); });
-  splitSeek(t); cmpSeek(t);
+  splitSeek(t); devSeek(t);
   // name intro sits under a two-row caption block (block bottom ~ +150)
   nameSeek(t,{dot:'ndot',path:'np',w:'n',tt:'ntt'},NM,300,150,{});
   // cream flash on Saber's cuts (no frame blending)
