@@ -3,7 +3,7 @@ import json,sys
 LATF={'A':('Playfair700.ttf',700),'B':('Cormorant600.ttf',600),'C':('BebasNeue.ttf',400),'D':('JosefinSans.ttf',600)}
 lf=sys.argv[1] if len(sys.argv)>1 else 'A'
 w=json.load(open('/home/user/claude/work/folder5/collagen5/words.json'))
-FIX={3:'مشدودة',12:'Volume',20:'Biostimulators',29:'دايمًا',32:'Sculptra',34:'Sculptra',43:'Radiesse',61:'وببساطة',74:'أساسي',93:'المفقود',104:'الفيلر',96:'إننا',22:'أشهر',113:'طبيعي'}
+FIX={3:'مشدودة',7:'تعتمدي',7:'تعتمدي',12:'Volume',20:'Biostimulators',29:'دايمًا',32:'Sculptra',34:'Sculptra',43:'Radiesse',61:'وببساطة',74:'أساسي',93:'المفقود',104:'الفيلر',96:'إننا',22:'أشهر',113:'طبيعي'}
 SPLIT={33:[('و',12.76,12.92),('Radiesse',12.92,13.46)]}
 MERGE={(39,41):'Poly-L-Lactic Acid',(48,50):'Calcium Hydroxylapatite',(62,63):'الاتنين'}
 W=[{'w':FIX.get(i,x[2]),'t':x[0],'e':x[1],'g':False} for i,x in enumerate(w)]
