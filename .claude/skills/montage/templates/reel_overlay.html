@@ -139,7 +139,10 @@ function devSeek(t){
       dv.ring.setAttribute('cx',x); dv.ring.setAttribute('cy',Y); dv.ring.setAttribute('stroke-dasharray',`${(L*s).toFixed(1)} ${L}`); dv.ring.setAttribute('transform',`rotate(-90 ${x} ${Y})`);
       dv.bd.b.style.left=(x-42)+'px'; dv.bd.b.style.top=(Y-42)+'px';
       dv.items.forEach((it,i)=>{ const nt=i+1<dv.items.length?dv.items[i+1].t:null, out=nt?spx(t-(nt-pre),.3):ex;
-        const a=spr(t-(it.t-pre),.3); dv.bd.ds[i].style.transform=`translateY(${((1-a)*84-out*84).toFixed(1)}px)`; dv.bd.ds[i].style.opacity=(a>0.001&&out<.999)?1:0;
+        // items that share a number keep it (no flip); the number flips only when a new number starts
+        let g0=i; while(g0>0&&dv.items[g0-1].num===it.num) g0--; let ge=i+1; while(ge<dv.items.length&&dv.items[ge].num===it.num) ge++;
+        if(i!==g0) dv.bd.ds[i].style.opacity=0; else { const ng=ge<dv.items.length?dv.items[ge].t:null, o2=ng?spx(t-(ng-pre),.3):ex, a=spr(t-(it.t-pre),.3);
+          dv.bd.ds[i].style.transform=`translateY(${((1-a)*84-o2*84).toFixed(1)}px)`; dv.bd.ds[i].style.opacity=(a>0.001&&o2<.999)?1:0; }
         place(dv.T[i],rowText(540,dv.geo[i]),0); it.words.forEach(o=>wordAnim(o,t-(o.t-pre),out,-1)); });
     }
     if(dv.type=='num'){
