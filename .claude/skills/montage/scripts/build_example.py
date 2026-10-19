@@ -80,7 +80,7 @@ def insert_timing(ins,insert,chunks):
     # 2) camera pulls back only after the last word inside the insert; ball returns after the camera settles; then the circle closes
     tl=0
     for c in ins["cards"]:
-        for L in c.get("titles",[])+c.get("subs",[]): tl=max(tl,L["t"]+0.12*(len(L["text"].split())-1))
+        for L in c.get("titles",[])+c.get("subs",[]): tl=max(tl,max(L["wt"]) if L.get("wt") else L["t"]+0.12*(len(L["text"].split())-1))
         for L in c.get("chips",[]): tl=max(tl,L["t"])
     for m in ins.get("marks",[]): tl=max(tl,m["t"])
     pull=round(tl+0.35,3); ins["cam"][-1]=[pull]+ins["cam"][-1][1:4]+[0.45]
