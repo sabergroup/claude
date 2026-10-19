@@ -92,7 +92,8 @@ def build(v,sentences,devices,insert,ins,icons,fx,cuts):
     schedule(chunks,devices,insert,ins)
     last=v.tk[-1]
     st=max(last["t"]-PRE+0.8, max([d["end"] for d in devices if d["end"]>last["t"]-1]+[0]))
-    END={"start":round(st,2)}; END["close"]=round(END["start"]+0.8,2); END["dur"]=round(END["close"]+(END_SND[1]-END_SND[2])+0.15,2)
+    END={"start":round(st,2)}; END["close"]=round(END["start"]+0.8,2); srcdur=float(subprocess.run(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",v.src],capture_output=True,text=True).stdout)
+    END["dur"]=round(srcdur,2); assert END["close"]<srcdur-0.1,(END,srcdur)   # Saber: never lengthen the video for the ending
     skip=[(insert["start"],insert["end"])] if insert else []
     trans=[]; j=0
     for c in cuts:
