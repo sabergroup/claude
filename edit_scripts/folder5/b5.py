@@ -29,5 +29,5 @@ d={'chunks':chunks,'devices':[],'cuts':cuts,'lap':[LAP]*(len(cuts)+1),'xs':[540]
    'insert':{'start':17.3,'end':25.5,'drop_from':17.0,'drop_to':24.95},'nameHold':None,'nameBase':150,'nameCap':40}
 json.dump(d,open('data_pdrn.json','w'),ensure_ascii=False)
 f,wt=LATF[lf]
-open(f'pp_pdrn_{lf}.html','w').write(open('p6.html').read().replace('LATFILE',f).replace('LATW',str(wt)).replace('DATA',json.dumps(d,ensure_ascii=False)))
+open(f'pp_pdrn_{lf}.html','w').write(open('p7.html').read().replace('LATFILE',f).replace('LATW',str(wt)).replace('DATA',json.dumps(d,ensure_ascii=False)))
 print('\n'.join(' '.join(o['w'] for o in c) for c in chunks))
