@@ -16,7 +16,7 @@ HERE=os.path.dirname(os.path.abspath(__file__)); ASSETS=os.path.join(HERE,"..","
 WD,HT=1080,1920
 import subprocess as _sp
 FPS=a.fps or float(eval(_sp.run(['ffprobe','-v','error','-select_streams','v','-show_entries','stream=r_frame_rate','-of','csv=p=0',a.inp],capture_output=True,text=True).stdout.strip() or '30'))
- TXT=tuple(int(a.color[i:i+2],16) for i in (0,2,4)); SH=(0,0,0)
+TXT=tuple(int(a.color[i:i+2],16) for i in (0,2,4)); SH=(0,0,0)
 # proportions measured from the reference (scaled to a 1080-wide frame)
 CAP1,W1,CAP2,GAP12,GAP2L,LOGO=16,161,13,10,6,152
 IN_T,OUT_T=0.15,5.0
