@@ -8,8 +8,9 @@ def dec(f,ss=None,t=None):
     cmd=["ffmpeg","-v","error"]+(["-ss",str(ss)] if ss is not None else [])+(["-t",str(t)] if t else [])+["-i",f,"-ac","2","-ar","48000","-f","f32le","-"]
     return np.frombuffer(subprocess.run(cmd,capture_output=True).stdout,np.float32).reshape(-1,2).copy()
 v=dec(sys.argv[1],float(sys.argv[2]),float(sys.argv[3])); hop=480
+n_out=int(float(sys.argv[3])*48000)   # the video can run past her audio (ending card): pad with silence so the effects are never cut before the picture ends
 e=np.sqrt((v[:len(v)//hop*hop].mean(1).reshape(-1,hop)**2).mean(1)); vr=np.percentile(e[e>np.percentile(e,40)],75)
-out=v.copy()
+out=np.concatenate([v,np.zeros((max(0,n_out-len(v)),2),np.float32)])
 for spec in sys.argv[5:]:
     parts=spec.split("@"); f,t,pk=parts[:3]; s=dec(f"{SFX}/{f}")
     if len(parts)==5: s=s[int(float(parts[3])*48000):int(float(parts[4])*48000)]
