@@ -110,7 +110,7 @@ def build(v,sentences,devices,insert,ins,icons,fx,cuts):
             if x<=s0<y: e=-1
         e=min(e,END["start"]-0.1)
         if e-s0>=0.9: IC.append({"n":n,"s":round(s0,2),"e":round(e,2)})
-    data={"chunks":chunks,"devices":devices,"cuts":[],"lap":[ANCHOR],"anchor":ANCHOR,"nameY":NAMEY,"capY":CAPY,"N":v.name_times(),"END":END,"trans":trans,"insert":insert,"icons":IC,"endY":560}
+    data={"chunks":chunks,"devices":devices,"cuts":[],"lap":[ANCHOR],"anchor":ANCHOR,"nameY":NAMEY,"capY":CAPY,"N":v.name_times(),"END":END,"trans":trans,"insert":insert,"icons":IC,"endY":getattr(v,"endY",560)}
     if ins:
         ins["ball"][0][1]={"s":{"x":540,"y":ANCHOR+60}}; ins["ball"][-1][1]={"s":{"x":540,"y":ANCHOR+60}}
     mp={}
@@ -127,7 +127,7 @@ def build(v,sentences,devices,insert,ins,icons,fx,cuts):
     W=f"{F}/w"; n=v.name
     h=open(f"{F}/b/reel_f1.html").read().replace("ICONDATA",json.dumps(ICONS)).replace("DATA",json.dumps(data,ensure_ascii=False))
     open(f"{W}/page_{n}.html","w").write(h)
-    if ins: open(f"{W}/ipage_{n}.html","w").write(open(f"{F}/b/ins_f1.html").read().replace("DATA",json.dumps(ins,ensure_ascii=False)))
+    if ins: open(f"{W}/ipage_{n}.html","w").write(open(f"{F}/b/"+("ins_f1_col.html" if ins.get("ballColumn") else "ins_f1.html")).read().replace("DATA",json.dumps(ins,ensure_ascii=False)))
     json.dump(data,open(f"{W}/data_{n}.json","w"),ensure_ascii=False); json.dump(ins,open(f"{W}/ins_{n}.json","w"),ensure_ascii=False)
     open(f"{W}/sfx_{n}.txt","w").write("\n".join(out)+"\n")
     print(n,"END",END,"ins",insert,ins and (ins["open"],ins["close"]))
