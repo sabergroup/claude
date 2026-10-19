@@ -39,9 +39,18 @@ D.cards.forEach(c=>{ const e=document.createElement('div'); e.className='card'; 
 function cam(t){ const C=D.cam; let x=C[0][1],y=C[0][2],lz=Math.log(C[0][3]);
   for(let i=1;i<C.length;i++){ const s=spr(t-C[i][0],C[i][4]||.6); x+=(C[i][1]-C[i-1][1])*s; y+=(C[i][2]-C[i-1][2])*s; lz+=(Math.log(C[i][3])-Math.log(C[i-1][3]))*s; } return {x,y,z:Math.exp(lz)}; }
 const toS=(c,p)=>({x:(p.x-c.x)*c.z+540,y:(p.y-c.y)*c.z+960});
-const pos=(wp,c)=>wp.s?wp.s:toS(c,wp.w);
+// ball waypoint {"wd":[card, "t"|"s", line, word]} = just under that word (the ball stands on the word being said, never on the number)
+let WP=null;
+function wordPos(){ WP=true; const keep=W.style.transform; W.style.transform='none';
+  D.cards.forEach(cd=>{ (cd.titles||[]).concat(cd.subs||[]).forEach(L=>L.ws.forEach(o=>{ const r=o.el.parentElement.getBoundingClientRect(); o.wx=(r.left+r.right)/2; o.wy=r.bottom-30+8; const g=o.el.getBoundingClientRect(); o.wl=g.left; o.wc=(g.top+g.bottom)/2+2; })); });
+  W.style.transform=keep; }
+function wdw(a){ const cd=D.cards[a[0]]; const L=(a[1]=='s'?cd.subs:cd.titles)[a[2]]; const fs=L.size||(a[1]=='s'?38:52);
+  const xl=Math.min(...L.ws.map(o=>o.wl)); return {x:xl-30,y:L.ws[0].wc}; }
+const pos=(wp,c)=>wp.s?wp.s:toS(c,wp.wd?wdw(wp.wd):wp.w);
 function seek(t){
-  const c=cam(t); W.style.transform=`translate(${540-c.x*c.z}px,${960-c.y*c.z}px) scale(${c.z})`;
+  if(!WP) wordPos();
+  const c=cam(t); { const u=Math.max(0,Math.min(t,D.close)-D.open); c.z*=1+0.012*u; c.y+=6*Math.sin(u*0.9); c.x+=5*Math.sin(u*0.7); }   // never parked: slow push-in + drift
+  W.style.transform=`translate(${540-c.x*c.z}px,${960-c.y*c.z}px) scale(${c.z})`;
   // ball route: lands on each waypoint at its word
   const R=D.ball; let bx,by,sq=0; const rad=17*Math.min(c.z,1.4);
   let k=0; while(k<R.length-1 && t>R[k+1][0]) k++;
