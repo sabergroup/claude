@@ -38,11 +38,11 @@ def glyphs(text,f,tr):
         w=f.getlength(c)
         if c!=" ":
             m=Image.new("RGBA",(int(w)+16,f.size*2),(0,0,0,0)); ImageDraw.Draw(m).text((8,f.size*1.4),c,font=f,fill=TXT+(255,),anchor="ls")
-            out.append((shadow(m),x+w/2))
+            out.append((m,x+w/2))   # Saber: credit text plain white, no stroke / no shadow
         x+=w+tr
     return out
 G1=glyphs("CREATED BY",f1,tr1)
-L2=Image.new("RGBA",(int(w2)+24,f2.size*2),(0,0,0,0)); ImageDraw.Draw(L2).text((12,f2.size*1.4),"SABERGROUPSTUDIO ©",font=f2,fill=TXT+(255,),anchor="ls"); L2=shadow(L2)
+L2=Image.new("RGBA",(int(w2)+24,f2.size*2),(0,0,0,0)); ImageDraw.Draw(L2).text((12,f2.size*1.4),"SABERGROUPSTUDIO ©",font=f2,fill=TXT+(255,),anchor="ls")
 def load_logo(size):
     """scale the logo without losing its thin outer red frame: draw at 4x, keep the frame's own position
     (outer edge of the canvas, 1.5/1104 inset) but never thinner than 1 final pixel, then downsample"""
