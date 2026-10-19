@@ -18,6 +18,7 @@ html,body{margin:0;background:transparent}
 .ttl.g{color:#17223F}
 .ttl.lt{font-family:A5;color:rgba(23,34,63,.82)}
 .ttl.tg{left:50%;right:auto;transform:translateX(-50%);color:#FFFFFF;border-radius:20px;padding:0 22px;background:linear-gradient(180deg,rgba(58,78,128,.93) 0%,rgba(23,34,63,.95) 52%,rgba(16,24,46,.97) 100%);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.42),inset 0 -3px 8px rgba(0,0,0,.20),0 0 0 1px rgba(255,255,255,.22),0 10px 24px rgba(23,34,63,.30)}
+.ttl.ty{left:50%;right:auto;width:max-content;direction:ltr;letter-spacing:1px}
 .ttl.tg::before{content:'';position:absolute;left:3px;right:3px;top:2px;height:46%;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,0));pointer-events:none}
 .ttl.tg{width:max-content;margin-top:0;line-height:1.55;padding:0 20px 2px;overflow:hidden;gap:18px}
 .ttl.tg .wm{padding:0;margin:0;overflow:visible;flex-shrink:0}
@@ -42,7 +43,7 @@ D.cards.forEach(c=>{ const e=document.createElement('div'); e.className='card'; 
   if(c.num){ const n=document.createElement('div'); n.className='num'; n.textContent=c.num; e.appendChild(n); }
   const words=(L,d)=>{ L.ws=L.text.split(' ').map((w,i)=>{ const m=document.createElement('span'); m.className='wm'; const s=document.createElement('span'); s.className='ww'; s.textContent=w; m.appendChild(s); d.appendChild(m);
       return {el:s,t:(L.wt&&L.wt[i]!==undefined)?L.wt[i]:L.t+i*0.12}; }); };
-  c.lines=(c.titles||[]).map(L=>{ const d=document.createElement('div'); d.className='ttl'+(L.g?' g':'')+(L.lt?' lt':'')+(L.tag?' tg':''); d.style.top=L.y+'px'; if(L.size) d.style.fontSize=L.size+'px'; words(L,d); e.appendChild(d); return d; });
+  c.lines=(c.titles||[]).map(L=>{ const d=document.createElement('div'); d.className='ttl'+(L.g?' g':'')+(L.lt?' lt':'')+(L.tag?' tg':'')+(L.type?' ty':''); d.style.top=L.y+'px'; if(L.size) d.style.fontSize=L.size+'px'; words(L,d); e.appendChild(d); return d; });
   c.subs=(c.subs||[]).map(L=>{ const d=document.createElement('div'); d.className='sub'; d.style.top=L.y+'px'; words(L,d); e.appendChild(d); L.el=d; return L; });
   c.chipEls=(c.chips||[]).map(ch=>{ const d=document.createElement('div'); d.className='chip'; d.style.top=ch.y+'px'; const s=document.createElement('span'); s.textContent=ch.text; d.appendChild(s); e.appendChild(d); ch.el=d; ch.sp=s; return ch; });
 });
@@ -72,6 +73,8 @@ function seek(t){
     const rise=(L,fs)=>L.ws.forEach(o=>{ const a=spr(t-(o.t-pre),.3); o.el.style.transform=`translateY(${((1-a)*fs*2.2).toFixed(1)}px)`; o.el.style.visibility=a>0.001?'visible':'hidden'; });
     { const u2=(t%3.6)/1.6; cd.sh.style.left=(-400+(cd.w+800)*(0.5-0.5*Math.cos(Math.PI*Math.min(1,u2)))).toFixed(1)+'px'; cd.sh.style.opacity=u2<1?1:0; }   // the same slow glass shine as the caption pill
     (cd.titles||[]).forEach(L=>rise(L,L.size||52));
+    (cd.titles||[]).forEach((L,i)=>{ if(!L.type) return; const e=cd.lines[i], n=L.text.length, u=Math.floor(cl((t-(L.t-pre))/L.type,0,1)*n)/n;   // typed letter by letter (LTR) over L.type seconds
+      L.ws.forEach(o=>{ o.el.style.transform='none'; o.el.style.visibility=u>0?'visible':'hidden'; }); e.style.transform="translateX(-50%)"; e.style.clipPath=`inset(-30px ${((1-u)*100).toFixed(2)}% -30px -30px)`; });
     (cd.titles||[]).forEach((L,i)=>{ if(!L.tag) return; const e=cd.lines[i], ta=cl(spr(t-(L.ws[0].t-pre),.3),0,1);   // the navy tag opens from its centre with its first word, never shows empty
       e.style.transform=`translateX(-50%) scaleX(${Math.max(.001,ta).toFixed(3)})`; e.style.opacity=ta>0.002?1:0; }); cd.subs.forEach(L=>rise(L,38));
     cd.chipEls.forEach(ch=>{ if(ch.w===undefined){ ch.w=ch.sp.offsetWidth; }
