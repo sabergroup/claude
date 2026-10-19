@@ -112,6 +112,7 @@ function mkbadge(nums){ const b=document.createElement('div'); b.className='badg
 DEV.forEach(dv=>{
   if(dv.type=='cmp'){ dv.S=dv.sections.map(s=>({H:grp(s.head), T:s.traits.map(x=>grp(x,'chip')), dots:s.traits.slice(1).map(mkdot)})); }
   if(dv.type=='counter'){ dv.T=dv.items.map(it=>grp(it.words)); dv.ring=mkring(); dv.bd=mkbadge(dv.items.map(i=>i.num)); }
+  if(dv.type=='num'){ dv.TT=dv.title?grp(dv.title):null; dv.T=dv.items.map(it=>grp(it.words)); dv.ring=mkring(); dv.bd=mkbadge([dv.num]); }
   if(dv.type=='pair'){ dv.T=dv.items.map(it=>grp(it.words)); dv.rings=dv.items.map(mkring); dv.bds=dv.items.map(it=>mkbadge([it.num])); dv.arrow=mkpath(); }
 });
 function devSeek(t){
@@ -140,6 +141,19 @@ function devSeek(t){
       dv.items.forEach((it,i)=>{ const nt=i+1<dv.items.length?dv.items[i+1].t:null, out=nt?spx(t-(nt-pre),.3):ex;
         const a=spr(t-(it.t-pre),.3); dv.bd.ds[i].style.transform=`translateY(${((1-a)*84-out*84).toFixed(1)}px)`; dv.bd.ds[i].style.opacity=(a>0.001&&out<.999)?1:0;
         place(dv.T[i],rowText(540,dv.geo[i]),0); it.words.forEach(o=>wordAnim(o,t-(o.t-pre),out,-1)); });
+    }
+    if(dv.type=='num'){
+      show(dv.T.concat([dv.bd.b]).concat(dv.TT?[dv.TT]:[])); dv.ring.style.visibility=on?'visible':'hidden'; if(!on) return;
+      if(!dv.geo){ dv.geo=dv.T.map(g=>g.getBoundingClientRect().width); dv.tw=dv.TT?dv.TT.getBoundingClientRect().width:0; }
+      const Y=46, L=2*Math.PI*40, rowY=dv.TT?86:0;
+      let x; if(dv.TT) x=rowRing(540,dv.tw); else { x=rowRing(540,dv.geo[0]); dv.items.forEach((it,i)=>{ if(i) x+=(rowRing(540,dv.geo[i])-rowRing(540,dv.geo[i-1]))*spr(t-(it.t-pre),.3); }); }
+      const s=cl(spr(t-(dv.ringT-pre),.34),0,1)*(1-ex);
+      dv.ring.setAttribute('cx',x); dv.ring.setAttribute('cy',Y); dv.ring.setAttribute('stroke-dasharray',`${(L*s).toFixed(1)} ${L}`); dv.ring.setAttribute('transform',`rotate(-90 ${x} ${Y})`);
+      dv.bd.b.style.left=(x-42)+'px'; dv.bd.b.style.top=(Y-42)+'px';
+      const a=spr(t-(dv.ringT-pre),.3); dv.bd.ds[0].style.transform=`translateY(${((1-a)*84+ex*84).toFixed(1)}px)`; dv.bd.ds[0].style.opacity=(a>0.001&&ex<.999)?1:0;
+      if(dv.TT){ place(dv.TT,rowText(540,dv.tw),0); dv.title.forEach(o=>wordAnim(o,t-(o.t-pre),ex,-1)); }
+      dv.items.forEach((it,i)=>{ const nt=i+1<dv.items.length?dv.items[i+1].t:null, out=nt?spx(t-(nt-pre),.3):ex;
+        place(dv.T[i],dv.TT?540:rowText(540,dv.geo[i]),rowY); it.words.forEach(o=>wordAnim(o,t-(o.t-pre),out,-1)); });
     }
     if(dv.type=='pair'){
       show(dv.T.concat(dv.bds.map(b=>b.b))); dv.rings.concat([dv.arrow]).forEach(e=>e.style.visibility=on?'visible':'hidden'); if(!on) return;
@@ -232,6 +246,7 @@ window.seek=seek;
 window.audit=()=>{ const out=[]; blocks.forEach(B=>B.c.forEach(o=>out.push(['cap',o.w,+(B.leave-o.ta).toFixed(2),+o.ta.toFixed(2)])));
   (D.devices||[]).forEach(d=>{ const ws=[]; const walk=x=>{ if(Array.isArray(x)) x.forEach(walk); else if(x&&typeof x=='object'){ if('w' in x) ws.push(x); else Object.values(x).forEach(walk);} }; walk(d.items||d.sections);
     if(d.type=='cmp') d.sections.forEach((s,si)=>{ const nx=si+1<d.sections.length?d.sections[si+1].head[0].t:d.end; const w2=[]; const wk=x=>{ if(Array.isArray(x)) x.forEach(wk); else if(x&&'w' in x) w2.push(x); else if(x) Object.values(x).forEach(wk);}; wk(s); w2.forEach(o=>out.push([d.type,o.w,+(nx-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])); });
+    else if(d.type=='num'){ d.items.forEach((it,i)=>{ const nx=i+1<d.items.length?d.items[i+1].t:d.end; it.words.forEach(o=>out.push([d.type,o.w,+(nx-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])); }); (d.title||[]).forEach(o=>out.push([d.type,o.w,+(d.end-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])); }
     else if(d.type=='counter') d.items.forEach((it,i)=>{ const nx=i+1<d.items.length?d.items[i+1].t:d.end; it.words.forEach(o=>out.push([d.type,o.w,+(nx-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])); });
     else ws.forEach(o=>out.push([d.type,o.w,+(d.end-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])); });
   if(SP){ ['c1','c2','title','chips'].forEach(k=>SP[k].forEach(o=>out.push(['split',o.w,+((k=='c1'||k=='c2'?SP.merge:SP.end)-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])));
