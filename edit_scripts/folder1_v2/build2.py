@@ -93,7 +93,8 @@ def build(v,sentences,devices,insert,ins,icons,fx,cuts):
     last=v.tk[-1]
     st=max(last["t"]-PRE+0.8, max([d["end"] for d in devices if d["end"]>last["t"]-1]+[0]))
     END={"start":round(st,2)}; END["close"]=round(END["start"]+0.8,2); srcdur=float(subprocess.run(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",v.src],capture_output=True,text=True).stdout)
-    END["dur"]=round(srcdur,2); assert END["close"]<srcdur-0.1,(END,srcdur)   # Saber: never lengthen the video for the ending
+    if END["close"]>srcdur-0.1: END["start"]=round(srcdur-0.9,2); END["close"]=round(END["start"]+0.8,2)   # raw length wins: the ring still closes before the last frame
+    END["dur"]=round(srcdur,2)   # Saber: never lengthen the video for the ending
     skip=[(insert["start"],insert["end"])] if insert else []
     trans=[]; j=0
     for c in cuts:
