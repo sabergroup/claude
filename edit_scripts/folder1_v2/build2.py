@@ -110,7 +110,7 @@ def build(v,sentences,devices,insert,ins,icons,fx,cuts):
             if x<=s0<y: e=-1
         e=min(e,END["start"]-0.1)
         if e-s0>=0.9: IC.append({"n":n,"s":round(s0,2),"e":round(e,2)})
-    data={"chunks":chunks,"devices":devices,"cuts":[],"lap":[ANCHOR],"anchor":ANCHOR,"nameY":NAMEY,"capY":CAPY,"N":v.name_times(),"END":END,"trans":trans,"insert":insert,"icons":IC,"endY":560}
+    data={"chunks":chunks,"devices":devices,"cuts":[],"lap":[ANCHOR],"anchor":ANCHOR,"nameY":NAMEY,"capY":CAPY,"N":v.name_times(),"END":END,"trans":trans,"insert":insert,"icons":IC,"endY":getattr(v,"endY",560)}
     if ins:
         ins["ball"][0][1]={"s":{"x":540,"y":ANCHOR+60}}; ins["ball"][-1][1]={"s":{"x":540,"y":ANCHOR+60}}
     mp={}

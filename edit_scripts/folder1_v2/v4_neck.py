@@ -1,6 +1,7 @@
 from build2 import *
 v=V("neck","خطوط_وتجاعيد_الرقبة_config.py",{})
 t=v.t
+v.endY=960   # Saber: the ending ring closes on the centre of the frame
 sentences=[(0,40),(53,64),(76,86),("p",86,93)]
 devices=[
  {"type":"cmp","start":t(40)-0.05,"end":t(52)+1.0,"sections":[{"head":v.ws(40,44,set()),"traits":[v.ws(44,47,{45,46})]},{"head":v.ws(47,49,{47,48}),"traits":[v.ws(49,51,set()),v.ws(51,53,{52})]}]},
@@ -17,8 +18,8 @@ ins={"ballColumn":True,"open":o,"close":t(75)+0.9,"cards":cards,
 icons=[(9,12,"phone"),(13,18,"clock"),(24,30,"wrinkles"),(31,34,"warning"),(35,39,"eye"),(53,57,"shield"),(84,85,"bulb"),(86,92,"hourglass")]
 N=v.name_times()
 fx=[sfx("soft reveal/1.MP3",N["split"]),sfx("pop/2.MP3",N["magdy"]),
- sfx("paper.MP3",t(40)),sfx("whoosh/fast paper.MP3",t(47)),sfx("pop/1.mp4",t(51)),
+ sfx("Hint , notification/1.mp4",t(12)),sfx("Hint , notification/simble notification.MP3",t(25)),sfx("Hint , notification/info.MP3",t(32)),sfx("photo insert.MP3",t(38)),sfx("Hint , notification/solid.MP3",32.70),sfx("paper.MP3",t(40)),sfx("whoosh/fast paper.MP3",t(47)),sfx("pop/1.mp4",t(51)),
  sfx("whoosh/big.MP3",o+0.07),sfx("pop/3.MP3",t(70)),sfx("pop/4.MP3",t(74)),sfx("whoosh/light .MP3",t(75)+0.93),
- sfx("معلومة مهمة في اول اخر الفيديو مش هوك.MP3",t(84)),sfx("clock ticking.MP3",t(87),(0.0,0.6,0.1)),
+ sfx("معلومة مهمة في اول اخر الفيديو مش هوك.MP3",t(84)),sfx("clock ticking.MP3",t(87),(0.0,1.6,0.1)),
  sfx("mouse click 1.MP3",t(93)),sfx("correct answer.MP3",t(96))]
 d=build(v,sentences,devices,insert,ins,icons,fx,shots("neck"))
