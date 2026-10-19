@@ -1,0 +1,15 @@
+soft reveal/1.MP3@0.60@0.53
+pop/2.MP3@1.80@0.05
+paper.MP3@17.22@0.275
+whoosh/fast paper.MP3@19.98@0.46
+pop/1.mp4@21.12@0.09
+whoosh/big.MP3@25.27@0.56
+pop/3.MP3@28.64@0.06
+pop/4.MP3@30.56@0.065
+Hint , notification/simble notification.MP3@31.46@0.26
+whoosh/light .MP3@34.51@0.56
+معلومة مهمة في اول اخر الفيديو مش هوك.MP3@34.51@0.075
+clock ticking.MP3@35.72@0.1@0.0@0.6
+mouse click 1.MP3@38.42@0.115
+correct answer.MP3@39.24@0.09
+اصوات تنفع لبداية او نهاية الفيديو/whoosh with impact.MP3@42.50@0.795

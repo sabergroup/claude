@@ -6,7 +6,9 @@ enc=subprocess.Popen(["ffmpeg","-v","error","-y","-f","rawvideo","-pix_fmt","rgb
 last=None
 for i in range(N):
     b=dec.stdout.read(W*H*3)
-    if len(b)==W*H*3: last=np.frombuffer(b,np.uint8).reshape(H,W,3)
+    if len(b)==W*H*3:
+        fr=np.frombuffer(b,np.uint8).reshape(H,W,3)
+        if last is None or fr[::40,::40].mean()>20: last=fr   # Saber's exports end on one black frame: hold the last real picture
     t=i/fps; z=1.0+0.035*(0.5-0.5*math.cos(2*math.pi*t/9.0)); im=Image.fromarray(last)
     if z>1.0005: im=im.transform((W,H),Image.AFFINE,(1/z,0,(W-W/z)/2,0,1/z,(H-H/z)*0.4),resample=Image.BICUBIC)
     im=im.convert("RGBA")
