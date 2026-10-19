@@ -71,7 +71,9 @@ function seek(t){
     cd.el.style.transform=`translateY(${((1-s)*30).toFixed(1)}px)`; cd.el.style.clipPath=u>0.999?'none':`inset(-120px -120px calc(${(100*(1-u)).toFixed(2)}% - ${(120*u).toFixed(1)}px) -120px round 44px)`;   // unfolds from the top; the soft shadow is never cut cd.el.style.visibility=u>0.001?'visible':'hidden';
     const rise=(L,fs)=>L.ws.forEach(o=>{ const a=spr(t-(o.t-pre),.3); o.el.style.transform=`translateY(${((1-a)*fs*2.2).toFixed(1)}px)`; o.el.style.visibility=a>0.001?'visible':'hidden'; });
     { const u2=(t%3.6)/1.6; cd.sh.style.left=(-400+(cd.w+800)*(0.5-0.5*Math.cos(Math.PI*Math.min(1,u2)))).toFixed(1)+'px'; cd.sh.style.opacity=u2<1?1:0; }   // the same slow glass shine as the caption pill
-    (cd.titles||[]).forEach(L=>rise(L,L.size||52)); cd.subs.forEach(L=>rise(L,38));
+    (cd.titles||[]).forEach(L=>rise(L,L.size||52));
+    (cd.titles||[]).forEach((L,i)=>{ if(!L.tag) return; const e=cd.lines[i], ta=cl(spr(t-(L.ws[0].t-pre),.3),0,1);   // the navy tag opens from its centre with its first word, never shows empty
+      e.style.transform=`translateX(-50%) scaleX(${Math.max(.001,ta).toFixed(3)})`; e.style.opacity=ta>0.002?1:0; }); cd.subs.forEach(L=>rise(L,38));
     cd.chipEls.forEach(ch=>{ if(ch.w===undefined){ ch.w=ch.sp.offsetWidth; }
       if(ch.off!==undefined){ if(!ch.xl){ ch.xl=document.createElement('div'); ch.xl.className='x'; ch.el.appendChild(ch.xl); }
         const k=cl(spx(t-(ch.off-pre),.35),0,1), tw=ch.w-60;
