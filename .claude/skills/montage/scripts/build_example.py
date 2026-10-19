@@ -16,7 +16,45 @@ def trans_for(sh,skip):
 def sfx(f,t,seg=None):
     p=PK[f] if not seg else seg[2]
     return f"{f}@{t:.2f}@{p}"+(f"@{seg[0]}@{seg[1]}" if seg else "")
+
+def _words(x):
+    if isinstance(x,dict): return [x] if "w" in x else [w for v in x.values() if isinstance(v,(list,dict)) for w in _words(v)]
+    if isinstance(x,list): return [w for v in x for w in _words(v)]
+    return []
+def _shift(ws,t0):
+    for o in ws:
+        o.setdefault("t0",o["t"]); o["t"]=max(o["t"],round(t0,3))
+def apply_holds(devices,split,insert,ins):
+    """skill rules: last word of any device stays >=1 s; numbers/sections don't flip before the current last word stayed >=0.8 s;
+    the next device (and the captions, in the page) wait; the insert ends only after its circle has fully closed."""
+    evs=[("dev",d) for d in devices]+([("split",split)] if split else [])
+    evs.sort(key=lambda e:e[1]["start"]); prev_end=-1
+    for kind,d in evs:
+        if d["start"]<prev_end+0.05:
+            d["start"]=round(prev_end+0.05,3); _shift(_words(d),d["start"]+0.12)
+        if kind=="split":
+            last2=max(o["t"] for o in d["c2"]); m=max(d["merge"],last2+0.8)
+            if m>d["merge"]: d["merge"]=round(m,3); _shift(d["cap"][0],m)
+            lastT=max(o["t"] for o in _words({k:d[k] for k in ("c1","c2","cap","title","chips")}))
+        elif d["type"]=="counter":
+            for k in range(1,len(d["items"])):
+                pl=max(o["t"] for o in d["items"][k-1]["words"]); t0=max(d["items"][k]["t"],pl+0.8)
+                d["items"][k]["t"]=round(t0,3); _shift(d["items"][k]["words"],t0)
+            lastT=max(o["t"] for o in _words(d["items"]))
+        elif d["type"]=="cmp":
+            for k in range(1,len(d["sections"])):
+                pl=max(o["t"] for o in _words(d["sections"][k-1])); t0=max(d["sections"][k]["head"][0]["t"],pl+0.8)
+                _shift(_words(d["sections"][k]),t0)
+            lastT=max(o["t"] for o in _words(d["sections"]))
+        else: lastT=max(o["t"] for o in _words(d["items"]))
+        d["end"]=round(max(d["end"],lastT+1.0),3); prev_end=d["end"]
+    if insert and ins:
+        insert["end"]=round(ins["close"]+0.6,3)
+        ins["ball"][-1][0]=ins["close"]                     # ball is back on her lap before the circle closes
+        ins["cam"][-1][0]=round(ins["close"]-1.0,3)          # camera settled before the close
+
 def finish(name,src,W,w,chunks,devices,N,insert,ins,sfxl,split=None,extra_skip=()):
+    apply_holds(devices,split,insert,ins)
     sh=json.load(open(f"{S}/f3/{name}_shots.json")) if name!="dandruff" else json.load(open(f"{S}/dd/shots.json"))
     cuts=sh["cuts"]; lap=sh["lap"][:]
     if len(cuts)>2 and cuts[-1]-cuts[-2]<0.2: cuts=cuts[:-2]+[cuts[-1]]; lap=lap[:-1]
@@ -30,6 +68,17 @@ def finish(name,src,W,w,chunks,devices,N,insert,ins,sfxl,split=None,extra_skip=(
     if ins:
         ins["ball"][0][1]={"s":{"x":540,"y":lap_at(sh,ins["open"])+70}}; ins["ball"][-1][1]={"s":{"x":540,"y":lap_at(sh,ins["close"])+70}}
         json.dump(ins,open(f"{S}/f3/ins_{name}.json","w"),ensure_ascii=False)
+    # sounds follow the words they belong to when a hold moved them
+    mp={}
+    for o in _words(devices)+(_words({k:split[k] for k in ("c1","c2","cap","title","chips")}) if split else []):
+        if "t0" in o and o["t"]!=o["t0"]: mp[round(o["t0"],2)]=o["t"]
+    out=[]
+    for s in sfxl:
+        p=s.split("@"); t=round(float(p[1]),2)
+        if t in mp: p[1]=f"{mp[t]:.2f}"
+        out.append("@".join(p))
+    sfxl[:]=out
+    if split: split["f1"],split["f2"]=split["f1"],split["f2"]
     sfxl.append(sfx("اصوات تنفع لبداية او نهاية الفيديو/whoosh with impact.MP3",END["close"]))
     open(f"{S}/f3/sfx_{name}.txt","w").write("\n".join(sfxl)+"\n")
     print(name,"END",END,"trans",data["trans"],"blocks",len(chunks))
