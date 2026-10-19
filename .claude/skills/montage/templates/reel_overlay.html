@@ -50,7 +50,7 @@ const Lc=$('L');
 function lap(t){ let y=D.lap[0]; for(let i=0;i<D.cuts.length;i++) y+=(D.lap[i+1]-D.lap[i])*spr(t-D.cuts[i],.22); return y; }
 // ---------- caption blocks (two rows, word by word, each block stays until the next one starts) ----------
 const blocks=[];
-if(D.insert) D.chunks=D.chunks.filter(c=>!(c[0].t>=D.insert.start-0.05 && c[0].t<D.insert.end-0.6));   // started while the insert was on: the insert says these words   // the insert says these words itself
+if(D.insert) D.chunks=D.chunks.filter(c=>!(c[0].t>=(D.insert.drop_from??D.insert.start)-0.05 && c[0].t<D.insert.end-0.6));   // started while the insert was on: the insert says these words   // the insert says these words itself
 D.chunks.forEach((c,ci)=>{ const B=document.createElement('div'); B.className='blk'; const rows=[];
   c.forEach(o=>{ if(!rows[o.r]){ rows[o.r]=document.createElement('div'); rows[o.r].className='row'; B.appendChild(rows[o.r]); }
     const m=document.createElement('span'); m.className='m'; const s=document.createElement('span'); s.className='w'+(o.g?' g':'');
@@ -211,4 +211,13 @@ function seek(t){
     ['e0','e1','e2','ett'].forEach(i=>$(i).style.visibility='hidden'); }
 }
 window.seek=seek;
+// audit: how long each word stays readable (captions + devices)
+window.audit=()=>{ const out=[]; blocks.forEach(B=>B.c.forEach(o=>out.push(['cap',o.w,+(B.leave-o.ta).toFixed(2),+o.ta.toFixed(2)])));
+  (D.devices||[]).forEach(d=>{ const ws=[]; const walk=x=>{ if(Array.isArray(x)) x.forEach(walk); else if(x&&typeof x=='object'){ if('w' in x) ws.push(x); else Object.values(x).forEach(walk);} }; walk(d.items||d.sections);
+    if(d.type=='cmp') d.sections.forEach((s,si)=>{ const nx=si+1<d.sections.length?d.sections[si+1].head[0].t:d.end; const w2=[]; const wk=x=>{ if(Array.isArray(x)) x.forEach(wk); else if(x&&'w' in x) w2.push(x); else if(x) Object.values(x).forEach(wk);}; wk(s); w2.forEach(o=>out.push([d.type,o.w,+(nx-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])); });
+    else if(d.type=='counter') d.items.forEach((it,i)=>{ const nx=i+1<d.items.length?d.items[i+1].t:d.end; it.words.forEach(o=>out.push([d.type,o.w,+(nx-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])); });
+    else ws.forEach(o=>out.push([d.type,o.w,+(d.end-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])); });
+  if(SP){ ['c1','c2','title','chips'].forEach(k=>SP[k].forEach(o=>out.push(['split',o.w,+((k=='c1'||k=='c2'?SP.merge:SP.end)-(o.t-pre)).toFixed(2),+o.t.toFixed(2)])));
+    SP.cap.forEach((r,ri)=>r.forEach(o=>out.push(['split',o.w,+((ri==0?SP.cap[1][0].t:SP.tt)-(o.t-pre)).toFixed(2),+o.t.toFixed(2)]))); }
+  return out; };
 </script></body></html>

@@ -10,9 +10,13 @@ ap.add_argument("--top",type=int,default=1622,help="top of the CREATED BY capita
 ap.add_argument("--corner",choices=["bottom","tr"],default="bottom",help="tr = top-right corner (wide shots where her legs show)")
 ap.add_argument("--only5",action="store_true"); ap.add_argument("--still",action="store_true")
 ap.add_argument("--fonts",default=os.environ.get("FONTS","fonts")); ap.add_argument("--color",default="FFFFFF")
+ap.add_argument("--fps",type=float,default=0,help="output fps; 0 = keep the input fps (never convert 25->30, it stutters)")
 a=ap.parse_args()
 HERE=os.path.dirname(os.path.abspath(__file__)); ASSETS=os.path.join(HERE,"..","assets")
-WD,HT,FPS=1080,1920,30; TXT=tuple(int(a.color[i:i+2],16) for i in (0,2,4)); SH=(0,0,0)
+WD,HT=1080,1920
+import subprocess as _sp
+FPS=a.fps or float(eval(_sp.run(['ffprobe','-v','error','-select_streams','v','-show_entries','stream=r_frame_rate','-of','csv=p=0',a.inp],capture_output=True,text=True).stdout.strip() or '30'))
+ TXT=tuple(int(a.color[i:i+2],16) for i in (0,2,4)); SH=(0,0,0)
 # proportions measured from the reference (scaled to a 1080-wide frame)
 CAP1,W1,CAP2,GAP12,GAP2L,LOGO=16,161,13,10,6,152
 IN_T,OUT_T=0.15,5.0

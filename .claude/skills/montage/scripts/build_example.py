@@ -35,6 +35,10 @@ def apply_holds(devices,split,insert,ins):
         if kind=="split":
             last2=max(o["t"] for o in d["c2"]); m=max(d["merge"],last2+0.8)
             if m>d["merge"]: d["merge"]=round(m,3); _shift(d["cap"][0],m)
+            c1=max(o["t"] for o in d["cap"][0])+0.8
+            if d["cap"][1][0]["t"]<c1: _shift(d["cap"][1],c1)
+            t2=max(o["t"] for o in d["cap"][1])+0.8
+            if d["tt"]<t2: d["tt"]=round(t2,3); _shift(d["title"],t2)
             lastT=max(o["t"] for o in _words({k:d[k] for k in ("c1","c2","cap","title","chips")}))
         elif d["type"]=="counter":
             for k in range(1,len(d["items"])):
@@ -53,14 +57,55 @@ def apply_holds(devices,split,insert,ins):
         ins["ball"][-1][0]=ins["close"]                     # ball is back on her lap before the circle closes
         ins["cam"][-1][0]=round(ins["close"]-1.0,3)          # camera settled before the close
 
+PRE=3/25
+def _caption_wait(chunks,start):
+    """latest moment a device/insert may start so the caption block right before it keeps its last word >= 0.8 s"""
+    prev=[c for c in chunks if c[0]["t"]<start-0.05]
+    if not prev: return start
+    last=max(o["t"] for o in prev[-1]); return max(start,last-PRE+0.8)
+def insert_timing(ins,insert,chunks):
+    ins["_open0"],ins["_close0"]=ins["open"],ins["close"]
+    # 1) the insert waits for the caption before it
+    insert["drop_from"]=insert["start"]
+    o2=_caption_wait(chunks,ins["open"])+0.08
+    d=round(o2-ins["open"],3)
+    if d>0:
+        ins["open"]=round(ins["open"]+d,3); insert["start"]=round(insert["start"]+d,3); fl=ins["open"]+0.5
+        for c in ins["cards"]:
+            c["t"]=max(c["t"],fl)
+            for L in c.get("titles",[])+c.get("subs",[])+c.get("chips",[]): L["t"]=max(L["t"],fl)
+        for m in ins.get("marks",[]): m["t"]=max(m["t"],fl)
+        for b in ins["ball"][1:]: b[0]=max(b[0],fl)
+        for k in ins["cam"][1:]: k[0]=max(k[0],ins["open"]-0.05)
+    # 2) camera pulls back only after the last word inside the insert; ball returns after the camera settles; then the circle closes
+    tl=0
+    for c in ins["cards"]:
+        for L in c.get("titles",[])+c.get("subs",[]): tl=max(tl,L["t"]+0.12*(len(L["text"].split())-1))
+        for L in c.get("chips",[]): tl=max(tl,L["t"])
+    for m in ins.get("marks",[]): tl=max(tl,m["t"])
+    pull=round(tl+0.35,3); ins["cam"][-1]=[pull]+ins["cam"][-1][1:4]+[0.45]
+    ins["close"]=round(max(ins["close"],pull+0.75),3)
+    ins["ball"][-1][0]=ins["close"]
+    if ins["ball"][-2][0]>pull: ins["ball"][-2][0]=pull
+    insert["end"]=round(ins["close"]+0.6,3)
+def devices_wait(chunks,devices,split):
+    for d in devices+([split] if split else []):
+        s2=_caption_wait(chunks,d["start"])
+        if s2>d["start"]+0.001:
+            d["start"]=round(s2,3); _shift(_words(d),s2+0.12)
+            if d is split:
+                d.setdefault("f1_0",d["f1"]); d["f1"]=max(d["f1"],round(s2+0.12,3))
+
 def finish(name,src,W,w,chunks,devices,N,insert,ins,sfxl,split=None,extra_skip=()):
+    devices_wait(chunks,devices,split)
     apply_holds(devices,split,insert,ins)
+    if insert and ins: insert_timing(ins,insert,chunks)
     sh=json.load(open(f"{S}/f3/{name}_shots.json")) if name!="dandruff" else json.load(open(f"{S}/dd/shots.json"))
     cuts=sh["cuts"]; lap=sh["lap"][:]
     if len(cuts)>2 and cuts[-1]-cuts[-2]<0.2: cuts=cuts[:-2]+[cuts[-1]]; lap=lap[:-1]
     sh={"cuts":cuts,"lap":lap}
     last_e=w[-1][1]; srcdur=float(subprocess.run(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",src],capture_output=True,text=True).stdout)
-    END={"start":round(last_e+0.12,2)}; END["close"]=round(END["start"]+0.8,2); END["dur"]=round(max(srcdur,END["close"]+0.5),2)
+    END={"start":round(max(last_e+0.12,w[-1][0]-PRE+1.0),2)}; END["close"]=round(END["start"]+0.8,2); END["dur"]=round(max(srcdur,END["close"]+0.5),2)
     skip=[(insert["start"],insert["end"])] if insert else []
     data={"chunks":chunks,"devices":devices,"cuts":cuts[1:-1],"lap":lap,"N":N,"END":END,"trans":trans_for(sh,skip),"insert":insert}
     if split: data["split"]=split
@@ -78,7 +123,19 @@ def finish(name,src,W,w,chunks,devices,N,insert,ins,sfxl,split=None,extra_skip=(
         if t in mp: p[1]=f"{mp[t]:.2f}"
         out.append("@".join(p))
     sfxl[:]=out
-    if split: split["f1"],split["f2"]=split["f1"],split["f2"]
+    if split and "f1_0" in split: mp[round(split["f1_0"],2)]=split["f1"]
+    if ins and "_open0" in ins:
+        for s_i,s in enumerate(sfxl):
+            p=s.split("@"); t=float(p[1])
+            if abs(t-ins["_open0"])<0.2: p[1]=f'{t+ins["open"]-ins["_open0"]:.2f}'
+            elif abs(t-ins["_close0"])<0.2: p[1]=f'{ins["close"]+0.03:.2f}'
+            sfxl[s_i]="@".join(p)
+    out=[]
+    for s in sfxl:
+        p=s.split("@"); t=round(float(p[1]),2)
+        if t in mp: p[1]=f"{mp[t]:.2f}"
+        out.append("@".join(p))
+    sfxl[:]=out
     sfxl.append(sfx("اصوات تنفع لبداية او نهاية الفيديو/whoosh with impact.MP3",END["close"]))
     open(f"{S}/f3/sfx_{name}.txt","w").write("\n".join(sfxl)+"\n")
     print(name,"END",END,"trans",data["trans"],"blocks",len(chunks))
@@ -110,9 +167,9 @@ fx=[sfx("soft reveal/1.MP3",N["split"]),sfx("pop/2.MP3",N["magdy"]),
 finish("hairloss",f"{S}/b3/تساقط الشعر.mp4",W,w,chunks,devices,N,insert,ins,fx)
 
 # ======================= تساقط الشعر بعد الولادة =======================
-pf={0:"لاحظتي",1:"إن",9:"ماتقلقيش",16:"وليه",18:"علمي",20:"الحمل",36:"الطبيعية",54:"إن",81:"لفترة",94:"الحالة",98:"ماتستنيش",106:"ارجعي",116:"ليكي",72:"تدريجيًا",92:"فورًا",112:"فورًا",7:"الولادة؟",57:"خفيف؟"}
+pf={0:"لاحظتي",1:"إن",9:"ماتقلقيش",16:"وليه",18:"معروف",20:"الحمل",36:"الطبيعية",54:"إن",81:"لفترة",94:"الحالة",98:"ماتستنيش",106:"راجعي",116:"ليكي",72:"تدريجيًا",92:"فورًا",112:"فورًا",7:"الولادة؟",57:"خفيف؟"}
 w,W=load("postpartum",pf,{5,9,18,57,92,98,107,108,115})
-chunks=rows_to_chunks(W,[[(0,3),(3,6)],[(6,8),(9,11)],[(11,13),(13,16)],[(16,19)],[(50,54),(54,58)],[(58,61),(61,65)],
+chunks=rows_to_chunks(W,[[(0,4),(4,8)],[(9,11)],[(11,13),(13,16)],[(16,19)],[(50,54),(54,58)],[(58,61),(61,65)],
   [(87,90),(90,92)],[(92,95)],[(95,97),(98,99)],[(99,103),(103,106)],[(106,109),(109,112)],[(112,114),(114,117)]])
 devices=[
  {"type":"cmp","start":26.75,"end":31.30,"sections":[{"head":[W(66),W(67,g=True)],"traits":[[W(70),W(71)],[W(73),W(74)]]}]},
